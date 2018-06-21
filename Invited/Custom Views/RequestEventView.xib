@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RequestEventView" customModule="Invited" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="580"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Krl-6u-bVX">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="580"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" tag="2" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="235" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="A9N-bz-gO6">
+                            <rect key="frame" x="25" y="30" width="270" height="550"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="A9N-bz-gO6" secondAttribute="trailing" constant="25" id="VZh-No-j38"/>
+                        <constraint firstAttribute="bottom" secondItem="A9N-bz-gO6" secondAttribute="bottom" id="WIy-ZH-hkb"/>
+                        <constraint firstItem="A9N-bz-gO6" firstAttribute="top" secondItem="Krl-6u-bVX" secondAttribute="top" constant="30" id="d4E-Ub-gEi"/>
+                        <constraint firstItem="A9N-bz-gO6" firstAttribute="leading" secondItem="Krl-6u-bVX" secondAttribute="leading" constant="25" id="o9F-Wf-aMA"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Krl-6u-bVX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="T1I-zw-0op"/>
+                <constraint firstAttribute="trailing" secondItem="Krl-6u-bVX" secondAttribute="trailing" id="jpT-sf-ZP3"/>
+                <constraint firstItem="Krl-6u-bVX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="vp8-Vo-MFH"/>
+                <constraint firstAttribute="bottom" secondItem="Krl-6u-bVX" secondAttribute="bottom" id="zx0-do-iCo"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="requestEventTableView" destination="A9N-bz-gO6" id="5gY-eQ-lWb"/>
+            </connections>
+            <point key="canvasLocation" x="-24" y="35"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="EventStatusView" customModule="Invited" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3KI-hF-eoO">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="568"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Il-KX-LEE">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="47.5"/>
+                            <subviews>
+                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7bX-G3-5Ae">
+                                    <rect key="frame" x="0.0" y="0.0" width="125" height="45.5"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                    <state key="normal" title="Invites Received">
+                                        <color key="titleColor" red="1" green="0.10196078431372549" blue="0.10588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                </button>
+                                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPa-jP-OpG">
+                                    <rect key="frame" x="125" y="0.0" width="125" height="45.5"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                    <state key="normal" title="Invites Sent">
+                                        <color key="titleColor" red="1" green="0.1019607843" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                </button>
+                                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QfU-2A-ToP">
+                                    <rect key="frame" x="250" y="0.0" width="125" height="47.5"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                    <state key="normal" title="My Events">
+                                        <color key="titleColor" red="1" green="0.1019607843" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oox-Wz-EBO">
+                                    <rect key="frame" x="0.0" y="45.5" width="125" height="2"/>
+                                    <color key="backgroundColor" red="1" green="0.1019607843" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="2" id="gKM-Xa-RYQ"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="QfU-2A-ToP" secondAttribute="trailing" id="0ha-yK-Uwi"/>
+                                <constraint firstItem="zPa-jP-OpG" firstAttribute="leading" secondItem="7bX-G3-5Ae" secondAttribute="trailing" id="51G-Lu-tzP"/>
+                                <constraint firstItem="7bX-G3-5Ae" firstAttribute="leading" secondItem="5Il-KX-LEE" secondAttribute="leading" id="70F-YG-KHC"/>
+                                <constraint firstItem="oox-Wz-EBO" firstAttribute="leading" secondItem="5Il-KX-LEE" secondAttribute="leading" id="CWc-Bg-mfp"/>
+                                <constraint firstItem="zPa-jP-OpG" firstAttribute="top" secondItem="5Il-KX-LEE" secondAttribute="top" id="MC0-c0-Ygu"/>
+                                <constraint firstAttribute="bottom" secondItem="QfU-2A-ToP" secondAttribute="bottom" id="NNO-KZ-A1z"/>
+                                <constraint firstItem="QfU-2A-ToP" firstAttribute="leading" secondItem="zPa-jP-OpG" secondAttribute="trailing" id="RHP-Dy-blC"/>
+                                <constraint firstItem="oox-Wz-EBO" firstAttribute="top" secondItem="7bX-G3-5Ae" secondAttribute="bottom" id="SXN-bj-Omd"/>
+                                <constraint firstItem="QfU-2A-ToP" firstAttribute="width" secondItem="7bX-G3-5Ae" secondAttribute="width" id="Yhj-2y-hgI"/>
+                                <constraint firstItem="zPa-jP-OpG" firstAttribute="width" secondItem="7bX-G3-5Ae" secondAttribute="width" id="ZXC-T1-ehP"/>
+                                <constraint firstAttribute="height" constant="47.5" id="bdU-od-24b"/>
+                                <constraint firstItem="oox-Wz-EBO" firstAttribute="width" secondItem="7bX-G3-5Ae" secondAttribute="width" id="dJd-2G-2Ld"/>
+                                <constraint firstAttribute="bottom" secondItem="oox-Wz-EBO" secondAttribute="bottom" id="g8y-DT-qT2"/>
+                                <constraint firstItem="QfU-2A-ToP" firstAttribute="top" secondItem="5Il-KX-LEE" secondAttribute="top" id="v04-AR-DiV"/>
+                                <constraint firstItem="oox-Wz-EBO" firstAttribute="top" secondItem="zPa-jP-OpG" secondAttribute="bottom" id="vhf-Te-aax"/>
+                                <constraint firstItem="7bX-G3-5Ae" firstAttribute="top" secondItem="5Il-KX-LEE" secondAttribute="top" id="yLh-3i-QUE"/>
+                            </constraints>
+                        </view>
+                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Lt-8C-bVo">
+                            <rect key="frame" x="0.0" y="48" width="375" height="520"/>
+                        </scrollView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="5Il-KX-LEE" firstAttribute="top" secondItem="3KI-hF-eoO" secondAttribute="top" id="AgK-gD-ySZ"/>
+                        <constraint firstAttribute="bottom" secondItem="0Lt-8C-bVo" secondAttribute="bottom" id="GOb-46-ZWV"/>
+                        <constraint firstItem="0Lt-8C-bVo" firstAttribute="leading" secondItem="3KI-hF-eoO" secondAttribute="leading" id="O0n-hZ-DJU"/>
+                        <constraint firstItem="0Lt-8C-bVo" firstAttribute="top" secondItem="5Il-KX-LEE" secondAttribute="bottom" id="RfB-7F-1IE"/>
+                        <constraint firstAttribute="trailing" secondItem="5Il-KX-LEE" secondAttribute="trailing" id="Z0x-ay-V1C"/>
+                        <constraint firstItem="5Il-KX-LEE" firstAttribute="leading" secondItem="3KI-hF-eoO" secondAttribute="leading" id="aXb-4z-pee"/>
+                        <constraint firstAttribute="trailing" secondItem="0Lt-8C-bVo" secondAttribute="trailing" id="gcQ-El-Cmc"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="3KI-hF-eoO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="2ud-DG-OlB"/>
+                <constraint firstAttribute="bottom" secondItem="3KI-hF-eoO" secondAttribute="bottom" id="8gS-ZG-sRB"/>
+                <constraint firstAttribute="trailing" secondItem="3KI-hF-eoO" secondAttribute="trailing" id="UqL-MG-Mr4"/>
+                <constraint firstItem="3KI-hF-eoO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="q4f-TO-ZLD"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="lineView" destination="oox-Wz-EBO" id="4jE-l7-HPw"/>
+                <outlet property="mainScrollView" destination="0Lt-8C-bVo" id="UxQ-Lk-k03"/>
+                <outlet property="receivedButton" destination="QfU-2A-ToP" id="PIJ-Xs-fGo"/>
+                <outlet property="requestButton" destination="7bX-G3-5Ae" id="rYp-yL-Ufd"/>
+                <outlet property="yourEventsButton" destination="zPa-jP-OpG" id="uzZ-VE-NF6"/>
+            </connections>
+            <point key="canvasLocation" x="25.5" y="52"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ReceivedEventsView" customModule="Invited" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="560"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kob-dX-Cpd">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="560"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" tag="4" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="91" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2uS-3D-98x">
+                            <rect key="frame" x="30" y="30" width="260" height="530"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="2uS-3D-98x" firstAttribute="leading" secondItem="Kob-dX-Cpd" secondAttribute="leading" constant="30" id="Mji-3o-TAH"/>
+                        <constraint firstAttribute="bottom" secondItem="2uS-3D-98x" secondAttribute="bottom" id="f7A-mD-xEM"/>
+                        <constraint firstItem="2uS-3D-98x" firstAttribute="top" secondItem="Kob-dX-Cpd" secondAttribute="top" constant="30" id="h6l-Tt-NeV"/>
+                        <constraint firstAttribute="trailing" secondItem="2uS-3D-98x" secondAttribute="trailing" constant="30" id="sQY-dc-MVv"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Kob-dX-Cpd" secondAttribute="bottom" id="BpS-ZN-JoE"/>
+                <constraint firstItem="Kob-dX-Cpd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="GNg-rH-109"/>
+                <constraint firstItem="Kob-dX-Cpd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="fRg-El-YTL"/>
+                <constraint firstAttribute="trailing" secondItem="Kob-dX-Cpd" secondAttribute="trailing" id="lwD-m6-bwf"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="receivedEventsTableView" destination="2uS-3D-98x" id="aEd-1w-8PZ"/>
+            </connections>
+        </view>
+    </objects>
+</document>
