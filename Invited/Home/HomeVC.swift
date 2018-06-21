@@ -1052,6 +1052,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
 
         self.receivedEventDetailView.receivedEventDetailTableView.reloadData()
+        // Testing github.
         
     }
     
