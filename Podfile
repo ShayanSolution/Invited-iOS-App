@@ -11,6 +11,7 @@ pod 'Tabman', '~> 1.0'
 pod 'GooglePlaces'
 pod 'GooglePlacePicker'
 pod 'GoogleMaps'
+pod 'SwiftyJSON'
 
   # Pods for Invited
 

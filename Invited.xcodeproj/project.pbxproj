@@ -25,6 +25,7 @@
 		AF4F636920C1B8D500083873 /* ReceivedEventsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF4F636820C1B8D500083873 /* ReceivedEventsView.xib */; };
 		AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */; };
 		AF4F636D20C1BC4100083873 /* ReceivedEventsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */; };
+		AF73019B20DBA35200483267 /* RouteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF73019A20DBA35200483267 /* RouteVC.swift */; };
 		AF7C1ACF20BD23BC000D810C /* EventStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7C1ACE20BD23BC000D810C /* EventStatusView.xib */; };
 		AF88848820B3EDCF002F6D4F /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF88848720B3EDCF002F6D4F /* HomeVC.swift */; };
 		AF88848B20B42CE0002F6D4F /* CreateListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF88848A20B42CE0002F6D4F /* CreateListVC.swift */; };
@@ -72,6 +73,7 @@
 		AF4F636820C1B8D500083873 /* ReceivedEventsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceivedEventsView.xib; sourceTree = "<group>"; };
 		AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedEventsCell.swift; sourceTree = "<group>"; };
 		AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceivedEventsCell.xib; sourceTree = "<group>"; };
+		AF73019A20DBA35200483267 /* RouteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteVC.swift; sourceTree = "<group>"; };
 		AF7C1ACE20BD23BC000D810C /* EventStatusView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventStatusView.xib; sourceTree = "<group>"; };
 		AF88848720B3EDCF002F6D4F /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		AF88848A20B42CE0002F6D4F /* CreateListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateListVC.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				AFBCABDA20DA4EDF007ABE74 /* MapVC.swift */,
+				AF73019A20DBA35200483267 /* RouteVC.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Pageboy/Pageboy.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Tabman/Tabman.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -409,6 +413,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pageboy.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tabman.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,6 +456,7 @@
 				AF88848820B3EDCF002F6D4F /* HomeVC.swift in Sources */,
 				AF88848B20B42CE0002F6D4F /* CreateListVC.swift in Sources */,
 				AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */,
+				AF73019B20DBA35200483267 /* RouteVC.swift in Sources */,
 				AFC9DD2120B52C0B00042708 /* ServerManager.m in Sources */,
 				AFD9028420B2CFC40039E686 /* BasicFunctions.swift in Sources */,
 				AF88848F20B42F59002F6D4F /* ContactCell.swift in Sources */,
@@ -546,7 +552,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "1877e431-0485-450f-8931-0ed177d5474b";
+				PROVISIONING_PROFILE = "bf9d61d5-9fbd-4378-bc74-4cd75037bded";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -598,7 +604,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "1877e431-0485-450f-8931-0ed177d5474b";
+				PROVISIONING_PROFILE = "bf9d61d5-9fbd-4378-bc74-4cd75037bded";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;

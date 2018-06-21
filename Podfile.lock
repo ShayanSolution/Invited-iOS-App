@@ -33,6 +33,7 @@ PODS:
   - MBProgressHUD (1.1.0)
   - Pageboy (2.1.0)
   - PureLayout (3.0.2)
+  - SwiftyJSON (4.0.0)
   - Tabman (1.1.4):
     - Pageboy (~> 2.1.0)
     - PureLayout (~> 3.0)
@@ -43,6 +44,7 @@ DEPENDENCIES:
   - GooglePlacePicker
   - GooglePlaces
   - MBProgressHUD (~> 1.1.0)
+  - SwiftyJSON
   - Tabman (~> 1.0)
 
 SPEC CHECKSUMS:
@@ -53,8 +55,9 @@ SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   Pageboy: f137e98cdb92c1913401d9d3c8888951ff81a630
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   Tabman: 50dc583227855fd424b491176cf164c23542cbcf
 
-PODFILE CHECKSUM: 6f27305319dcce1c909ffc3ee831a9d7c5236a9a
+PODFILE CHECKSUM: bd3342b8ecc1439cf63e72352d00ac8b2eca91e0
 
 COCOAPODS: 1.4.0

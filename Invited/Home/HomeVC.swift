@@ -94,6 +94,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var selectedList : UserList?
     var updateSelectedList : UserList?
     var isUpdated : Bool!
+//    var isStartNavigationButtonTapped : Bool!
     var listID : Int?
     
     var selectedLat : String?
@@ -105,6 +106,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
         // Do any additional setup after loading the view.
         
+//        self.isStartNavigationButtonTapped = false
         self.isUpdated = false
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
@@ -170,6 +172,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         }
+//        else if self.isStartNavigationButtonTapped == true
+//        {
+//            self.isStartNavigationButtonTapped = false
+//
+//            let point = CGPoint(x: self.mainScrollView.frame.size.width * 2, y: 0)
+//            self.mainScrollView.setContentOffset(point, animated: false)
+//
+//        }
         else
         {
             if (self.lineView.frame.origin.x != self.contactListButton.frame.origin.x) {
@@ -851,7 +861,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             receivedEventsCell?.expandButton.addTarget(self, action: #selector(self.showReceivedEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
             
             
-            //
+            
             
             return receivedEventsCell!
             
@@ -1301,8 +1311,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func startNavigationButtonTapped(sender:UIButton)
     {
+//        self.isStartNavigationButtonTapped = true
+//
         let toLat = self.requestEventList[sender.tag].lat
         let toLong = self.requestEventList[sender.tag].long
+//
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let routeVC : RouteVC = storyboard.instantiateViewController(withIdentifier: "RouteVC") as! RouteVC
+//        routeVC.originLocationCoordinate = self.currentLocationCoordinate
+//        routeVC.destinationLocationCoordinate = CLLocationCoordinate2D.init(latitude: Double(toLat)!, longitude: Double(toLong)!)
+//
+//        BasicFunctions.pushVCinNCwithObject(vc: routeVC, popTop: false)
         
         // if GoogleMap installed
         if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {

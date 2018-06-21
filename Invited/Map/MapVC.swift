@@ -27,15 +27,17 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
         
         self.mapView.isMyLocationEnabled = true
         
         let camera = GMSCameraPosition.camera(withLatitude: (self.selectedLocationCoordinate.latitude), longitude: (self.selectedLocationCoordinate.longitude), zoom: 14.0)
         
         self.mapView?.animate(to: camera)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        
     }
     
     @IBAction func backButtonTapped(_ sender: UIButton)
@@ -53,8 +55,8 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
         
-        let northEast = CLLocationCoordinate2DMake(self.selectedLocationCoordinate.latitude + 0.5, self.selectedLocationCoordinate.longitude + 0.5)
-        let southWest = CLLocationCoordinate2DMake(self.selectedLocationCoordinate.latitude - 0.5, self.selectedLocationCoordinate.longitude - 0.5)
+        let northEast = CLLocationCoordinate2DMake(self.selectedLocationCoordinate.latitude + 0.6, self.selectedLocationCoordinate.longitude + 0.6)
+        let southWest = CLLocationCoordinate2DMake(self.selectedLocationCoordinate.latitude - 0.6, self.selectedLocationCoordinate.longitude - 0.6)
         
         let predictBounds = GMSCoordinateBounds.init(coordinate: northEast, coordinate: southWest)
         
@@ -80,8 +82,6 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
             
             self.mapView.animate(toLocation: place.coordinate)
 //            self.addressLabel.text = place.formattedAddress
-            
-            
             
             let marker = GMSMarker(position: place.coordinate)
             marker.title = place.name
