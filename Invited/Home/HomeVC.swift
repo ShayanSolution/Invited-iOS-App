@@ -851,7 +851,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             receivedEventsCell?.expandButton.addTarget(self, action: #selector(self.showReceivedEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
             
             
-            
+            //
             
             return receivedEventsCell!
             
