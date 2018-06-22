@@ -12,6 +12,7 @@ import GooglePlaces
 
 class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDelegate {
     
+    @IBOutlet var doneButton: UIButton!
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -27,6 +28,8 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
         
         self.mapView.isMyLocationEnabled = true
         

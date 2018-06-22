@@ -416,6 +416,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 
@@ -473,6 +474,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 

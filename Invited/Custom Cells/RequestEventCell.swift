@@ -41,6 +41,7 @@ class RequestEventCell: UITableViewCell {
         
 //        BasicFunctions.setRoundCornerOfImageView(imageView: self.profileImageView)
         
+        BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.acceptButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.rejectButton, radius: 5.0)
     }

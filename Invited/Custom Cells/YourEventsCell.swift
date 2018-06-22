@@ -28,6 +28,9 @@ class YourEventsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        BasicFunctions.setRoundCornerOfButton(button: self.editButton, radius: 5.0)
+        BasicFunctions.setRoundCornerOfButton(button: self.deleteButton, radius: 5.0)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

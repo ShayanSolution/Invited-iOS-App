@@ -194,15 +194,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let point = CGPoint(x: 0, y: 0)
             self.mainScrollView.setContentOffset( point, animated: true)
             
+            self.getContactListFromServer()
+            
         }
         
         
         
-        self.getContactListFromServer()
+        
         
         
         
     }
+//    override func viewDidDisappear(_ animated: Bool)
+//    {
+////        super.viewDidDisappear(true)
+//
+//        self.view.endEditing(true)
+//    }
     @objc func receivedNotification(notification : Notification)
     {
 //        self.backButtonTapped()
@@ -345,6 +353,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.createEventView.locationTextField.text = self.currentLocationAddress
         
+        self.createEventView.setListTextField.text = ""
+        self.selectedList = nil
+        
         UserDefaults.standard.removeObject(forKey: kSelectedLat)
         UserDefaults.standard.removeObject(forKey: kSelectedLong)
         UserDefaults.standard.removeObject(forKey: kSelectedAddress)
@@ -391,22 +402,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        self.createEventView.titleTextField.attributedPlaceholder = NSAttributedString(string: "Invite Title",
 //                                                                                       attributes: [NSAttributedStringKey.foregroundColor: UIColor.darkGray])
         
-//        self.createEventView.titleTextField.tag = 1
+        self.createEventView.titleTextField.tag = 1
         self.createEventView.timeTextField.tag = 1
         self.createEventView.dateTextField.tag = 1
-        self.createEventView.locationTextField.tag = 1
+        self.createEventView.locationTextField.tag = 3
+        self.createEventView.setNumberOfPeopleTextfield.tag = 1
         self.createEventView.setListTextField.tag = 1
         
         self.createEventView.titleTextField.delegate = self
         self.createEventView.setNumberOfPeopleTextfield.delegate = self
-//        self.createEventView.timeTextField.delegate = self
-//        self.createEventView.dateTextField.delegate = self
+        self.createEventView.timeTextField.delegate = self
+        self.createEventView.dateTextField.delegate = self
         self.createEventView.locationTextField.delegate = self
+        self.createEventView.setListTextField.delegate = self
         
         self.showPicker(textField: self.createEventView.setListTextField)
         
         self.showDatePicker(textField: self.createEventView.dateTextField)
         self.showTimePicker(textField: self.createEventView.timeTextField)
+        
+        self.addDoneButtonOnKeyboard(textField: self.createEventView.setNumberOfPeopleTextfield)
         
         self.createEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.createEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
@@ -685,21 +700,27 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let dateformatter = DateFormatter()
             dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             
+            
             let date = dateformatter.date(from: eventData.eventTime)
             
-            dateformatter.dateFormat = "dd/MM/yyyy"
+            dateformatter.dateStyle = .medium
+            dateformatter.timeStyle = .short
             
-            let formatter2 = DateFormatter()
-            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            
-            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-            let time = formatter2.date(from: eventData.eventTime)
-            
-            formatter2.dateFormat = "hh:mm a"
+//            dateformatter.dateStyle = .long
+//            dateformatter.dateFormat = "dd/MM/yyyy"
+//
+//            let formatter2 = DateFormatter()
+//            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//            let time = formatter2.date(from: eventData.eventTime)
+//
+//            formatter2.timeStyle = .medium
+//            formatter2.dateFormat = "hh:mm a"
             
 
             requestEventCell?.eventName.text = eventData.title
-            requestEventCell?.date.text = "Date :" + dateformatter.string(from: date!) + " " + formatter2.string(from: time!)
+            requestEventCell?.date.text = "Date : " + dateformatter.string(from: date!)
             requestEventCell?.createdBy.text = "Invited by " + eventData.createdBy
             requestEventCell?.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
             
@@ -746,7 +767,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 requestEventCell?.startNavigationButton.isHidden = true
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
-                requestEventCell?.acceptORRejectLabel.text = "Too late. Event has been closed."
+                requestEventCell?.acceptORRejectLabel.text = "Too late, event has been closed."
                 requestEventCell?.acceptORRejectLabel.textColor = UIColor.black
                 
             }
@@ -772,18 +793,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let date = dateformatter.date(from: eventData.eventTime)
             
-            dateformatter.dateFormat = "dd/MM/yyyy"
+            dateformatter.dateStyle = .medium
+            dateformatter.timeStyle = .short
             
-            let formatter2 = DateFormatter()
-            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//            dateformatter.dateFormat = "dd/MM/yyyy"
+//
+//            let formatter2 = DateFormatter()
+//            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//            let time = formatter2.date(from: eventData.eventTime)
             
-            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-            let time = formatter2.date(from: eventData.eventTime)
-            
-            formatter2.dateFormat = "hh:mm a"
+//            formatter2.dateFormat = "hh:mm a"
 
             yourEventsCell?.title.text = eventData.title
-            yourEventsCell?.date.text = "Date : " + dateformatter.string(from: date!) + " " + formatter2.string(from: time!)
+            yourEventsCell?.date.text = "Date : " + dateformatter.string(from: date!)
             yourEventsCell?.location.text =  "Location : " + eventData.eventAddress
             yourEventsCell?.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
             
@@ -815,18 +839,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let date = dateformatter.date(from: eventData.eventTime)
             
-            dateformatter.dateFormat = "dd/MM/yyyy"
+            dateformatter.dateStyle = .medium
+            dateformatter.timeStyle = .short
             
-            let formatter2 = DateFormatter()
-            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            
-            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-            let time = formatter2.date(from: eventData.eventTime)
-            
-            formatter2.dateFormat = "hh:mm a"
+//            dateformatter.dateFormat = "dd/MM/yyyy"
+//
+//            let formatter2 = DateFormatter()
+//            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//            let time = formatter2.date(from: eventData.eventTime)
+//
+//            formatter2.dateFormat = "hh:mm a"
             
             receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.date.text = "Date : " +  dateformatter.string(from: date!) + " " + formatter2.string(from: time!)
+            receivedEventsCell?.date.text = "Date : " +  dateformatter.string(from: date!)
             
             if eventData.firstName != ""
             {
@@ -882,18 +909,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let date = dateformatter.date(from: eventData.eventTime)
             
-            dateformatter.dateFormat = "dd/MM/yyyy"
+            dateformatter.dateStyle = .medium
+            dateformatter.timeStyle = .short
             
-            let formatter2 = DateFormatter()
-            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            
-            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-            let time = formatter2.date(from: eventData.eventTime)
-            
-            formatter2.dateFormat = "hh:mm a"
+//            dateformatter.dateFormat = "dd/MM/yyyy"
+//
+//            let formatter2 = DateFormatter()
+//            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//            //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//            let time = formatter2.date(from: eventData.eventTime)
+//
+//            formatter2.dateFormat = "hh:mm a"
             
             receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.date.text = "Date : " +  dateformatter.string(from: date!) + " " + formatter2.string(from: time!)
+            receivedEventsCell?.date.text = "Date : " +  dateformatter.string(from: date!)
             
             if eventData.firstName != ""
             {
@@ -1015,6 +1045,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
+        self.createEventView.locationTextField.isUserInteractionEnabled = true
+        if self.editEventView != nil
+        {
+            self.editEventView.locationTextField.isUserInteractionEnabled = true
+        }
+        
+        
         textField.resignFirstResponder()
         
         return true
@@ -1025,7 +1062,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if textField.tag == 1 || textField.tag == 2
         {
-            textField.resignFirstResponder()
+
+            self.createEventView.locationTextField.isUserInteractionEnabled = false
+            if self.editEventView != nil
+            {
+                self.editEventView.locationTextField.isUserInteractionEnabled = false
+            }
+            
+        }
+        else if textField.tag == 3
+        {
+            self.view.endEditing(true)
             self.showSearchVC()
         }
     }
@@ -1080,20 +1127,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let date = dateformatter.date(from: eventData.eventTime)
         
-        dateformatter.dateFormat = "dd/MM/yyyy"
+        dateformatter.dateStyle = .medium
+        dateformatter.timeStyle = .short
         
-        let formatter2 = DateFormatter()
-        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-        let time = formatter2.date(from: eventData.eventTime)
-        
-        formatter2.dateFormat = "hh:mm a"
+//        dateformatter.dateFormat = "dd/MM/yyyy"
+//
+//        let formatter2 = DateFormatter()
+//        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//        //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//        let time = formatter2.date(from: eventData.eventTime)
+//
+//        formatter2.dateFormat = "hh:mm a"
         
         
         self.detailView.title.text = eventData.title
         self.detailView.createdBy.text = "Invited by " + eventData.createdBy
-        self.detailView.date.text =   "Date : "  + dateformatter.string(from: date!) + " " + formatter2.string(from: time!)
+        self.detailView.date.text =   "Date : "  + dateformatter.string(from: date!)
         self.detailView.location.text = "Location :" + eventData.eventAddress
         self.detailView.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
         
@@ -1138,6 +1188,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.detailView.paymentMethodLabel.text = "All members will pay."
         }
         
+        BasicFunctions.setRoundCornerOfButton(button: self.detailView.acceptButton, radius: 5.0)
+        BasicFunctions.setRoundCornerOfButton(button: self.detailView.rejectButton, radius: 5.0)
+        BasicFunctions.setRoundCornerOfButton(button: self.detailView.startNavigationButton, radius: 5.0)
+        
         self.detailView.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
@@ -1161,20 +1215,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let date = dateformatter.date(from: eventData.eventTime)
         
-        dateformatter.dateFormat = "dd/MM/yyyy"
+        dateformatter.dateStyle = .medium
+        dateformatter.timeStyle = .short
         
-        let formatter2 = DateFormatter()
-        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-        let time = formatter2.date(from: eventData.eventTime)
-        
-        formatter2.dateFormat = "hh:mm a"
+//        dateformatter.dateFormat = "dd/MM/yyyy"
+//
+//        let formatter2 = DateFormatter()
+//        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//        //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//        let time = formatter2.date(from: eventData.eventTime)
+//
+//        formatter2.dateFormat = "hh:mm a"
         
         
         self.eventDetailView.title.text = eventData.title
         self.eventDetailView.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
-        self.eventDetailView.date.text =   "Date : "  + dateformatter.string(from: date!) + " " + formatter2.string(from: time!)
+        self.eventDetailView.date.text =   "Date : "  + dateformatter.string(from: date!) 
         self.eventDetailView.location.text = "Location :" + eventData.eventAddress
 
         self.eventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -1192,10 +1249,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.editEventView.frame = CGRect(x: 0 , y: 0, width: Int(self.yourEventsView.frame.size.width), height: Int(self.yourEventsView.frame.size.height))
         
-//        self.editEventView.titleTextField.tag = 2
+        self.editEventView.titleTextField.tag = 2
         self.editEventView.timeTextField.tag = 2
         self.editEventView.dateTextField.tag = 2
-        self.editEventView.locationTextField.tag = 2
+        self.editEventView.locationTextField.tag = 3
+        self.editEventView.setNumberOfPeopleTextfield.tag = 2
         self.editEventView.setListTextField.tag = 2
         
         self.selectedList = nil
@@ -1203,9 +1261,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.editEventView.titleTextField.delegate = self
         self.editEventView.setNumberOfPeopleTextfield.delegate = self
-//        self.editEventView.timeTextField.delegate = self
-//        self.editEventView.dateTextField.delegate = self
+        self.editEventView.timeTextField.delegate = self
+        self.editEventView.dateTextField.delegate = self
         self.editEventView.locationTextField.delegate = self
+        self.editEventView.setListTextField.delegate = self
         
         self.isUpdated = true
         
@@ -1214,6 +1273,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.showTimePicker(textField: self.editEventView.timeTextField)
         
         self.showPicker(textField: self.editEventView.setListTextField)
+        
+        self.addDoneButtonOnKeyboard(textField: self.editEventView.setNumberOfPeopleTextfield)
         
         self.editEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.editEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
@@ -1239,14 +1300,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        let dateString = eventData.eventTime
         let date = formatter1.date(from: eventData.eventTime)
         
-        formatter1.dateFormat = "dd/MM/yyyy"
+        formatter1.dateStyle = .medium
+        formatter1.timeStyle = .short
         
+        formatter1.dateFormat = "dd/MM/yyyy"
+
         let formatter2 = DateFormatter()
         formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    
+
 //        let timeString = eventData.eventTime.components(separatedBy: " ")[1
         let time = formatter2.date(from: eventData.eventTime)
-        
+
         formatter2.dateFormat = "hh:mm a"
         
         self.editEventView.titleTextField.text = eventData.title
@@ -1354,6 +1418,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 
@@ -1417,6 +1482,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if message != nil && message == "Unauthorized"
         {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
             BasicFunctions.showSigInVC()
             return
             
@@ -1487,6 +1553,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if message != nil && message == "Unauthorized"
         {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
             BasicFunctions.showSigInVC()
             return
             
@@ -1526,6 +1593,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func showSearchVC()
     {
+        
         
         self.placeSelectedORCancelled = true
         
@@ -1641,6 +1709,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if message != nil && message == "Unauthorized"
         {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
             BasicFunctions.showSigInVC()
             return
             
@@ -1727,7 +1796,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         toolbar.sizeToFit()
         
         //done button & cancel button
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelTimePicker))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.doneTimePicker(sender:)))
@@ -1757,14 +1826,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.editEventView.timeTextField.text = formatter.string(from: self.timePicker.date)
             
         }
+        
+        self.createEventView.locationTextField.isUserInteractionEnabled = true
+        if self.editEventView != nil
+        {
+            self.editEventView.locationTextField.isUserInteractionEnabled = true
+        }
+        
         //dismiss date picker dialog
         self.view.endEditing(true)
     }
     
-    @objc func cancelTimePicker(){
-        //cancel button dismiss datepicker dialog
-        self.view.endEditing(true)
-    }
+//    @objc func cancelTimePicker(){
+//        //cancel button dismiss datepicker dialog
+//        self.view.endEditing(true)
+//    }
     
     
     // UIDatePicker Methods
@@ -1779,7 +1855,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         toolbar.sizeToFit()
         
         //done button & cancel button
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelDatePicker))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.donedatePicker(sender:)))
@@ -1808,14 +1884,24 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.editEventView.dateTextField.text = formatter.string(from: self.datePicker.date)
             
         }
+        
+        self.createEventView.locationTextField.isUserInteractionEnabled = true
+        if self.editEventView != nil
+        {
+            self.editEventView.locationTextField.isUserInteractionEnabled = true
+        }
+        
         //dismiss date picker dialog
         self.view.endEditing(true)
     }
     
-    @objc func cancelDatePicker(){
-        //cancel button dismiss datepicker dialog
-        self.view.endEditing(true)
-    }
+//    @objc func cancelDatePicker(){
+//        //cancel button dismiss datepicker dialog
+//
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//
+//        self.view.endEditing(true)
+//    }
     
     
     
@@ -1907,6 +1993,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 
@@ -2047,6 +2134,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 
@@ -2120,6 +2208,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if message != nil && message == "Unauthorized"
         {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
             BasicFunctions.showSigInVC()
             return
             
@@ -2215,6 +2304,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if message != nil && message == "Unauthorized"
         {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
             BasicFunctions.showSigInVC()
             return
             
@@ -2303,6 +2393,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if message != nil && message == "Unauthorized"
         {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
             BasicFunctions.showSigInVC()
             return
             
@@ -2392,6 +2483,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 
@@ -2419,6 +2511,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if message != nil && message == "Unauthorized"
             {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
                 BasicFunctions.showSigInVC()
                 return
                 
@@ -2495,12 +2588,49 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
             
         }
+        
+        self.createEventView.locationTextField.isUserInteractionEnabled = true
+        if self.editEventView != nil
+        {
+            self.editEventView.locationTextField.isUserInteractionEnabled = true
+        }
+        
         self.view.endEditing(true)
     }
     //When Press Cancel on PickerView
     @objc func cancelClick() {
+        
+        self.createEventView.locationTextField.isUserInteractionEnabled = true
+        if self.editEventView != nil
+        {
+            self.editEventView.locationTextField.isUserInteractionEnabled = true
+        }
+        
         self.view.endEditing(true)
     }
+    
+    func addDoneButtonOnKeyboard(textField:UITextField!)
+    {
+        //ToolBar
+        let toolbar = UIToolbar();
+        toolbar.sizeToFit()
+        
+        
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
+
+        toolbar.setItems([spaceButton,doneButton], animated: false)
+        
+        
+        // add toolbar to textField
+        textField.inputAccessoryView = toolbar
+    }
+    
+//    @objc func doneButtonAction()
+//    {
+//        self.view.endEditing(true)
+//    }
     
     
     
