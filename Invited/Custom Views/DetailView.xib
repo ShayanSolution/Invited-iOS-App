@@ -38,7 +38,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="25" id="JFu-f0-9gy"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                            <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>

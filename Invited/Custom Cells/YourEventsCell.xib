@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -26,7 +26,7 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rkp 2010 alumni get together" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01y-86-3mn">
                                         <rect key="frame" x="0.0" y="0.0" width="295" height="41"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="0.0" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -51,27 +51,30 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NDy-ob-lab">
-                                <rect key="frame" x="15" y="56" width="295" height="50"/>
+                                <rect key="frame" x="15" y="56" width="295" height="65.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date : June 21 2018" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pu3-La-LzO">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="11"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pu3-La-LzO">
+                                        <rect key="frame" x="0.0" y="0.0" width="295" height="16"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="10.5" id="Ckb-AH-Ecf"/>
+                                            <constraint firstAttribute="height" constant="16" id="urX-vf-IK9"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                         <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location : 49-10 Queens Blvd, Queens, NY 11377, USA" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5vd-NT-DLn">
-                                        <rect key="frame" x="0.0" y="20" width="295" height="11"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5vd-NT-DLn">
+                                        <rect key="frame" x="0.0" y="26" width="295" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="18.5" id="7JX-6O-bRW"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                         <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Invited : 12" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tIc-Nu-Vua">
-                                        <rect key="frame" x="0.0" y="39" width="98.5" height="11"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tIc-Nu-Vua">
+                                        <rect key="frame" x="0.0" y="54.5" width="150" height="11"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="10.5" id="pkt-Gl-XTe"/>
+                                            <constraint firstAttribute="width" constant="150" id="o5z-ab-6BF"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                         <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -80,14 +83,16 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="tIc-Nu-Vua" secondAttribute="bottom" id="5XY-ue-8nd"/>
-                                    <constraint firstItem="tIc-Nu-Vua" firstAttribute="top" secondItem="5vd-NT-DLn" secondAttribute="bottom" constant="8" id="9cx-sQ-DOA"/>
-                                    <constraint firstItem="5vd-NT-DLn" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="A2X-iB-ltc"/>
+                                    <constraint firstAttribute="height" constant="65.5" id="19L-tp-T2p"/>
                                     <constraint firstItem="Pu3-La-LzO" firstAttribute="top" secondItem="NDy-ob-lab" secondAttribute="top" id="EBQ-Xx-7m2"/>
                                     <constraint firstAttribute="trailing" secondItem="5vd-NT-DLn" secondAttribute="trailing" id="EOw-TZ-G69"/>
-                                    <constraint firstItem="tIc-Nu-Vua" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="pxa-rk-7I9"/>
-                                    <constraint firstItem="Pu3-La-LzO" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="uI9-dE-aFZ"/>
-                                    <constraint firstItem="5vd-NT-DLn" firstAttribute="top" secondItem="Pu3-La-LzO" secondAttribute="bottom" constant="9" id="yTp-ad-TDU"/>
+                                    <constraint firstAttribute="trailing" secondItem="Pu3-La-LzO" secondAttribute="trailing" id="FXD-Eg-lFn"/>
+                                    <constraint firstItem="5vd-NT-DLn" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="Hjy-bp-w2E"/>
+                                    <constraint firstItem="Pu3-La-LzO" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="JmD-TU-9QF"/>
+                                    <constraint firstItem="tIc-Nu-Vua" firstAttribute="top" secondItem="5vd-NT-DLn" secondAttribute="bottom" constant="10" id="Sni-xT-zRl"/>
+                                    <constraint firstItem="tIc-Nu-Vua" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="UAv-Ca-IID"/>
+                                    <constraint firstItem="5vd-NT-DLn" firstAttribute="top" secondItem="Pu3-La-LzO" secondAttribute="bottom" constant="10" id="n2K-Mu-rfp"/>
+                                    <constraint firstAttribute="bottom" secondItem="tIc-Nu-Vua" secondAttribute="bottom" id="ynb-Cf-sgq"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xRg-5l-0f6">
@@ -138,7 +143,6 @@
                             <constraint firstItem="DQa-Sg-iJS" firstAttribute="top" secondItem="P7u-PA-8Y3" secondAttribute="top" id="4L1-wR-RnB"/>
                             <constraint firstItem="f9D-cm-yWe" firstAttribute="top" secondItem="P7u-PA-8Y3" secondAttribute="top" id="4kO-iF-yzk"/>
                             <constraint firstAttribute="trailing" secondItem="NDy-ob-lab" secondAttribute="trailing" constant="15" id="7Ow-nH-Ghj"/>
-                            <constraint firstItem="xRg-5l-0f6" firstAttribute="top" secondItem="NDy-ob-lab" secondAttribute="bottom" constant="30.5" id="BrQ-70-2cX"/>
                             <constraint firstAttribute="bottom" secondItem="xRg-5l-0f6" secondAttribute="bottom" constant="8" id="Efn-eK-DIg"/>
                             <constraint firstAttribute="trailing" secondItem="f9D-cm-yWe" secondAttribute="trailing" constant="15" id="KGK-aN-cb3"/>
                             <constraint firstItem="xRg-5l-0f6" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" constant="15" id="MQI-Pc-GWh"/>

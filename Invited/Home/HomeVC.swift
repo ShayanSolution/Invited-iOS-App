@@ -38,6 +38,30 @@ class EventData: NSObject
     var userList = [ContactData]()
     
 }
+extension NSMutableAttributedString {
+    @discardableResult func bold(_ text: String) -> NSMutableAttributedString {
+        if #available(iOS 8.2, *) {
+            let attrs: [NSAttributedStringKey: Any] = [.font: UIFont.systemFont(ofSize: 15.0, weight: .semibold)]
+            
+            let boldString = NSMutableAttributedString(string:text, attributes: attrs)
+            append(boldString)
+        }
+        
+        else {
+            // Fallback on earlier versions
+        }
+        
+        
+        return self
+    }
+    
+    @discardableResult func normal(_ text: String) -> NSMutableAttributedString {
+        let normal = NSAttributedString(string: text)
+        append(normal)
+        
+        return self
+    }
+}
 
 
 class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate {
@@ -125,6 +149,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
+//        let tapRecognizer = UITapGestureRecognizer()
+//        tapRecognizer.addTarget(self, action: #selector(self.didTapView))
+//        self.view.addGestureRecognizer(tapRecognizer)
+        
     
     }
     override func viewWillAppear(_ animated: Bool)
@@ -211,6 +239,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //        self.view.endEditing(true)
 //    }
+    
+//    @objc func didTapView(){
+//        self.view.endEditing(true)
+//    }
+
+    
     @objc func receivedNotification(notification : Notification)
     {
 //        self.backButtonTapped()
@@ -720,9 +754,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
 
             requestEventCell?.eventName.text = eventData.title
-            requestEventCell?.date.text = "Date : " + dateformatter.string(from: date!)
-            requestEventCell?.createdBy.text = "Invited by " + eventData.createdBy
-            requestEventCell?.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
+            requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(eventData.createdBy)
+            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
             
             requestEventCell?.expandButton.tag = indexPath.row
             requestEventCell?.startNavigationButton.tag = indexPath.row
@@ -807,9 +841,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.dateFormat = "hh:mm a"
 
             yourEventsCell?.title.text = eventData.title
-            yourEventsCell?.date.text = "Date : " + dateformatter.string(from: date!)
-            yourEventsCell?.location.text =  "Location : " + eventData.eventAddress
-            yourEventsCell?.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
+            yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+            yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
             
             yourEventsCell?.expandButton.tag = indexPath.row
             yourEventsCell?.editButton.tag = indexPath.row
@@ -853,15 +887,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.dateFormat = "hh:mm a"
             
             receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.date.text = "Date : " +  dateformatter.string(from: date!)
+            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
             
             if eventData.firstName != ""
             {
-            receivedEventsCell?.invitedBy.text = "Invited to " + eventData.firstName + eventData.lastName
+                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(eventData.firstName).normal(eventData.lastName)
             }
             else
             {
-                receivedEventsCell?.invitedBy.text = "Invited to " + String(eventData.phone)
+                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(String(eventData.phone))
             }
             
             if eventData.confirmed == 0
@@ -923,15 +957,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.dateFormat = "hh:mm a"
             
             receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.date.text = "Date : " +  dateformatter.string(from: date!)
+            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
             
             if eventData.firstName != ""
             {
-                receivedEventsCell?.invitedBy.text = "Invited to " + eventData.firstName + eventData.lastName
+                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(eventData.firstName).normal(eventData.lastName)
             }
             else
             {
-                receivedEventsCell?.invitedBy.text = "Invited to " + String(eventData.phone)
+                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(String(eventData.phone))
             }
             
             if eventData.confirmed == 0
@@ -1140,12 +1174,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //        formatter2.dateFormat = "hh:mm a"
         
+    
         
         self.detailView.title.text = eventData.title
-        self.detailView.createdBy.text = "Invited by " + eventData.createdBy
-        self.detailView.date.text =   "Date : "  + dateformatter.string(from: date!)
-        self.detailView.location.text = "Location :" + eventData.eventAddress
-        self.detailView.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
+        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(eventData.createdBy)
+        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+        self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
         
         self.detailView.acceptButton.tag = sender.tag
         self.detailView.rejectButton.tag = sender.tag
@@ -1230,9 +1265,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.eventDetailView.title.text = eventData.title
-        self.eventDetailView.totalInvited.text = "Total Invited : " + String(eventData.totalInvited)
-        self.eventDetailView.date.text =   "Date : "  + dateformatter.string(from: date!) 
-        self.eventDetailView.location.text = "Location :" + eventData.eventAddress
+        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+        self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+        self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 
         self.eventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
         
@@ -2614,23 +2649,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         //ToolBar
         let toolbar = UIToolbar();
         toolbar.sizeToFit()
-        
-        
+
+
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        
+
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
 
         toolbar.setItems([spaceButton,doneButton], animated: false)
-        
-        
+
+
         // add toolbar to textField
         textField.inputAccessoryView = toolbar
     }
     
-//    @objc func doneButtonAction()
-//    {
-//        self.view.endEditing(true)
-//    }
+    @objc func doneButtonAction()
+    {
+        self.view.endEditing(true)
+    }
     
     
     

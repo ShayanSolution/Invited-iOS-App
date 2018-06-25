@@ -26,7 +26,7 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rkp 2010 alumni get together" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ceD-gf-NLN">
                                         <rect key="frame" x="30" y="0.0" width="265" height="41"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="0.0" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -61,7 +61,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5I-J9-JwQ">
-                                <rect key="frame" x="15" y="56" width="295" height="60"/>
+                                <rect key="frame" x="15" y="56" width="295" height="65"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="GEU-yK-Vt3">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -80,15 +80,15 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Invited : 7" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VzW-HO-Jrp">
-                                        <rect key="frame" x="183" y="20" width="92" height="20"/>
+                                        <rect key="frame" x="183" y="20" width="92" height="20.5"/>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                         <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date : June 20 2018" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LT7-ri-2Kh">
-                                        <rect key="frame" x="153" y="49" width="122" height="11"/>
+                                        <rect key="frame" x="153" y="49" width="122" height="16"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="10.5" id="1Z5-vV-5fh"/>
+                                            <constraint firstAttribute="height" constant="16" id="1Z5-vV-5fh"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                         <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -102,7 +102,7 @@
                                     <constraint firstAttribute="trailing" secondItem="LT7-ri-2Kh" secondAttribute="trailing" constant="20" id="BgR-D9-oGb"/>
                                     <constraint firstAttribute="bottom" secondItem="LT7-ri-2Kh" secondAttribute="bottom" id="Dab-bG-1bP"/>
                                     <constraint firstAttribute="trailing" secondItem="VzW-HO-Jrp" secondAttribute="trailing" constant="20" id="PRd-7k-GeH"/>
-                                    <constraint firstAttribute="bottom" secondItem="GEU-yK-Vt3" secondAttribute="bottom" constant="10" id="QTn-J8-MIf"/>
+                                    <constraint firstAttribute="bottom" secondItem="GEU-yK-Vt3" secondAttribute="bottom" constant="15" id="QTn-J8-MIf"/>
                                     <constraint firstItem="U5I-YY-JWn" firstAttribute="leading" secondItem="GEU-yK-Vt3" secondAttribute="trailing" constant="20" id="ebw-i2-dNH"/>
                                     <constraint firstAttribute="trailing" secondItem="U5I-YY-JWn" secondAttribute="trailing" constant="20" id="kBb-bZ-ZaC"/>
                                     <constraint firstItem="GEU-yK-Vt3" firstAttribute="leading" secondItem="b5I-J9-JwQ" secondAttribute="leading" id="mv5-QI-SzK"/>
@@ -181,7 +181,7 @@
                             <constraint firstItem="hft-y2-dpH" firstAttribute="top" secondItem="h41-7N-Gzh" secondAttribute="bottom" constant="20" id="8WQ-K9-aNd"/>
                             <constraint firstItem="h41-7N-Gzh" firstAttribute="leading" secondItem="Hx6-a0-JzL" secondAttribute="leading" constant="15" id="91b-mX-uXf"/>
                             <constraint firstItem="AQ4-vX-L4V" firstAttribute="leading" secondItem="Hx6-a0-JzL" secondAttribute="leading" constant="15" id="Dcf-dV-rLV"/>
-                            <constraint firstItem="h41-7N-Gzh" firstAttribute="top" secondItem="b5I-J9-JwQ" secondAttribute="bottom" constant="25" id="HJn-qi-h3b"/>
+                            <constraint firstItem="h41-7N-Gzh" firstAttribute="top" secondItem="b5I-J9-JwQ" secondAttribute="bottom" constant="20" id="HJn-qi-h3b"/>
                             <constraint firstAttribute="trailing" secondItem="AQ4-vX-L4V" secondAttribute="trailing" constant="15" id="NwF-3p-Scj"/>
                             <constraint firstAttribute="trailing" secondItem="h41-7N-Gzh" secondAttribute="trailing" constant="15" id="RjZ-Xo-JtQ"/>
                             <constraint firstAttribute="trailing" secondItem="hft-y2-dpH" secondAttribute="trailing" constant="15" id="ZTl-I9-H7a"/>

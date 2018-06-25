@@ -15,7 +15,9 @@ extension NSObject {
 var className: String {
     return String(describing: type(of: self))
 }
+    
 }
+
 
 class BasicFunctions: NSObject {
     

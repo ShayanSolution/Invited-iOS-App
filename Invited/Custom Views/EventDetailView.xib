@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -59,18 +59,18 @@
                             <rect key="frame" x="65" y="86" width="245" height="214"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uz0-ef-eZt">
-                                    <rect key="frame" x="0.0" y="0.0" width="245" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="245" height="54.5"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OC6-Yg-VoS">
-                                            <rect key="frame" x="0.0" y="54.5" width="245" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="54" width="245" height="0.5"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="0.5" id="I4p-ha-anH"/>
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Invited : 7" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtv-6Z-QhU">
-                                            <rect key="frame" x="53" y="0.0" width="192" height="50"/>
-                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                            <rect key="frame" x="53" y="0.0" width="192" height="49.5"/>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -96,23 +96,23 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RmZ-dz-50P">
-                                    <rect key="frame" x="0.0" y="80" width="245" height="54"/>
+                                    <rect key="frame" x="0.0" y="79.5" width="245" height="55"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="maS-jq-AhM">
-                                            <rect key="frame" x="0.0" y="53.5" width="245" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="54.5" width="245" height="0.5"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="0.5" id="OTI-h9-4lO"/>
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date : June 20 2018" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wZS-1c-h7a">
-                                            <rect key="frame" x="46.5" y="0.0" width="198.5" height="49"/>
-                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                            <rect key="frame" x="46.5" y="0.0" width="198.5" height="50"/>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconCalender" translatesAutoresizingMaskIntoConstraints="NO" id="SKE-Mv-Avr">
-                                            <rect key="frame" x="0.0" y="17.5" width="20.5" height="20"/>
+                                            <rect key="frame" x="0.0" y="18" width="20.5" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20.5" id="SS9-8D-NP5"/>
                                                 <constraint firstAttribute="height" constant="20" id="huh-Is-C11"/>
@@ -133,16 +133,16 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7I6-b2-tpW">
-                                    <rect key="frame" x="0.0" y="159" width="245" height="55"/>
+                                    <rect key="frame" x="0.0" y="159.5" width="245" height="54.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location : 49-10 Queens Blvd, Queens, NY 11377, USA" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ajh-6Z-tyj">
-                                            <rect key="frame" x="45.5" y="0.0" width="199.5" height="55"/>
-                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                            <rect key="frame" x="45.5" y="0.0" width="199.5" height="54.5"/>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconLocation" translatesAutoresizingMaskIntoConstraints="NO" id="Ko3-h5-aCP">
-                                            <rect key="frame" x="0.0" y="18" width="19.5" height="19.5"/>
+                                            <rect key="frame" x="0.0" y="17.5" width="19.5" height="19.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="19.5" id="mkD-yx-G6X"/>
                                                 <constraint firstAttribute="width" constant="19.5" id="xgf-sB-RE5"/>

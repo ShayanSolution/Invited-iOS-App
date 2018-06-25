@@ -1020,6 +1020,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Z2G-wr-5TM"/>
+                    <size key="freeformSize" width="320" height="480"/>
                     <connections>
                         <outlet property="contactListButton" destination="Cfb-Hp-dCW" id="jaY-7d-LYG"/>
                         <outlet property="createNewButton" destination="FdO-kK-Zkr" id="fK8-Ct-I4W"/>
