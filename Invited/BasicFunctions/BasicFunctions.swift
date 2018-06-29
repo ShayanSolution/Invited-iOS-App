@@ -21,9 +21,17 @@ var className: String {
 
 class BasicFunctions: NSObject {
     
-    class func setRoundCornerOfView(view:UIView , radius : CGFloat!) -> Void {
+    class func setBorderOfView(view:UIView) -> Void {
+        view.layer.cornerRadius = 2.0
+        view.layer.borderWidth = 1.0
+        view.layer.borderColor = UIColor.init(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0).cgColor
+        
+    }
+    
+    class func setRoundCornerOfView(view:UIView , radius : CGFloat) -> Void {
         view.layer.cornerRadius = radius
         view.clipsToBounds = true
+        
     }
     class func setRoundCornerOfButton(button:UIButton, radius : CGFloat!) -> Void {
         button.layer.cornerRadius = radius

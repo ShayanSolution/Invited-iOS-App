@@ -79,6 +79,58 @@
     
     
 }
++ (void) sendSMS:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    
+    [[ServerManager sharedWebService] POST:@"sms" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+//                                       else
+//                                       {
+//                                           resultBlock(@{
+//                                                         @"error": @"1",
+//                                                         @"message": @"Could not communicate with the server."});
+//                                       }
+                                       
+                                       
+                                   }];
+    
+    
+}
++ (void) verifySMSCode:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    
+    [[ServerManager sharedWebService] POST:@"phone/verification?" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+//                                       else
+//                                       {
+//                                           resultBlock(@{
+//                                                         @"error": @"1",
+//                                                         @"message": @"Could not communicate with the server."});
+//                                       }
+//                                       
+                                       
+                                   }];
+    
+    
+}
 + (void) createList:(NSDictionary *) inputData accessToken : (NSString*)token  withResulBlock: (TMARServiceResultBlock) resultBlock
 {
     [[ServerManager sharedWebService].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];

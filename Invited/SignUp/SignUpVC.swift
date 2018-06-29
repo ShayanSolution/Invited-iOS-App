@@ -12,6 +12,9 @@ class UserProfileData: NSObject
 {
     var authID = Int()
     var authToken = String()
+    var phone = String()
+    var email = String()
+    var password = String()
     
 }
 
@@ -101,8 +104,12 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         self.mainScrollView.isHidden = true
     }
     
+    
+    
     @IBAction func register(_ sender: UIButton)
     {
+
+        
         if (self.phoneTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
@@ -123,23 +130,23 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             BasicFunctions.showAlert(vc: self, msg: "Please confirm password.")
             return
         }
-        
+
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
         postParams["email"] = self.emailTextField.text
         postParams["phone"] = self.phoneTextField.text
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
-        
-        var deviceToken = BasicFunctions.getPreferences(kAccessToken)
-        if deviceToken == nil
-        {
-            deviceToken = "123"
-        }
-        postParams["device_token"] = deviceToken
-        
+
+//        var deviceToken = BasicFunctions.getPreferences(kAccessToken)
+//        if deviceToken == nil
+//        {
+//            deviceToken = ""
+//        }
+        postParams["device_token"] = ""
+
         ServerManager.signUp(postParams) { (result) in
-            
+
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
         }
@@ -190,8 +197,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         {
             if json["status"] != nil
             {
-                self.resetData()
-                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+//                self.resetData()
+//                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+                self.sendSMSFromServer()
                 return
             }
             
@@ -209,6 +217,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
 //            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken)
 //            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
 //            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
+            
+            
+            
             BasicFunctions.setUserLoggedIn()
             BasicFunctions.setHomeVC()
         }
@@ -223,10 +234,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             else if json["email"] != nil
             {
                 errorString = (json["email"] as! Array)[0]
-            }
-            else if json["message"] != nil
-            {
-                errorString = json["message"] as! String
             }
             else if json["password"] != nil
             {
@@ -243,6 +250,123 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             
             BasicFunctions.showAlert(vc: self, msg: errorString)
         }
+        
+    }
+//    func handleServerResponseOfLogin(_ json: [String: Any])
+//    {
+//
+//        if  json["error"] == nil && json["phone"] == nil && json["email"] == nil && json["password"] == nil && json["password_confirmation"] == nil
+//        {
+//            if json["status"] != nil
+//            {
+//                self.resetData()
+//                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+//                return
+//            }
+//
+//
+//            let userProfileData = UserProfileData()
+//            let userID = json["user_id"] as? Int
+//            userProfileData.authID = userID!
+//            userProfileData.authToken = (json["access_token"] as? String)!
+//
+//            BasicFunctions.setPreferences(userProfileData.authToken, key: kAccessToken)
+//            BasicFunctions.setPreferences(userProfileData.authID, key: kUserID)
+//
+//
+//
+//            //            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken)
+//            //            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
+//            //            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
+//
+////            self.sendSMSFromServer()
+//
+//            //            BasicFunctions.setUserLoggedIn()
+//            //            BasicFunctions.setHomeVC()
+//        }
+//        else
+//        {
+//            var errorString : String!
+//
+//            if  json["phone"] != nil
+//            {
+//                errorString = (json["phone"] as! Array)[0]
+//            }
+//            else if json["email"] != nil
+//            {
+//                errorString = (json["email"] as! Array)[0]
+//            }
+//            else if json["message"] != nil
+//            {
+//                errorString = json["message"] as! String
+//            }
+//            else if json["password"] != nil
+//            {
+//                errorString = (json["password"] as! Array)[0]
+//            }
+//            else if json["password_confirmation"] != nil
+//            {
+//                errorString = (json["password_confirmattion"] as! Array)[0]
+//            }
+//            else
+//            {
+//                errorString = "Could not communicate with the server."
+//            }
+//
+//            BasicFunctions.showAlert(vc: self, msg: errorString)
+//        }
+//
+//    }
+    func sendSMSFromServer()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        var postParams = [String: Any]()
+        postParams["phone"] = self.phoneTextField.text
+        
+        ServerManager.sendSMS(postParams) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            self.handleServerResponseOfSendSMS(result as! [String : Any])
+        }
+        
+    }
+    func handleServerResponseOfSendSMS(_ json: [String: Any])
+    {
+        if  json["error"] == nil && json["Error"] == nil
+        {
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let verifyCodeVC : VerifyCodeVC = storyBoard.instantiateViewController(withIdentifier: "VerifyCodeVC") as! VerifyCodeVC
+            
+            let userProfileData = UserProfileData()
+            userProfileData.phone = self.phoneTextField.text!
+            userProfileData.email = self.emailTextField.text!
+            userProfileData.password = self.passwordTextField.text!
+            
+            verifyCodeVC.userCredentials = userProfileData
+            
+            
+            
+            BasicFunctions.pushVCinNCwithObject(vc: verifyCodeVC, popTop: true)
+
+            
+        }
+        else
+        {
+            var errorString : String!
+            
+            if  json["Error"] != nil
+            {
+                errorString = json["Error"] as! String
+            }
+            else
+            {
+                errorString = "Could not communicate with the server."
+            }
+            
+            BasicFunctions.showAlert(vc: self, msg: errorString)
+            
+        }
+        
         
     }
     
@@ -294,6 +418,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             
         }
         self.keyboardHeight = nil
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     

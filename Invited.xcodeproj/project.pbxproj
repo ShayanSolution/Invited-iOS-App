@@ -49,6 +49,7 @@
 		AFE5DFC9207CD53900652A1B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFC7207CD53900652A1B /* Main.storyboard */; };
 		AFE5DFCB207CD53900652A1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFCA207CD53900652A1B /* Assets.xcassets */; };
 		AFE5DFCE207CD53900652A1B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFCC207CD53900652A1B /* LaunchScreen.storyboard */; };
+		AFEF939220E639790033801A /* VerifyCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEF939120E639790033801A /* VerifyCodeVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +102,7 @@
 		AFE5DFCA207CD53900652A1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFE5DFCD207CD53900652A1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AFE5DFCF207CD53900652A1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AFEF939120E639790033801A /* VerifyCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				AFD9028620B2D39C0039E686 /* SignUpVC.swift */,
+				AFEF939120E639790033801A /* VerifyCodeVC.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				AF1F353C20C2EB86003F4F19 /* EventStatusView.swift in Sources */,
 				AFBCABDB20DA4EDF007ABE74 /* MapVC.swift in Sources */,
 				AF1F353E20C2F5F3003F4F19 /* DetailView.swift in Sources */,
+				AFEF939220E639790033801A /* VerifyCodeVC.swift in Sources */,
 				AF4F636720C1B8A100083873 /* ReceivedEventsView.swift in Sources */,
 				AF1D362A20D10DE200CDB0E8 /* ReceivedEventDetailView.swift in Sources */,
 				AFB9CCF020CE609100337C6A /* ListDetailVC.swift in Sources */,
