@@ -9,6 +9,7 @@
 import UIKit
 import MBProgressHUD
 import GoogleMaps
+import Contacts
 //import CoreLocation
 
 extension NSObject {
@@ -194,5 +195,78 @@ class BasicFunctions: NSObject {
     }
     
     
+    class func fetchAllContactsFromDevice()  {
+        
+        
+        if #available(iOS 9.0, *) {
+            var results = [CNContact]()
+        
+        
+        
+        var contacts: [CNContact] = {
+            let contactStore = CNContactStore()
+            let keysToFetch = [
+                CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+                CNContactEmailAddressesKey,
+                CNContactPhoneNumbersKey,
+                CNContactImageDataAvailableKey,
+                CNContactThumbnailImageDataKey] as [Any]
+            
+            // Get all the containers
+            var allContainers: [CNContainer] = []
+            do {
+                allContainers = try contactStore.containers(matching: nil)
+            } catch {
+                print("Error fetching containers")
+            }
+            
+            
+            
+            // Iterate all containers and append their contacts to our results array
+            for container in allContainers {
+                let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
+                
+                do {
+                    let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+                    results.append(contentsOf: containerResults)
+                    //                        self.storeDataInModelObjects()
+                } catch {
+                    print("Error fetching results for container")
+                }
+            }
+            
+            kContactList.removeAll()
+            
+            for contact in results
+            {
+                let contactData = ContactData()
+                contactData.name = contact.givenName + " " + contact.familyName
+                //            contactData.phoneNumber = ((contact.phoneNumbers.first?.value)?.stringValue)!
+                if contact.isKeyAvailable(CNContactPhoneNumbersKey){
+                    let phoneNOs=contact.phoneNumbers
+                    for item in phoneNOs
+                    {
+                        contactData.phoneNumber = item.value.stringValue
+                    }
+                }
+                
+                
+                kContactList.append(contactData)
+            }
+
+            
+            return results
+        }()
+        } else {
+            // Fallback on earlier versions
+        }
+
 
 }
+}
+
+        
+        
+    
+    
+

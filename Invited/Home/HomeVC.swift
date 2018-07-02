@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import Contacts
 
 class UserList: NSObject
 {
@@ -25,6 +26,7 @@ class EventData: NSObject
     var listID = Int()
     var listName = String()
     var eventTime = String()
+    var eventCreatedTime = String()
     var lat = String()
     var long = String()
     var paymentMethod = Int()
@@ -35,6 +37,8 @@ class EventData: NSObject
     var phone = String()
     var firstName = String()
     var lastName = String()
+    var fullName = String()
+    var maximumNumberOfPeople = Int()
     var userList = [ContactData]()
     
 }
@@ -63,7 +67,7 @@ extension NSMutableAttributedString {
     }
 }
 
-
+@available(iOS 9.0, *)
 class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate {
     
     
@@ -125,6 +129,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var selectedLong : String?
     
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -134,6 +141,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.isUpdated = false
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
+        
+        
         
         
         self.updateDeviceToken()
@@ -222,6 +231,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let point = CGPoint(x: 0, y: 0)
             self.mainScrollView.setContentOffset( point, animated: true)
             
+//            self.fetchAllContactsFromDevice()
             self.getContactListFromServer()
             
         }
@@ -233,6 +243,67 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
     }
+//    func fetchAllContactsFromDevice()  {
+//
+//            var contacts: [CNContact] = {
+//                let contactStore = CNContactStore()
+//                let keysToFetch = [
+//                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+//                    CNContactEmailAddressesKey,
+//                    CNContactPhoneNumbersKey,
+//                    CNContactImageDataAvailableKey,
+//                    CNContactThumbnailImageDataKey] as [Any]
+//
+//                // Get all the containers
+//                var allContainers: [CNContainer] = []
+//                do {
+//                    allContainers = try contactStore.containers(matching: nil)
+//                } catch {
+//                    print("Error fetching containers")
+//                }
+//
+//
+//
+//                // Iterate all containers and append their contacts to our results array
+//                for container in allContainers {
+//                    let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
+//
+//                    do {
+//                        let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+//                        self.results.append(contentsOf: containerResults)
+//                        //                        self.storeDataInModelObjects()
+//                    } catch {
+//                        print("Error fetching results for container")
+//                    }
+//                }
+//                self.storeDataInModelObjects()
+//                return self.results
+//            }()
+//
+//    }
+//    func storeDataInModelObjects()  {
+//
+//        kContactList.removeAll()
+//
+//        for contact in self.results
+//        {
+//            let contactData = ContactData()
+//            contactData.name = contact.givenName + " " + contact.familyName
+//            //            contactData.phoneNumber = ((contact.phoneNumbers.first?.value)?.stringValue)!
+//            if contact.isKeyAvailable(CNContactPhoneNumbersKey){
+//                let phoneNOs=contact.phoneNumbers
+//                for item in phoneNOs
+//                {
+//                    contactData.phoneNumber = item.value.stringValue
+//                }
+//            }
+//
+//
+//            kContactList.append(contactData)
+//        }
+//    }
+    
+    
 //    override func viewDidDisappear(_ animated: Bool)
 //    {
 ////        super.viewDidDisappear(true)
@@ -570,6 +641,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else
         {
             self.selectedList = nil
+            self.createEventView.setListTextField.text = ""
             
         }
         }
@@ -583,6 +655,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 self.updateSelectedList = nil
+                self.listID = nil
+                
+                self.editEventView.setListTextField.text = ""
                 
             }
             
@@ -752,10 +827,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.timeStyle = .medium
 //            formatter2.dateFormat = "hh:mm a"
             
+            var invitedBy : String!
+            if eventData.fullName == " "
+            {
+                invitedBy = eventData.phone
+            }
+            else
+            {
+                invitedBy = eventData.fullName + " " + "(" + eventData.phone + ")"
+            }
+            
 
             requestEventCell?.eventName.text = eventData.title
             requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
-            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(eventData.createdBy)
+            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
             requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
             
             requestEventCell?.expandButton.tag = indexPath.row
@@ -827,6 +912,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let date = dateformatter.date(from: eventData.eventTime)
             
+            let date2 = dateformatter.date(from: eventData.eventCreatedTime)
+            
             dateformatter.dateStyle = .medium
             dateformatter.timeStyle = .short
             
@@ -841,9 +928,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.dateFormat = "hh:mm a"
 
             yourEventsCell?.title.text = eventData.title
-            yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+            yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
             yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
-            yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+            yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+            yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
             
             yourEventsCell?.expandButton.tag = indexPath.row
             yourEventsCell?.editButton.tag = indexPath.row
@@ -886,17 +976,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //            formatter2.dateFormat = "hh:mm a"
             
-            receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
-            
-            if eventData.firstName != ""
+            var invitedTo : String!
+            if eventData.fullName == " "
             {
-                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(eventData.firstName).normal(eventData.lastName)
+                invitedTo = eventData.phone
             }
             else
             {
-                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(String(eventData.phone))
+                invitedTo = eventData.fullName + " " + "(" + eventData.phone + ")"
             }
+            
+            receivedEventsCell?.title.text = eventData.title
+            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+            
+            
+            receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(invitedTo)
+            
             
             if eventData.confirmed == 0
             {
@@ -956,17 +1051,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //            formatter2.dateFormat = "hh:mm a"
             
-            receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
-            
-            if eventData.firstName != ""
+            var invitedTo : String!
+            if eventData.fullName == " "
             {
-                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(eventData.firstName).normal(eventData.lastName)
+                invitedTo = eventData.phone
             }
             else
             {
-                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(String(eventData.phone))
+                invitedTo = eventData.fullName + " " + "(" + eventData.phone + ")"
             }
+            
+            receivedEventsCell?.title.text = eventData.title
+            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+            
+            
+            receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(invitedTo)
             
             if eventData.confirmed == 0
             {
@@ -1173,11 +1272,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        let time = formatter2.date(from: eventData.eventTime)
 //
 //        formatter2.dateFormat = "hh:mm a"
-        
-    
+        var invitedBy : String!
+        if eventData.fullName.isEmpty
+        {
+            invitedBy = eventData.phone
+        }
+        else
+        {
+            invitedBy = eventData.fullName + " " + "(" + eventData.phone + ")"
+        }
         
         self.detailView.title.text = eventData.title
-        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(eventData.createdBy)
+        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
         self.detailView.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
         self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
         self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
@@ -1250,6 +1356,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let date = dateformatter.date(from: eventData.eventTime)
         
+        let date2 = dateformatter.date(from: eventData.eventCreatedTime)
+        
         dateformatter.dateStyle = .medium
         dateformatter.timeStyle = .short
         
@@ -1265,9 +1373,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.eventDetailView.title.text = eventData.title
-        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
-        self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date : ").normal(dateformatter.string(from: date!))
+        self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
         self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+        self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(dateformatter.string(from: date!))
+        
 
         self.eventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
         
@@ -1303,6 +1414,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.isUpdated = true
         
+        let eventData = self.userEventList[sender.tag]
+        
+        self.editEventView.updateButton.tag = eventData.eventID
+        self.listID = eventData.listID
+        
         
         self.showDatePicker(textField: self.editEventView.dateTextField)
         self.showTimePicker(textField: self.editEventView.timeTextField)
@@ -1322,12 +1438,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.editEventView.updateButtonView.isHidden = false
         self.editEventView.createButtonView.isHidden = true
-        
-        let eventData = self.userEventList[sender.tag]
-        
-        self.editEventView.updateButton.tag = eventData.eventID
-//        self.listID = eventData.listID
-        
         
         
         let formatter1 = DateFormatter()
@@ -1352,7 +1462,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.timeTextField.text = formatter2.string(from: time!)
         self.editEventView.dateTextField.text = formatter1.string(from: date!)
         self.editEventView.locationTextField.text = eventData.eventAddress
-//        self.editEventView.setListTextField.text = eventData.listName
+        self.editEventView.setNumberOfPeopleTextfield.text = String(eventData.maximumNumberOfPeople)
+        self.editEventView.setListTextField.text = eventData.listName
         
         self.selectedLat = eventData.lat
         self.selectedLong = eventData.long
@@ -2142,9 +2253,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             postParams["list_id"] = self.listID
         }
         
-        
-        
-        
+    
         let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
         let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
         
@@ -2188,7 +2297,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.editEventView.iWillPayButton.isSelected = true
                 self.editEventView.youWillPayButton.isSelected = false
                 self.editEventView.allButton.isSelected = false
-//                self.listID = nil
+                self.listID = nil
                 self.updateSelectedList = nil
                 
                 UserDefaults.standard.removeObject(forKey: kSelectedLat)
@@ -2268,12 +2377,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             eventData.title = event["title"] as! String
             eventData.eventAddress = event["event_address"] as! String
             eventData.eventTime = event["event_time"] as! String
+            eventData.eventCreatedTime = event["event_created_time"] as! String
             eventData.listName = event["list_name"] as! String
             eventData.listID = event["list_id"] as! Int
             eventData.totalInvited = event["list_count"] as! Int
             eventData.lat = event["latitude"] as! String
             eventData.long = event["longitude"] as! String
             eventData.paymentMethod = event["payment_method"] as! Int
+            eventData.maximumNumberOfPeople = event["max_invited"] as! Int
             
 //            let userList = event["list_users"] as? [[String : Any]]
 //
@@ -2366,6 +2477,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.eventAddress = event["address"] as! String
                 eventData.confirmed = event["confirmed"] as! Int
                 eventData.eventTime = event["event_time"] as! String
+                eventData.phone = event["phone"] as! String
                 eventData.paymentMethod = event["payment_method"] as! Int
                 
                 if event["latitude"] as? String != nil
@@ -2377,6 +2489,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 {
                 eventData.long = event["longitude"] as! String
                 }
+                
+                eventData.fullName = self.getNameFromPhoneNumber(phone: eventData.phone)
                 
                 self.requestEventList.append(eventData)
                 
@@ -2403,6 +2517,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
         
+    }
+    func getNameFromPhoneNumber(phone : String) -> String
+    {
+        for contctData in kContactList
+        {
+            if contctData.phoneNumber.stringByRemovingWhitespaces == phone
+            {
+                return contctData.name
+            }
+        }
+        return " "
     }
     func fetchReceivedRequestsFromServer()
     {
@@ -2465,6 +2590,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     {
                     eventData.lastName = event["lastName"] as! String
                     }
+                    
+                    eventData.fullName = self.getNameFromPhoneNumber(phone: eventData.phone)
                     
                     self.receivedRequestEventList.append(eventData)
                     
@@ -2598,10 +2725,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         toolBar.isUserInteractionEnabled = true
         
         self.dropDownPickerView = UIPickerView()
-        dropDownPickerView.dataSource = self
-        dropDownPickerView.delegate = self
-        dropDownPickerView.tag = textField.tag
-        textField.inputView = dropDownPickerView
+        self.dropDownPickerView.dataSource = self
+        self.dropDownPickerView.delegate = self
+        self.dropDownPickerView.tag = textField.tag
+        
+        if textField.tag == 2
+        {
+            let row = self.userList.index(where: {$0.id == self.listID})
+            self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+        }
+        
+        
+        textField.inputView = self.dropDownPickerView
         textField.inputAccessoryView = toolBar
         
     }

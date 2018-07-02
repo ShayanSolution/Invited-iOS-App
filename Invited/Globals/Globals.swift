@@ -7,7 +7,10 @@
 //
 
 import Foundation
+import Contacts
 
+
+var kContactList = [ContactData]()
 let kSelectedAddress = "selectedAddress"
 let kSelectedLat = "selectedLat"
 let kSelectedLong = "selectedLong"

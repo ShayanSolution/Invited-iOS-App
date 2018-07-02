@@ -18,6 +18,10 @@ class YourEventsCell: UITableViewCell {
     
     @IBOutlet var totalInvited: UILabel!
     
+    @IBOutlet var listName: UILabel!
+    
+    @IBOutlet var createdDate: UILabel!
+    
     @IBOutlet var editButton: UIButton!
     
     @IBOutlet var deleteButton: UIButton!

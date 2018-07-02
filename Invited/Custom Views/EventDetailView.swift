@@ -10,6 +10,11 @@ import UIKit
 
 class EventDetailView: UIView {
     
+    
+    @IBOutlet var listName: UILabel!
+    
+    @IBOutlet var createdDate: UILabel!
+    
     @IBOutlet var title: UILabel!
     
     @IBOutlet var totalInvited: UILabel!

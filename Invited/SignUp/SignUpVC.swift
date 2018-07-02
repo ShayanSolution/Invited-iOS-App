@@ -197,9 +197,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         {
             if json["status"] != nil
             {
-//                self.resetData()
-//                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
-                self.sendSMSFromServer()
+                self.resetData()
+                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+//                self.sendSMSFromServer()
                 return
             }
             
@@ -222,6 +222,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             
             BasicFunctions.setUserLoggedIn()
             BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
         }
         else
         {
@@ -242,6 +243,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             else if json["password_confirmation"] != nil
             {
                 errorString = (json["password_confirmattion"] as! Array)[0]
+            }
+            else if json["message"] != nil
+            {
+                errorString = json["message"] as! String
             }
             else
             {

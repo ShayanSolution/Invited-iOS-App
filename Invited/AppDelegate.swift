@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         if BasicFunctions.getIfUserLoggedIn()
         {
             BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
         }
         
         self.registerForPushNotifications(application: application)

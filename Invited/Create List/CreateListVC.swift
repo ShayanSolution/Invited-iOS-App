@@ -46,8 +46,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
     @IBOutlet var setListNameTextField: UITextField!
     
-    var results = [CNContact]()
-    var contactList = [ContactData]()
+//    var results = [CNContact]()
+//    var contactList = [ContactData]()
     var filteredList = [ContactData]()
     var selectedContactList = [ContactData]()
     var updatedContactList = [ContactData]()
@@ -73,6 +73,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
+        
+        BasicFunctions.fetchAllContactsFromDevice()
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -89,7 +91,9 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
-        self.fetchAllContactsFromDevice()
+//        self.fetchAllContactsFromDevice()
+        
+        self.checkUpdate()
     }
     override func viewWillDisappear(_ animated: Bool) {
         
@@ -110,68 +114,53 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         BasicFunctions.setLeftPaddingOfTextField(textField: self.searchTextField, padding: 10.0)
     }
     
-    func fetchAllContactsFromDevice()  {
-         if #available(iOS 9.0, *) {
-            var contacts: [CNContact] = {
-                let contactStore = CNContactStore()
-                let keysToFetch = [
-                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-                    CNContactEmailAddressesKey,
-                    CNContactPhoneNumbersKey,
-                    CNContactImageDataAvailableKey,
-                    CNContactThumbnailImageDataKey] as [Any]
-                
-                // Get all the containers
-                var allContainers: [CNContainer] = []
-                do {
-                    allContainers = try contactStore.containers(matching: nil)
-                } catch {
-                    print("Error fetching containers")
-                }
-                
-                
-                
-                // Iterate all containers and append their contacts to our results array
-                for container in allContainers {
-                    let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
-                    
-                    do {
-                        let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
-                        self.results.append(contentsOf: containerResults)
-//                        self.storeDataInModelObjects()
-                    } catch {
-                        print("Error fetching results for container")
-                    }
-                }
-                self.storeDataInModelObjects()
-                return self.results
-            }()
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-    func storeDataInModelObjects()  {
-        for contact in self.results
-        {
-            let contactData = ContactData()
-            contactData.name = contact.givenName + " " + contact.familyName
-//            contactData.phoneNumber = ((contact.phoneNumbers.first?.value)?.stringValue)!
-            if contact.isKeyAvailable(CNContactPhoneNumbersKey){
-                let phoneNOs=contact.phoneNumbers
-                for item in phoneNOs
-                {
-                    contactData.phoneNumber = item.value.stringValue
-                }
-            }
-            
-            
-            self.contactList.append(contactData)
-        }
+//    func fetchAllContactsFromDevice()  {
+//         if #available(iOS 9.0, *) {
+//            var contacts: [CNContact] = {
+//                let contactStore = CNContactStore()
+//                let keysToFetch = [
+//                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+//                    CNContactEmailAddressesKey,
+//                    CNContactPhoneNumbersKey,
+//                    CNContactImageDataAvailableKey,
+//                    CNContactThumbnailImageDataKey] as [Any]
+//                
+//                // Get all the containers
+//                var allContainers: [CNContainer] = []
+//                do {
+//                    allContainers = try contactStore.containers(matching: nil)
+//                } catch {
+//                    print("Error fetching containers")
+//                }
+//                
+//                
+//                
+//                // Iterate all containers and append their contacts to our results array
+//                for container in allContainers {
+//                    let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
+//                    
+//                    do {
+//                        let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+//                        self.results.append(contentsOf: containerResults)
+////                        self.storeDataInModelObjects()
+//                    } catch {
+//                        print("Error fetching results for container")
+//                    }
+//                }
+//                self.storeDataInModelObjects()
+//                return self.results
+//            }()
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//    }
+    func checkUpdate()  {
+        
         
         if self.isUpdated == true
         {
         
-        for contactData in self.contactList
+        for contactData in kContactList
         {
             
             for contact in self.listData.contactList
@@ -222,7 +211,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         else
         {
         
-            self.updatedContactList = self.contactList.sorted { $0.name < $1.name }
+            self.updatedContactList = kContactList.sorted { $0.name < $1.name }
             self.filteredList.removeAll()
             
             
