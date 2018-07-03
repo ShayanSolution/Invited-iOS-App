@@ -28,10 +28,15 @@ class YourEventsCell: UITableViewCell {
     
     @IBOutlet var expandButton: UIButton!
     
+    @IBOutlet var mainView: UIView!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        BasicFunctions.setBorderOfView(view: self.mainView)
         
         BasicFunctions.setRoundCornerOfButton(button: self.editButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.deleteButton, radius: 5.0)

@@ -158,12 +158,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
 //        let tapRecognizer = UITapGestureRecognizer()
 //        tapRecognizer.addTarget(self, action: #selector(self.didTapView))
 //        self.view.addGestureRecognizer(tapRecognizer)
         
     
     }
+    @objc func appDidBecomeActive()
+    {
+        self.fetchRequestsFromServer()
+        self.fetchReceivedRequestsFromServer()
+
+    
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool)
     {
         self.locationManager.startUpdatingLocation()
@@ -235,7 +246,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.getContactListFromServer()
             
         }
-        
         
         
         
@@ -1131,6 +1141,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
     }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//
+//        if tableView.tag == 3
+//        {
+//            return 250.0
+//        }
+//
+//
+//    }
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if tableView.tag == 1
         {

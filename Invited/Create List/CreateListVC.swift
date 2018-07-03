@@ -554,7 +554,14 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             if self.activeField.tag == 2
             {
-            self.bottomViewConstraint.constant += keyboardSize.height
+                if #available(iOS 11.0, *) {
+                    self.bottomViewConstraint.constant = keyboardSize.height + self.view.safeAreaInsets.bottom
+                } else {
+                    // Fallback on earlier versions
+                    
+                    self.bottomViewConstraint.constant += keyboardSize.height
+                    
+                }
             }
         }
     }
