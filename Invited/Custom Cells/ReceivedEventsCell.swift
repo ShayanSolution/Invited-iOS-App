@@ -10,11 +10,21 @@ import UIKit
 
 class ReceivedEventsCell: UITableViewCell {
     
+    @IBOutlet var mainView: UIView!
+    
     @IBOutlet var title: UILabel!
     
     @IBOutlet var date: UILabel!
     
     @IBOutlet var invitedBy: UILabel!
+    
+    @IBOutlet var listName: UILabel!
+    
+    @IBOutlet var eventCreatedDate: UILabel!
+    
+    @IBOutlet var address: UILabel!
+    
+    @IBOutlet var totalInvited: UILabel!
     
     
     @IBOutlet var iconAccepted: UIImageView!
@@ -27,6 +37,8 @@ class ReceivedEventsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        BasicFunctions.setBorderOfView(view: self.mainView)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

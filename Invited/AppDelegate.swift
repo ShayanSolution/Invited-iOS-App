@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         if BasicFunctions.getIfUserLoggedIn()
         {
             BasicFunctions.setHomeVC()
-            BasicFunctions.fetchAllContactsFromDevice()
         }
         
         self.registerForPushNotifications(application: application)
@@ -146,7 +145,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         application.applicationIconBadgeNumber = 0
         
-        BasicFunctions.fetchAllContactsFromDevice()
+        if BasicFunctions.getIfUserLoggedIn()
+        {
+            BasicFunctions.fetchAllContactsFromDevice()
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

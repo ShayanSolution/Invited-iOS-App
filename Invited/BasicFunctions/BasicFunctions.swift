@@ -263,6 +263,23 @@ class BasicFunctions: NSObject {
 
 
 }
+    class func getNameFromContactList(phoneNumber : String) -> String
+    {
+        
+        for contctData in kContactList
+        {
+            if contctData.phoneNumber.stringByRemovingWhitespaces.suffix(9) == phoneNumber.stringByRemovingWhitespaces.suffix(9)
+            {
+                return contctData.name
+            }
+        }
+        
+        
+        return " "
+        
+    }
+    
+    
 }
 
         

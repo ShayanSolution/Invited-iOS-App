@@ -10,6 +10,9 @@ import UIKit
 
 class RequestEventCell: UITableViewCell {
     
+    
+    @IBOutlet var mainView: UIView!
+    
     @IBOutlet var profileImageView: UIImageView!
     
     @IBOutlet var acceptButton: UIButton!
@@ -23,6 +26,13 @@ class RequestEventCell: UITableViewCell {
     @IBOutlet var totalInvited: UILabel!
     
     @IBOutlet var date: UILabel!
+    
+    @IBOutlet var listName: UILabel!
+    
+    @IBOutlet var eventCreatedDate: UILabel!
+    
+    @IBOutlet var address: UILabel!
+    
     
     @IBOutlet var startNavigationButton: UIButton!
     
@@ -40,6 +50,8 @@ class RequestEventCell: UITableViewCell {
         // Initialization code
         
 //        BasicFunctions.setRoundCornerOfImageView(imageView: self.profileImageView)
+        
+        BasicFunctions.setBorderOfView(view: self.mainView)
         
         BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.acceptButton, radius: 5.0)

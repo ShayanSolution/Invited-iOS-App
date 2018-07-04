@@ -30,6 +30,8 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,6 +43,10 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         self.contactListTableView.reloadData()
         
     }
+    @objc func appDidBecomeActive()
+    {
+        self.contactListTableView.reloadData()
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -50,28 +56,28 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
     @objc func searchRecordsAsPerText(_ textfield:UITextField) {
         self.searchData.removeAll()
-        if self.searchTextField.text?.characters.count != 0 {
+        if self.searchTextField.text?.count != 0 {
             for contactData in self.listData.contactList
             {
                 let range = contactData.name.lowercased().range(of: textfield.text!, options: .caseInsensitive, range: nil,   locale: nil)
                 
                 if range != nil {
-                    
-                    if self.searchData.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
-                    {
-                        
-                    }
-                    else
-                    {
+//
+//                    if self.searchData.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+//                    {
+//
+//                    }
+//                    else
+//                    {
                         self.searchData.append(contactData)
                     }
-                }
+//                }
             }
         } else {
             
-            for contactData in self.listData.contactList {
-                
-                
+//            for contactData in self.listData.contactList {
+//
+//
 //                if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
 //                {
 //
@@ -83,7 +89,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 
                 
-            }
+//            }
             
         }
         
@@ -119,7 +125,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         }
         else
         {
-            cell?.nameLabel.text = contactData.name
+            cell?.nameLabel.text = BasicFunctions.getNameFromContactList(phoneNumber: contactData.phoneNumber)
         }
         
         return cell!
@@ -131,41 +137,41 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //        return true
 //    }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        var editAction = UITableViewRowAction(style: .default, title: "", handler: { (action, indexPath) in
-            
-            
-            
-        })
-        
-        var deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
-            
-            let contactData = self.searchData[indexPath.row]
-            
-            
-            
-            
-            
-//            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//
+//        var editAction = UITableViewRowAction(style: .default, title: "", handler: { (action, indexPath) in
+//
+//
+//
+//        })
+//
+//        var deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+//
+//            let contactData = self.searchData[indexPath.row]
+//
+//
+//
+//
+//
+////            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+////            {
+//            if let index = self.listData.contactList.index(of: contactData)
 //            {
-            if let index = self.listData.contactList.index(of: contactData)
-            {
-                    
-                self.listData.contactList.remove(at: index)
-
-            }
-            
-
-            self.updateButtonTapped()
-            
-            
-            
-        })
-        
-        return[editAction,deleteAction]
-        
-    }
+//
+//                self.listData.contactList.remove(at: index)
+//
+//            }
+//
+//
+//            self.updateButtonTapped()
+//
+//
+//
+//        })
+//
+//        return[editAction,deleteAction]
+//
+//    }
     
     @objc func deleteContact(sender : UIButton)
     {

@@ -40,19 +40,19 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
     @IBOutlet var mainView: UIView!
     
-    @IBOutlet var bottomView: UIView!
+//    @IBOutlet var bottomView: UIView!
     
     @IBOutlet var searchTextField: UITextField!
     
     @IBOutlet var setListNameTextField: UITextField!
     
 //    var results = [CNContact]()
-//    var contactList = [ContactData]()
+//    var deviceContactList = [ContactData]()
     var filteredList = [ContactData]()
     var selectedContactList = [ContactData]()
     var updatedContactList = [ContactData]()
     
-    var activeField : UITextField!
+//    var activeField : UITextField!
     
     var isUpdated : Bool?
     
@@ -85,11 +85,13 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             self.setListNameTextField.text = self.listData.name
             
+//            BasicFunctions.fetchAllContactsFromDevice()
+            
             
             
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
 //        self.fetchAllContactsFromDevice()
         
@@ -97,18 +99,18 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     }
     override func viewWillDisappear(_ animated: Bool) {
         
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.bottomView.layer.cornerRadius = 10.0
-        self.bottomView.clipsToBounds = true
-        
-        self.bottomView.layer.borderWidth = 1.0
-        self.bottomView.layer.borderColor = UIColor.lightGray.cgColor
+//        self.bottomView.layer.cornerRadius = 10.0
+//        self.bottomView.clipsToBounds = true
+//
+//        self.bottomView.layer.borderWidth = 1.0
+//        self.bottomView.layer.borderColor = UIColor.lightGray.cgColor
         
         BasicFunctions.setLeftPaddingOfTextField(textField: self.setListNameTextField, padding: 10.0)
         BasicFunctions.setLeftPaddingOfTextField(textField: self.searchTextField, padding: 10.0)
@@ -157,6 +159,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     func checkUpdate()  {
         
         
+        
+        
         if self.isUpdated == true
         {
         
@@ -173,7 +177,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 break
             }
-            else if contactData.phoneNumber.stringByRemovingWhitespaces ==  contact.phoneNumber.stringByRemovingWhitespaces
+            else if contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) ==  contact.phoneNumber.stringByRemovingWhitespaces.suffix(9)
             {
                 contactData.isSelected = true
                 self.selectedContactList.append(contactData)
@@ -183,21 +187,21 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
             }
             
-            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
-            {
-            
-            
-            }
-            else
-            {
-                self.filteredList.append(contactData)
-            }
+//            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+//            {
+//
+//
+//            }
+//            else
+//            {
+//                self.filteredList.append(contactData)
+//            }
             
             
         }
             
-            self.updatedContactList = self.filteredList.sorted { $0.name < $1.name }
-            self.filteredList.removeAll()
+//            self.updatedContactList = self.filteredList.sorted { $0.name < $1.name }
+//            self.filteredList.removeAll()
             
             
             
@@ -208,14 +212,14 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //            }
             
         }
-        else
-        {
+//        else
+//        {
         
             self.updatedContactList = kContactList.sorted { $0.name < $1.name }
-            self.filteredList.removeAll()
+//            self.filteredList.removeAll()
             
             
-        }
+//        }
 //        self.filteredList = self.updatedContactList
         
         for contactdata in self.updatedContactList
@@ -230,6 +234,10 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             }
             
         }
+        
+        self.updatedContactList.removeAll()
+        self.updatedContactList = self.filteredList
+        
         self.contactListTableView.reloadData()
         
         
@@ -245,40 +253,41 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     }
     @objc func searchRecordsAsPerText(_ textfield:UITextField) {
         self.filteredList.removeAll()
-        if textfield.text?.characters.count != 0 {
+        if textfield.text?.count != 0
+        {
             for contactData in self.updatedContactList {
                 let range = contactData.name.lowercased().range(of: textfield.text!, options: .caseInsensitive, range: nil,   locale: nil)
 
                 if range != nil {
                     
-                    if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
-                    {
-
-                    }
-                    else
-                    {
+//                    if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+//                    {
+//
+//                    }
+//                    else
+//                    {
                         self.filteredList.append(contactData)
-                    }
+//                    }
                 }
             }
         } else {
             
-            for contactData in self.updatedContactList {
-                
-                
-                if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
-                {
-                    
-                }
-                else
-                {
-                    self.filteredList.append(contactData)
-                }
-                
-                
-                
-            }
+//            for contactData in self.updatedContactList {
+//
+//
+//                if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+//                {
+//
+//                }
+//                else
+//                {
+                    self.filteredList = self.updatedContactList
+//                }
             
+                
+                
+//            }
+        
         }
 
         self.contactListTableView.reloadData()
@@ -540,42 +549,42 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         }
         return nil
     }
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool
-    {
-        
-        self.activeField = textField
-        
-        return true
-        
-    }
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool
+//    {
+//
+////        self.activeField = textField
+//
+//        return true
+//
+//    }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            
-            if self.activeField.tag == 2
-            {
-                if #available(iOS 11.0, *) {
-                    self.bottomViewConstraint.constant = keyboardSize.height + self.view.safeAreaInsets.bottom
-                } else {
-                    // Fallback on earlier versions
-                    
-                    self.bottomViewConstraint.constant += keyboardSize.height
-                    
-                }
-            }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            
-            if self.bottomViewConstraint.constant != 10
-            {
-            
-            self.bottomViewConstraint.constant = 10
-            }
-        }
-    }
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            
+//            if self.activeField.tag == 2
+//            {
+//                if #available(iOS 11.0, *) {
+//                    self.bottomViewConstraint.constant = keyboardSize.height + self.view.safeAreaInsets.bottom
+//                } else {
+//                    // Fallback on earlier versions
+//                    
+//                    self.bottomViewConstraint.constant += keyboardSize.height
+//                    
+//                }
+//            }
+//        }
+//    }
+//    
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            
+//            if self.bottomViewConstraint.constant != 10
+//            {
+//            
+//            self.bottomViewConstraint.constant = 10
+//            }
+//        }
+//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
