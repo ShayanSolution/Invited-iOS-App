@@ -172,7 +172,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
 //            if contactData.phoneNumber.stringByRemovingWhitespaces ==  contact.phoneNumber.stringByRemovingWhitespaces
                 
-            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
             {
                 
                 break
@@ -362,7 +362,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             self.filteredList[indexPath.row]  = contactData
             self.updatedContactList[indexPath.row]  = contactData
             
-            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
             {
                 let index = self.selectedContactList.index(of: contactData)
                 self.selectedContactList.remove(at: index!)
