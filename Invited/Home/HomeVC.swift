@@ -996,35 +996,39 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //            formatter2.dateFormat = "hh:mm a"
             
-            var invitedTo : String!
+//            var invitedTo : String!
+//
+//            let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
+//
+//            if fullName == " "
+//            {
+//                invitedTo = eventData.phone
+//            }
+//            else
+//            {
+//                invitedTo = fullName + " " + "(" + eventData.phone + ")"
+//            }
             
-            let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
-            
-            if fullName == " "
-            {
-                invitedTo = eventData.phone
-            }
-            else
-            {
-                invitedTo = fullName + " " + "(" + eventData.phone + ")"
-            }
-            
-            receivedEventsCell?.title.text = eventData.title
-            receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold(eventData.title)
+            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ")
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             
-            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
+//            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
             
             
             if eventData.eventAcceptedBy == 0
             {
-                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal(invitedTo)
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+                
+                receivedEventsCell?.acceptedORSentByMe.text = "Sent by me"
             }
             else
             {
-                receivedEventsCell?.invitedBy.attributedText = NSMutableAttributedString().bold("Invited to : ").normal("Me").normal(" ").normal("(").normal(invitedTo).normal(")")
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by : ")
+                
+                receivedEventsCell?.acceptedORSentByMe.text = "Accepted by me"
                 
             }
             
@@ -1032,25 +1036,25 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
             
-            if eventData.confirmed == 0
-            {
-                receivedEventsCell?.iconAccepted.image = UIImage.init(named: "iconDeclined")
-                receivedEventsCell?.acceptLabel.text = "Rejected"
-                receivedEventsCell?.acceptLabel.textColor = UIColor.init(red: 255/255, green: 97/255, blue: 71/255, alpha: 1.0)
-            }
-            else if eventData.confirmed == 1
-            {
-                receivedEventsCell?.iconAccepted.image = UIImage.init(named: "iconAccepted")
-                receivedEventsCell?.acceptLabel.text = "Accepted"
-                receivedEventsCell?.acceptLabel.textColor = UIColor.init(red: 134/255, green: 224/255, blue: 139/255, alpha: 1.0)
-                
-            }
-            else if eventData.confirmed == 2
-            {
-                receivedEventsCell?.iconAccepted.image = UIImage.init(named: "iconActionPending")
-                receivedEventsCell?.acceptLabel.text = "Action Pending"
-                receivedEventsCell?.acceptLabel.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
-            }
+//            if eventData.confirmed == 0
+//            {
+//                receivedEventsCell?.iconAccepted.image = UIImage.init(named: "iconDeclined")
+//                receivedEventsCell?.acceptLabel.text = "Rejected"
+//                receivedEventsCell?.acceptLabel.textColor = UIColor.init(red: 255/255, green: 97/255, blue: 71/255, alpha: 1.0)
+//            }
+//            else if eventData.confirmed == 1
+//            {
+//                receivedEventsCell?.iconAccepted.image = UIImage.init(named: "iconAccepted")
+//                receivedEventsCell?.acceptLabel.text = "Accepted"
+//                receivedEventsCell?.acceptLabel.textColor = UIColor.init(red: 134/255, green: 224/255, blue: 139/255, alpha: 1.0)
+//
+//            }
+//            else if eventData.confirmed == 2
+//            {
+//                receivedEventsCell?.iconAccepted.image = UIImage.init(named: "iconActionPending")
+//                receivedEventsCell?.acceptLabel.text = "Action Pending"
+//                receivedEventsCell?.acceptLabel.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.7)
+//            }
             
             receivedEventsCell?.expandButton.tag = indexPath.row
             receivedEventsCell?.expandButton.addTarget(self, action: #selector(self.showReceivedEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
@@ -2568,7 +2572,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             }
             self.requestEventView.requestEventTableView.reloadData()
+            if self.requestEventList.count > 0
+            {
             self.requestEventView.requestEventTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+            }
             
             
         }

@@ -12,6 +12,9 @@ class ReceivedEventsCell: UITableViewCell {
     
     @IBOutlet var mainView: UIView!
     
+    @IBOutlet var acceptedORSentByMe: UILabel!
+    
+    
     @IBOutlet var title: UILabel!
     
     @IBOutlet var date: UILabel!
@@ -25,6 +28,9 @@ class ReceivedEventsCell: UITableViewCell {
     @IBOutlet var address: UILabel!
     
     @IBOutlet var totalInvited: UILabel!
+    
+    @IBOutlet var paymentMethod: UILabel!
+    
     
     
     @IBOutlet var iconAccepted: UIImageView!
