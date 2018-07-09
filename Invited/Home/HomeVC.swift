@@ -97,6 +97,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var editEventView : CreateEventView!
     var eventDetailView : EventDetailView!
     var receivedEventDetailView : ReceivedEventDetailView!
+    var acceptByMeView : AcceptByMeView!
     
     let datePicker = UIDatePicker()
     let timePicker = UIDatePicker()
@@ -867,7 +868,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             requestEventCell?.rejectButton.tag = indexPath.row
             
             requestEventCell?.expandButton.addTarget(self, action: #selector(self.showDetailView(sender:)), for: UIControlEvents.touchUpInside)
-            requestEventCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            requestEventCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             
@@ -996,20 +997,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //            formatter2.dateFormat = "hh:mm a"
             
-//            var invitedTo : String!
-//
-//            let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
-//
-//            if fullName == " "
-//            {
-//                invitedTo = eventData.phone
-//            }
-//            else
-//            {
-//                invitedTo = fullName + " " + "(" + eventData.phone + ")"
-//            }
+            var invitedBy : String!
+
+            let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
+
+            if fullName == " "
+            {
+                invitedBy = eventData.phone
+            }
+            else
+            {
+                invitedBy = fullName + " " + "(" + eventData.phone + ")"
+            }
             
-            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold(eventData.title)
+            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Event name : ").normal(eventData.title)
             receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ")
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
@@ -1017,24 +1018,53 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
             
+            var paymentMethodString : String!
             
             if eventData.eventAcceptedBy == 0
             {
                 receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
                 
                 receivedEventsCell?.acceptedORSentByMe.text = "Sent by me"
+                
+                if eventData.paymentMethod == 1
+                {
+                    paymentMethodString = "You will pay."
+                }
+                else if eventData.paymentMethod == 2
+                {
+                    paymentMethodString = "Invitee will pay."
+                }
+                else
+                {
+                    paymentMethodString = "Shared"
+                }
+                
+                
             }
             else
             {
-                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by : ")
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
                 
                 receivedEventsCell?.acceptedORSentByMe.text = "Accepted by me"
+                
+                if eventData.paymentMethod == 1
+                {
+                    paymentMethodString = "Inviter will pay."
+                }
+                else if eventData.paymentMethod == 2
+                {
+                    paymentMethodString = "You will pay."
+                }
+                else
+                {
+                    paymentMethodString = "Shared"
+                }
                 
             }
             
             
-            
-            
+            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(paymentMethodString)
+
             
 //            if eventData.confirmed == 0
 //            {
@@ -1057,7 +1087,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            }
             
             receivedEventsCell?.expandButton.tag = indexPath.row
+            receivedEventsCell?.startNavigationButton.tag = indexPath.row
+            
             receivedEventsCell?.expandButton.addTarget(self, action: #selector(self.showReceivedEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
+            receivedEventsCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromReceivedRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
             
             
             
@@ -1286,33 +1319,87 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func showReceivedEventDetailView(sender:UIButton)
     {
-        self.receivedEventDetailView  = ReceivedEventDetailView.instanceFromNib() as! ReceivedEventDetailView
-        
-        self.receivedEventDetailView.frame = CGRect(x: 0 , y: 0, width: Int(self.receivedEventsView.frame.size.width), height: Int(self.receivedEventsView.frame.size.height))
-        
-        self.receivedEventDetailView.receivedEventDetailTableView.register(UINib(nibName: "ReceivedEventsCell", bundle: nil), forCellReuseIdentifier: "ReceivedEventsCell")
-        
-        self.receivedEventDetailView.receivedEventDetailTableView.delegate = self
-        self.receivedEventDetailView.receivedEventDetailTableView.dataSource = self
-        
-        self.receivedEventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
-        
-        self.receivedEventsView.addSubview(self.receivedEventDetailView)
-        
-        
         let eventData = self.receivedRequestEventList[sender.tag]
         
-        self.specificReceivedRequestEventList.removeAll()
-        
-        for event in self.receivedRequestEventList
+        if eventData.eventAcceptedBy == 0
         {
-            if eventData.eventID == event.eventID
-            {
-                self.specificReceivedRequestEventList.append(event)
-            }
+            self.receivedEventDetailView  = ReceivedEventDetailView.instanceFromNib() as! ReceivedEventDetailView
+            
+            self.receivedEventDetailView.frame = CGRect(x: 0 , y: 0, width: Int(self.receivedEventsView.frame.size.width), height: Int(self.receivedEventsView.frame.size.height))
+            
+            self.receivedEventDetailView.receivedEventDetailTableView.register(UINib(nibName: "ReceivedEventsCell", bundle: nil), forCellReuseIdentifier: "ReceivedEventsCell")
+            
+            self.receivedEventDetailView.receivedEventDetailTableView.delegate = self
+            self.receivedEventDetailView.receivedEventDetailTableView.dataSource = self
+            
+            self.receivedEventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
+            
+            self.receivedEventsView.addSubview(self.receivedEventDetailView)
+            
         }
+        else
+        {
+            self.acceptByMeView  = AcceptByMeView.instanceFromNib() as! AcceptByMeView
+            
+            self.acceptByMeView.frame = CGRect(x: 0 , y: 0, width: Int(self.receivedEventsView.frame.size.width), height: Int(self.receivedEventsView.frame.size.height))
+            
+            let dateformatter = DateFormatter()
+            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            let date = dateformatter.date(from: eventData.eventTime)
+            
+            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+            
+            dateformatter.dateStyle = .medium
+            dateformatter.timeStyle = .short
+            
+            self.acceptByMeView.title.attributedText = NSMutableAttributedString().bold("Event name : ").normal(eventData.title)
+            self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
+            self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
+            var invitedBy : String!
+            
+            let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
+            
+            if fullName == " "
+            {
+                invitedBy = eventData.phone
+            }
+            else
+            {
+                invitedBy = fullName + " " + "(" + eventData.phone + ")"
+            }
+            
+            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
+            
+            
+            self.acceptByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
+            
+            self.acceptByMeView.startNavigationButton.tag = sender.tag
+            self.acceptByMeView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromReceivedRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
+            
+            self.receivedEventsView.addSubview(self.acceptByMeView)
+            
+        }
+        
+        
+        
+        
+        
+        
+//        self.specificReceivedRequestEventList.removeAll()
+//
+//        for event in self.receivedRequestEventList
+//        {
+//            if eventData.eventID == event.eventID
+//            {
+//                self.specificReceivedRequestEventList.append(event)
+//            }
+//        }
 
-        self.receivedEventDetailView.receivedEventDetailTableView.reloadData()
+//        self.receivedEventDetailView.receivedEventDetailTableView.reloadData()
         // Testing github.
         
     }
@@ -1409,7 +1496,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.detailView.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-        self.detailView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        
+        self.detailView.startNavigationButton.tag = sender.tag
+        self.detailView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
         
         
         
@@ -1592,13 +1681,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.receivedEventDetailView.removeFromSuperview()
         }
         
+        if self.acceptByMeView != nil
+        {
+            self.acceptByMeView.removeFromSuperview()
+        }
+        
     }
-    @objc func startNavigationButtonTapped(sender:UIButton)
+    @objc func startNavigationButtonTappedFromRequestEvents(sender : UIButton)
     {
 //        self.isStartNavigationButtonTapped = true
 //
         let toLat = self.requestEventList[sender.tag].lat
         let toLong = self.requestEventList[sender.tag].long
+        
+        self.showRouteOnGoogleMap(lat: toLat, long: toLong)
 //
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let routeVC : RouteVC = storyboard.instantiateViewController(withIdentifier: "RouteVC") as! RouteVC
@@ -1607,15 +1703,38 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //        BasicFunctions.pushVCinNCwithObject(vc: routeVC, popTop: false)
         
+        
+    }
+    @objc func startNavigationButtonTappedFromUserEvents(sender : UIButton)
+    {
+        
+        let toLat = self.userEventList[sender.tag].lat
+        let toLong = self.userEventList[sender.tag].long
+        
+        self.showRouteOnGoogleMap(lat: toLat, long: toLong)
+        
+    }
+    @objc func startNavigationButtonTappedFromReceivedRequestEvents(sender : UIButton)
+    {
+        
+        let toLat = self.receivedRequestEventList[sender.tag].lat
+        let toLong = self.receivedRequestEventList[sender.tag].long
+        
+        self.showRouteOnGoogleMap(lat: toLat, long: toLong)
+        
+    }
+    
+    func showRouteOnGoogleMap (lat : String , long : String)
+    {
         // if GoogleMap installed
         if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
             UIApplication.shared.openURL(NSURL(string:
-                "comgooglemaps://?saddr=\(self.currentLocationCoordinate.latitude),\(self.currentLocationCoordinate.longitude)&daddr=\(toLat),\(toLong)&directionsmode=driving")! as URL)
-
+                "comgooglemaps://?saddr=\(self.currentLocationCoordinate.latitude),\(self.currentLocationCoordinate.longitude)&daddr=\(lat),\(long)&directionsmode=driving")! as URL)
+            
         } else {
             // if GoogleMap App is not installed
             UIApplication.shared.openURL(NSURL(string:
-                "https://www.google.co.in/maps/dir/?saddr=\(self.currentLocationCoordinate.latitude),\(self.currentLocationCoordinate.longitude)&daddr=\(self.locationCoordinate?.latitude),\(self.locationCoordinate?.longitude)&directionsmode=driving")! as URL)
+                "https://www.google.co.in/maps/dir/?saddr=\(self.currentLocationCoordinate.latitude),\(self.currentLocationCoordinate.longitude)&daddr=\(lat),\(long)&directionsmode=driving")! as URL)
         }
         
     }
@@ -2460,6 +2579,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             eventData.paymentMethod = event["payment_method"] as! Int
             eventData.maximumNumberOfPeople = event["max_invited"] as! Int
             
+            
 //            let userList = event["list_users"] as? [[String : Any]]
 //
 //
@@ -2555,6 +2675,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.paymentMethod = event["payment_method"] as! Int
                 eventData.listName = event["list_name"] as! String
                 eventData.eventCreatedTime = event["updated_at"] as! String
+                
                 
                 if event["latitude"] as? String != nil
                 {
@@ -2665,6 +2786,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     eventData.confirmed = event["confirmed"] as! Int
                     eventData.phone = event["phone"] as! String
                     eventData.eventAcceptedBy = event["event_accepted"] as! Int
+                    eventData.paymentMethod = event["payment_method"] as! Int
+                    eventData.lat = event["event_latitude"] as! String
+                    eventData.long = event["event_longitude"] as! String
+                    
                     
                     if event["firstName"] as? String != nil
                     {

@@ -32,6 +32,7 @@ class ReceivedEventsCell: UITableViewCell {
     @IBOutlet var paymentMethod: UILabel!
     
     
+    @IBOutlet var startNavigationButton: UIButton!
     
     @IBOutlet var iconAccepted: UIImageView!
     
