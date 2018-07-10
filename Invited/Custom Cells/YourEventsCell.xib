@@ -117,27 +117,17 @@
                                     <constraint firstItem="pjQ-FX-lMm" firstAttribute="leading" secondItem="NDy-ob-lab" secondAttribute="leading" id="q3D-Yt-J6e"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E8N-hq-x4K">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wB8-6a-gvA">
                                 <rect key="frame" x="15" y="191" width="295" height="30.5"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wB8-6a-gvA">
-                                        <rect key="frame" x="0.0" y="0.0" width="295" height="30.5"/>
-                                        <color key="backgroundColor" red="0.52549019610000003" green="0.87843137250000003" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <state key="normal" title="Start Navigation">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.52549019610000003" green="0.87843137250000003" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="wB8-6a-gvA" firstAttribute="top" secondItem="E8N-hq-x4K" secondAttribute="top" id="2Uv-03-wxF"/>
-                                    <constraint firstAttribute="bottom" secondItem="wB8-6a-gvA" secondAttribute="bottom" id="Ixh-SI-qpU"/>
-                                    <constraint firstAttribute="height" constant="30.5" id="QfC-SY-Vaw"/>
-                                    <constraint firstAttribute="trailing" secondItem="wB8-6a-gvA" secondAttribute="trailing" id="dfn-De-Xhg"/>
-                                    <constraint firstItem="wB8-6a-gvA" firstAttribute="leading" secondItem="E8N-hq-x4K" secondAttribute="leading" id="tOQ-Ru-DfF"/>
+                                    <constraint firstAttribute="height" constant="30.5" id="zWY-3Y-SqS"/>
                                 </constraints>
-                            </view>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <state key="normal" title="Start Navigation">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xRg-5l-0f6">
                                 <rect key="frame" x="15" y="236.5" width="295" height="30.5"/>
                                 <subviews>
@@ -186,16 +176,16 @@
                             <constraint firstItem="DQa-Sg-iJS" firstAttribute="top" secondItem="P7u-PA-8Y3" secondAttribute="top" id="4L1-wR-RnB"/>
                             <constraint firstItem="f9D-cm-yWe" firstAttribute="top" secondItem="P7u-PA-8Y3" secondAttribute="top" id="4kO-iF-yzk"/>
                             <constraint firstAttribute="trailing" secondItem="NDy-ob-lab" secondAttribute="trailing" constant="15" id="7Ow-nH-Ghj"/>
+                            <constraint firstItem="xRg-5l-0f6" firstAttribute="top" secondItem="wB8-6a-gvA" secondAttribute="bottom" constant="15" id="7x1-P6-Cue"/>
+                            <constraint firstItem="wB8-6a-gvA" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" constant="15" id="9ux-RM-1eR"/>
                             <constraint firstAttribute="trailing" secondItem="f9D-cm-yWe" secondAttribute="trailing" constant="15" id="KGK-aN-cb3"/>
                             <constraint firstItem="xRg-5l-0f6" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" constant="15" id="MQI-Pc-GWh"/>
-                            <constraint firstAttribute="trailing" secondItem="E8N-hq-x4K" secondAttribute="trailing" constant="15" id="NPG-oX-qWN"/>
                             <constraint firstItem="NDy-ob-lab" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" constant="15" id="PXi-XP-ZiJ"/>
                             <constraint firstAttribute="trailing" secondItem="xRg-5l-0f6" secondAttribute="trailing" constant="15" id="T9l-XU-X0Y"/>
+                            <constraint firstAttribute="trailing" secondItem="wB8-6a-gvA" secondAttribute="trailing" constant="15" id="Us9-Ic-76p"/>
                             <constraint firstItem="f9D-cm-yWe" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" constant="15" id="Y3b-yF-0Du"/>
-                            <constraint firstItem="xRg-5l-0f6" firstAttribute="top" secondItem="E8N-hq-x4K" secondAttribute="bottom" constant="15" id="gLr-nV-sJU"/>
+                            <constraint firstItem="wB8-6a-gvA" firstAttribute="top" secondItem="NDy-ob-lab" secondAttribute="bottom" constant="15" id="fU8-io-J9V"/>
                             <constraint firstAttribute="trailing" secondItem="DQa-Sg-iJS" secondAttribute="trailing" id="sob-QT-Roe"/>
-                            <constraint firstItem="E8N-hq-x4K" firstAttribute="top" secondItem="NDy-ob-lab" secondAttribute="bottom" constant="15" id="vKZ-bQ-x9e"/>
-                            <constraint firstItem="E8N-hq-x4K" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" constant="15" id="vn9-5c-Qgr"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -215,6 +205,7 @@
                 <outlet property="listName" destination="gnt-jM-qpw" id="A5T-y7-bFx"/>
                 <outlet property="location" destination="YNj-Z6-dDn" id="D3f-Rp-Ign"/>
                 <outlet property="mainView" destination="P7u-PA-8Y3" id="PPf-4F-bLD"/>
+                <outlet property="startNavigationButton" destination="wB8-6a-gvA" id="jn5-Ui-8cG"/>
                 <outlet property="title" destination="01y-86-3mn" id="VTP-vj-PkY"/>
                 <outlet property="totalInvited" destination="tIc-Nu-Vua" id="IbJ-dh-K9U"/>
             </connections>

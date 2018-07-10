@@ -30,6 +30,9 @@ class YourEventsCell: UITableViewCell {
     
     @IBOutlet var mainView: UIView!
     
+    @IBOutlet var startNavigationButton: UIButton!
+    
+    
     
     
     override func awakeFromNib() {
@@ -38,6 +41,7 @@ class YourEventsCell: UITableViewCell {
         
         BasicFunctions.setBorderOfView(view: self.mainView)
         
+        BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.editButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.deleteButton, radius: 5.0)
     }

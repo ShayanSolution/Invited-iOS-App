@@ -46,6 +46,8 @@ class ReceivedEventsCell: UITableViewCell {
         // Initialization code
         
         BasicFunctions.setBorderOfView(view: self.mainView)
+        
+        BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

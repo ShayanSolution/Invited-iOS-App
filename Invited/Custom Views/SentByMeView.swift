@@ -1,18 +1,23 @@
 //
-//  ReceivedEventDetailView.swift
+//  SentByMeView.swift
 //  Invited
 //
-//  Created by ShayanSolutions on 6/13/18.
+//  Created by ShayanSolutions on 7/10/18.
 //  Copyright © 2018 ShayanSolutions. All rights reserved.
 //
 
 import UIKit
 
-class ReceivedEventDetailView: UIView {
+class SentByMeView: UIView {
     
-    @IBOutlet var receivedEventDetailTableView: UITableView!
+    @IBOutlet var createEventDate: UILabel!
+    
+    @IBOutlet var numberOfInvitationAccepted: UILabel!
+    
+    @IBOutlet var acceptedUserTableView: UITableView!
     
     @IBOutlet var backButton: UIButton!
+    
     
     
     override init (frame : CGRect) {
@@ -28,9 +33,8 @@ class ReceivedEventDetailView: UIView {
     class func instanceFromNib() -> UIView {
         
         
-        return UINib(nibName: "ReceivedEventDetailView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
+        return UINib(nibName: "SentByMeView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }
-    
 
     /*
     // Only override draw() if you perform custom drawing.

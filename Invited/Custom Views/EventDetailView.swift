@@ -25,6 +25,9 @@ class EventDetailView: UIView {
     
     @IBOutlet var backButton: UIButton!
     
+    @IBOutlet var startNavigationButton: UIButton!
+    
+    
     
     @IBOutlet var inviedListTableView: UITableView!
     

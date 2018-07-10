@@ -20,6 +20,10 @@ class DetailView: UIView {
     
     @IBOutlet var date: UILabel!
     
+    @IBOutlet var createdDate: UILabel!
+    
+    @IBOutlet var whoWillPay: UILabel!
+    
     @IBOutlet var location: UILabel!
     
     @IBOutlet var acceptORRejectButtonView: UIView!

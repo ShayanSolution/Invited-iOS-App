@@ -136,39 +136,29 @@
                                     <constraint firstAttribute="trailing" secondItem="Y8F-Zc-chX" secondAttribute="trailing" id="kNi-JL-zZq"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X9w-70-bMw">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMp-nL-MxW">
                                 <rect key="frame" x="80" y="336" width="203" height="30.5"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMp-nL-MxW">
-                                        <rect key="frame" x="0.0" y="0.0" width="203" height="30.5"/>
-                                        <color key="backgroundColor" red="0.52549019610000003" green="0.87843137250000003" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <state key="normal" title="Start Navigation">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.52549019610000003" green="0.87843137250000003" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="KMp-nL-MxW" firstAttribute="top" secondItem="X9w-70-bMw" secondAttribute="top" id="0pL-6T-nMI"/>
-                                    <constraint firstItem="KMp-nL-MxW" firstAttribute="leading" secondItem="X9w-70-bMw" secondAttribute="leading" id="SIQ-Za-u79"/>
-                                    <constraint firstAttribute="bottom" secondItem="KMp-nL-MxW" secondAttribute="bottom" id="Utw-nQ-Yx8"/>
-                                    <constraint firstAttribute="height" constant="30.5" id="V5g-US-Omf"/>
-                                    <constraint firstAttribute="trailing" secondItem="KMp-nL-MxW" secondAttribute="trailing" id="w70-5I-t0u"/>
+                                    <constraint firstAttribute="height" constant="30.5" id="uQw-Eb-ryl"/>
                                 </constraints>
-                            </view>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <state key="normal" title="Start Navigation">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="X9w-70-bMw" firstAttribute="top" secondItem="DMn-ZG-HXr" secondAttribute="bottom" constant="10" id="2pX-Sb-3Fg"/>
+                            <constraint firstItem="KMp-nL-MxW" firstAttribute="leading" secondItem="DMn-ZG-HXr" secondAttribute="leading" id="3r5-5W-Hn9"/>
                             <constraint firstItem="CRT-Fn-CGI" firstAttribute="top" secondItem="Ao7-91-wbr" secondAttribute="top" constant="15.5" id="5jD-Q5-SOo"/>
-                            <constraint firstItem="X9w-70-bMw" firstAttribute="trailing" secondItem="DMn-ZG-HXr" secondAttribute="trailing" id="BGU-I6-3T6"/>
                             <constraint firstItem="T8r-Jb-KPs" firstAttribute="leading" secondItem="DMn-ZG-HXr" secondAttribute="trailing" id="H4v-ln-VhW"/>
                             <constraint firstItem="DMn-ZG-HXr" firstAttribute="top" secondItem="Ao7-91-wbr" secondAttribute="top" constant="15.5" id="Hxd-0b-JCm"/>
                             <constraint firstItem="DMn-ZG-HXr" firstAttribute="leading" secondItem="CRT-Fn-CGI" secondAttribute="trailing" constant="15" id="L3E-ap-0c9"/>
-                            <constraint firstAttribute="bottom" secondItem="X9w-70-bMw" secondAttribute="bottom" constant="10" id="Rvq-6s-3kF"/>
+                            <constraint firstItem="KMp-nL-MxW" firstAttribute="trailing" secondItem="DMn-ZG-HXr" secondAttribute="trailing" id="Vgz-1F-FUl"/>
+                            <constraint firstItem="KMp-nL-MxW" firstAttribute="top" secondItem="DMn-ZG-HXr" secondAttribute="bottom" constant="10" id="Yuw-Su-ki7"/>
+                            <constraint firstAttribute="bottom" secondItem="KMp-nL-MxW" secondAttribute="bottom" constant="10" id="ef2-vr-GZ1"/>
                             <constraint firstItem="T8r-Jb-KPs" firstAttribute="top" secondItem="Ao7-91-wbr" secondAttribute="top" id="fMQ-6U-2sm"/>
-                            <constraint firstItem="X9w-70-bMw" firstAttribute="leading" secondItem="DMn-ZG-HXr" secondAttribute="leading" id="gd6-Mh-dVG"/>
                             <constraint firstAttribute="trailing" secondItem="T8r-Jb-KPs" secondAttribute="trailing" id="qkw-Vr-pQ7"/>
                             <constraint firstItem="CRT-Fn-CGI" firstAttribute="leading" secondItem="Ao7-91-wbr" secondAttribute="leading" constant="5" id="z79-Vi-fl1"/>
                         </constraints>
@@ -189,7 +179,7 @@
                 <outlet property="listName" destination="XLQ-1M-jBo" id="g6c-md-G8M"/>
                 <outlet property="mainView" destination="Ao7-91-wbr" id="qjF-DQ-WXh"/>
                 <outlet property="paymentMethod" destination="Y8F-Zc-chX" id="1vW-5c-tWq"/>
-                <outlet property="startNavigationButton" destination="KMp-nL-MxW" id="jLy-Pv-cox"/>
+                <outlet property="startNavigationButton" destination="KMp-nL-MxW" id="MYR-Ah-7fZ"/>
                 <outlet property="title" destination="aff-Nt-vPR" id="I0b-vu-zXg"/>
                 <outlet property="totalInvited" destination="KHI-D2-BdR" id="wrj-ED-n1Y"/>
             </connections>

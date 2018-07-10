@@ -31,7 +31,7 @@ class RequestEventCell: UITableViewCell {
     
     @IBOutlet var eventCreatedDate: UILabel!
     
-    @IBOutlet var address: UILabel!
+    @IBOutlet var location: UILabel!
     
     
     @IBOutlet var startNavigationButton: UIButton!
