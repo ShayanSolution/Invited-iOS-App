@@ -212,6 +212,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             BasicFunctions.setPreferences(userProfileData.authToken, key: kAccessToken)
             BasicFunctions.setPreferences(userProfileData.authID, key: kUserID)
             
+            kUserList.removeAll()
+            
             
             
 //            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken)

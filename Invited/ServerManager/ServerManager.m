@@ -20,6 +20,7 @@
             sharedInstance = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kBaseURL]];
             [sharedInstance setResponseSerializer:[AFJSONResponseSerializer serializer]];
             [sharedInstance setRequestSerializer:[AFHTTPRequestSerializer serializer]];
+            [sharedInstance.requestSerializer setTimeoutInterval:300];
             [sharedInstance.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html", nil]];
             
         }

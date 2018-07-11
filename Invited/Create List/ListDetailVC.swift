@@ -59,7 +59,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         if self.searchTextField.text?.count != 0 {
             for contactData in self.listData.contactList
             {
-                let range = contactData.name.lowercased().range(of: textfield.text!, options: .caseInsensitive, range: nil,   locale: nil)
+                let range = contactData.name.lowercased().range(of: textfield.text!.lowercased(), options: .caseInsensitive, range: nil,   locale: nil)
                 
                 if range != nil {
 //
@@ -118,14 +118,16 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         cell?.deleteButton.addTarget(self, action: #selector(self.deleteContact(sender:)), for: UIControlEvents.touchUpInside)
         
-        if contactData.name == " "
+        let name = BasicFunctions.getNameFromContactList(phoneNumber: contactData.phoneNumber)
+        
+        if name == " "
         {
             
             cell?.nameLabel.text = contactData.phoneNumber
         }
         else
         {
-            cell?.nameLabel.text = BasicFunctions.getNameFromContactList(phoneNumber: contactData.phoneNumber)
+            cell?.nameLabel.text = name + " " + "(" + contactData.phoneNumber + ")"
         }
         
         return cell!
@@ -187,7 +189,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         }
         
         
-        self.updateButtonTapped()
+        self.updateListOnServer()
         
     }
     
@@ -219,7 +221,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     }
     
     
-    func updateButtonTapped()
+    func updateListOnServer()
     {
         
         BasicFunctions.showActivityIndicator(vu: self.view)
@@ -249,6 +251,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             if json["error"] == nil
             {
+                kUserList.removeAll()
                 self.contactListTableView.reloadData()
 //                BasicFunctions.showAlert(vc: self, msg: msg)
             }

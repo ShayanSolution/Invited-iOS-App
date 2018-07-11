@@ -179,7 +179,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             }
             else if contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) ==  contact.phoneNumber.stringByRemovingWhitespaces.suffix(9)
             {
-                contactData.isSelected = true
+//                contactData.isSelected = true
                 self.selectedContactList.append(contactData)
                 break
                 
@@ -224,7 +224,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         for contactdata in self.updatedContactList
         {
-            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactdata.phoneNumber.stringByRemovingWhitespaces })
+            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactdata.phoneNumber.stringByRemovingWhitespaces.suffix(9) }) && self.filteredList.contains(where: { $0.name == contactdata.name })
             {
                 
             }
@@ -256,7 +256,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         if textfield.text?.count != 0
         {
             for contactData in self.updatedContactList {
-                let range = contactData.name.lowercased().range(of: textfield.text!, options: .caseInsensitive, range: nil,   locale: nil)
+                let range = contactData.name.lowercased().range(of: textfield.text!.lowercased(), options: .caseInsensitive, range: nil,   locale: nil)
+                
 
                 if range != nil {
                     
@@ -337,7 +338,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             cell?.nameLabel.text = contactData.name
         }
         
-        if contactData.isSelected
+        if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
         {
             cell?.selectedIcon.isHidden = false
         }
@@ -354,20 +355,20 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         let contactData = self.filteredList[indexPath.row]
         
-        if contactData.isSelected
+        if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
         {
-            contactData.isSelected = false
+//            contactData.isSelected = false
             cell.selectedIcon.isHidden = true
             
-            self.filteredList[indexPath.row]  = contactData
-            self.updatedContactList[indexPath.row]  = contactData
+//            self.filteredList[indexPath.row]  = contactData
+//            self.updatedContactList[indexPath.row]  = contactData
             
-            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
-            {
-                let index = self.selectedContactList.index(of: contactData)
+//            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
+//            {
+                let index = self.selectedContactList.index{$0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9)}
                 self.selectedContactList.remove(at: index!)
                 
-            }
+//            }
         }
         else
         {
@@ -407,7 +408,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
             let json = result as? [String : Any]
-            let msg = json!["message"] as? String
+//            let msg = json!["message"] as? String
             let status = json!["status"] as? String
             
             let message = json!["message"] as? String
@@ -424,6 +425,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             {
                 let msg = json!["messages"] as? String
                 
+                kUserList.removeAll()
+                
                 self.dismiss(animated: true, completion: nil)
                 
                 if msg != nil
@@ -433,7 +436,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             }
             else
             {
-                BasicFunctions.showAlert(vc: self, msg: msg)
+                
+                BasicFunctions.showAlert(vc: self, msg: message)
             }
             
         }
@@ -480,7 +484,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             if json["error"] == nil
             {
-                
+                kUserList.removeAll()
                 self.dismissVC()
                 BasicFunctions.showAlert(vc: self, msg: msg)
             }

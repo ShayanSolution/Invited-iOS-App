@@ -11,6 +11,7 @@ import Contacts
 
 
 var kContactList = [ContactData]()
+var kUserList = [UserList]()
 let kSelectedAddress = "selectedAddress"
 let kSelectedLat = "selectedLat"
 let kSelectedLong = "selectedLong"

@@ -107,7 +107,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     @IBOutlet var mainScrollView: UIScrollView!
     
     
-    var userList = [UserList]()
+//    var userList = [UserList]()
     
     var contactsView : ContactsView!
     var createEventView : CreateEventView!
@@ -165,6 +165,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.isUpdated = false
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
         
         
         
@@ -192,6 +193,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func appDidBecomeActive()
     {
+//        self.locationManager.startUpdatingLocation()
         self.requestEventView.requestEventTableView.reloadData()
         self.receivedEventsView.receivedEventsTableView.reloadData()
         
@@ -200,7 +202,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     override func viewWillAppear(_ animated: Bool)
     {
-        self.locationManager.startUpdatingLocation()
+        
         
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
@@ -265,8 +267,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let point = CGPoint(x: 0, y: 0)
             self.mainScrollView.setContentOffset( point, animated: true)
             
-//            self.fetchAllContactsFromDevice()
+            if kUserList.count < 1
+            {
             self.getContactListFromServer()
+            }
             
         }
         
@@ -491,8 +495,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.createEventView.locationTextField.text = self.currentLocationAddress
         
-        self.createEventView.setListTextField.text = ""
-        self.selectedList = nil
+//        self.createEventView.setListTextField.text = ""
+//        self.selectedList = nil
         
         UserDefaults.standard.removeObject(forKey: kSelectedLat)
         UserDefaults.standard.removeObject(forKey: kSelectedLong)
@@ -645,7 +649,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        return self.userList.count + 1
+        return kUserList.count + 1
         
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -655,9 +659,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             return "Select List"
         }
         
-        if self.userList.count != 0
+        if kUserList.count != 0
         {
-        return (self.userList[row - 1] ).name
+        return (kUserList[row - 1] ).name
         }
         return ""
         
@@ -666,9 +670,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if pickerView.tag == 1
         {
-        if self.userList.count != 0 && row != 0
+        if kUserList.count != 0 && row != 0
         {
-        self.selectedList = self.userList[row - 1]
+        self.selectedList = kUserList[row - 1]
         
         }
         else
@@ -680,9 +684,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            if self.userList.count != 0 && row != 0
+            if kUserList.count != 0 && row != 0
             {
-                self.updateSelectedList = self.userList[row - 1]
+                self.updateSelectedList = kUserList[row - 1]
                 
             }
             else
@@ -784,7 +788,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if tableView.tag == 1
         {
-        return self.userList.count
+        return kUserList.count
         }
         else if tableView.tag == 2
         {
@@ -822,7 +826,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             contactCell?.deleteButton.isHidden = true
             
         
-        let userListObject = self.userList[indexPath.row]
+        let userListObject = kUserList[indexPath.row]
         
             contactCell!.nameLabel.text = userListObject.name
             
@@ -1180,8 +1184,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            self.deleteList(index: self.userList[indexPath.row].id)
-            self.userList.remove(at: indexPath.row)
+            self.deleteList(index: kUserList[indexPath.row].id)
+            kUserList.remove(at: indexPath.row)
             self.contactsView.contactsTableView.deleteRows(at: [indexPath], with: .automatic)
 
 
@@ -1214,7 +1218,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
 
         let listDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "ListDetailVC") as! ListDetailVC
-        listDetailVC.listData = self.userList[indexPath.row]
+        listDetailVC.listData = kUserList[indexPath.row]
         BasicFunctions.pushVCinNCwithObject(vc: listDetailVC, popTop: false)
     }
     
@@ -1961,7 +1965,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
 //                UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
                 
+                
                 BasicFunctions.setBoolPreferences(false, forkey: kIfUserLoggedIn)
+                
                 
                 
 //                let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
@@ -2023,7 +2029,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         
-        self.userList.removeAll()
+        kUserList.removeAll()
         
         var contactListArray : [[String : Any]]!
         if (json["user_contact_list"] as? [[String : Any]]) != nil
@@ -2060,7 +2066,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 userListObject.contactList.append(contactData)
             }
             
-            self.userList.append(userListObject)
+            kUserList.append(userListObject)
         }
         self.contactsView.contactsTableView.reloadData()
         }
@@ -2069,7 +2075,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             if status == "error"
             {
-                self.userList.removeAll()
+                kUserList.removeAll()
                 self.contactsView.contactsTableView.reloadData()
                 
             }
@@ -2080,7 +2086,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if message != nil
             {
-                BasicFunctions.showAlert(vc: self, msg: status as! String)
+                BasicFunctions.showAlert(vc: self, msg: message!)
             }
             
         }
@@ -2780,6 +2786,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                         eventAcceptedData.id = acceptedEvent["id"] as! Int
                         eventAcceptedData.eventID = acceptedEvent["event_id"] as! Int
                         
+                        if acceptedEvent["invitee"] as? [String : Any] != nil
+                        {
                         let invitee = acceptedEvent["invitee"] as! [String : Any]
                         
                         let userData = UserData()
@@ -2788,6 +2796,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                         userData.phone = invitee["phone"] as! String
                         
                         eventAcceptedData.invitee = userData
+                        }
                         
                         eventData.acceptedEventList.append(eventAcceptedData)
                     }
@@ -2883,6 +2892,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if json["error"] == nil && json["status"] == nil
             {
+                
                 self.getContactListFromServer()
             }
             else
@@ -2932,7 +2942,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if textField.tag == 2
         {
-            let row = self.userList.index(where: {$0.id == self.listID})
+            let row = kUserList.index(where: {$0.id == self.listID})
             self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
         }
         
