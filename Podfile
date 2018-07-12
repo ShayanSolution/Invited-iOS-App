@@ -7,7 +7,6 @@ target 'Invited' do
 
 pod 'AFNetworking', '2.5.4'
 pod 'MBProgressHUD', '~> 1.1.0'
-pod 'Tabman', '~> 1.0'
 pod 'GooglePlaces'
 pod 'GooglePlacePicker'
 pod 'GoogleMaps'

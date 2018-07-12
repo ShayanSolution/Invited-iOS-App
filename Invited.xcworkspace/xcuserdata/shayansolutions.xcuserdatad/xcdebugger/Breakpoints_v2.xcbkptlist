@@ -9,28 +9,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Invited/SignUp/VerifyCodeVC.swift"
-            timestampString = "553019449.1038181"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
-            landmarkName = "handleServerResponse(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.104169"
+            timestampString = "553102555.566622"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2493"
-            endingLineNumber = "2493"
+            startingLineNumber = "2505"
+            endingLineNumber = "2505"
             landmarkName = "HomeVC"
             landmarkType = "3">
          </BreakpointContent>
@@ -42,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.1046489"
+            timestampString = "553102555.566723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2591"
-            endingLineNumber = "2591"
+            startingLineNumber = "2603"
+            endingLineNumber = "2603"
             landmarkName = "HomeVC"
             landmarkType = "3">
          </BreakpointContent>
@@ -58,23 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.104973"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2701"
-            endingLineNumber = "2701"
-            landmarkName = "HomeVC"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.105294"
+            timestampString = "553102555.566805"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "356"
@@ -90,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.105966"
+            timestampString = "553102555.566879"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1768"
@@ -106,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.1063581"
+            timestampString = "553102555.566959"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1838"
@@ -122,27 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.107017"
+            timestampString = "553102555.5670249"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1997"
-            endingLineNumber = "1997"
-            landmarkName = "getContactListFromServer()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.107335"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2253"
-            endingLineNumber = "2253"
+            startingLineNumber = "2265"
+            endingLineNumber = "2265"
             landmarkName = "createButtonTapped()"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.107639"
+            timestampString = "553102555.567091"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2387"
-            endingLineNumber = "2387"
+            startingLineNumber = "2399"
+            endingLineNumber = "2399"
             landmarkName = "updateButtonTapped(sender:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -170,28 +122,91 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.107945"
+            timestampString = "553102555.567158"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2839"
-            endingLineNumber = "2839"
-            landmarkName = "updateDeviceToken()"
+            startingLineNumber = "2872"
+            endingLineNumber = "2872"
+            landmarkName = "deleteList(index:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Invited/Home/HomeVC.swift"
-            timestampString = "553019449.108252"
+            filePath = "Invited/ServerManager/ServerManager.m"
+            timestampString = "553102555.56723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2869"
-            endingLineNumber = "2869"
-            landmarkName = "deleteList(index:)"
+            startingLineNumber = "452"
+            endingLineNumber = "452"
+            landmarkName = "+updateList:accessToken:withResulBlock:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[ServerManager updateList:accessToken:withResulBlock:]"
+                  moduleName = "Invited"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited/Invited/ServerManager/ServerManager.m"
+                  timestampString = "553102555.617944"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "452"
+                  endingLineNumber = "452"
+                  offsetFromSymbolStart = "492">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__55+[ServerManager updateList:accessToken:withResulBlock:]_block_invoke"
+                  moduleName = "Invited"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited/Invited/ServerManager/ServerManager.m"
+                  timestampString = "553102555.621004"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "452"
+                  endingLineNumber = "452"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_.208"
+                  moduleName = "Invited"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited/Invited/ServerManager/ServerManager.m"
+                  timestampString = "553102555.623723"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "452"
+                  endingLineNumber = "452"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Invited/ServerManager/ServerManager.m"
+            timestampString = "553102555.567288"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
+            landmarkName = "+updateList:accessToken:withResulBlock:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

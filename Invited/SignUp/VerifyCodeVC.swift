@@ -65,6 +65,12 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         
     }
     
+    @IBAction func backButtonTapped(_ sender: UIButton)
+    {
+        self.navigationController?.popViewController(animated: true)
+        
+    }
+    
     @IBAction func sendAgainButtonTapped(_ sender: UIButton)
     {
         sender.isEnabled = false
@@ -145,18 +151,41 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     
             if  json["error"] == nil && json["Error"] == nil
             {
-                self.login()
+                self.register()
                 
     
             }
-            else
+            else if json["Error"] != nil
             {
                 BasicFunctions.showAlert(vc: self, msg: json["Error"] as! String)
+            }
+            else
+            {
+              BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
             }
     
     
     
         }
+    
+    func register()
+    {
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        var postParams = [String: Any]()
+        postParams["email"] = self.userCredentials.email
+        postParams["phone"] = self.userCredentials.phone
+        postParams["password"] = self.userCredentials.password
+        postParams["password_confirmation"] = self.userCredentials.password
+        
+        
+        ServerManager.signUp(postParams) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            self.handleServerResponse(result as! [String : Any])
+        }
+        
+    }
     func login()
     {
         
@@ -179,24 +208,22 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     func handleServerResponse(_ json: [String: Any])
     {
         
-        if  json["error"] == nil && json["phone"] == nil && json["password"] == nil
+        if  json["error"] == nil && json["phone"] == nil && json["email"] == nil && json["password"] == nil && json["password_confirmation"] == nil
         {
-//            if json["status"] != nil
-//            {
-//                //                self.resetData()
-//                //                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
-//
-//                return
-//            }
+            if json["status"] != nil
+            {
+                self.login()
+                return
+            }
             
-            
-            let userProfileData = UserProfileData()
             let userID = json["user_id"] as? Int
-            userProfileData.authID = userID!
-            userProfileData.authToken = (json["access_token"] as? String)!
+            let authToken = (json["access_token"] as? String)!
             
-            BasicFunctions.setPreferences(userProfileData.authToken, key: kAccessToken)
-            BasicFunctions.setPreferences(userProfileData.authID, key: kUserID)
+            
+            BasicFunctions.setPreferences(authToken, key: kAccessToken)
+            BasicFunctions.setPreferences(userID, key: kUserID)
+            
+            kUserList.removeAll()
             
             
             
@@ -218,9 +245,21 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             {
                 errorString = (json["phone"] as! Array)[0]
             }
+            else if json["email"] != nil
+            {
+                errorString = (json["email"] as! Array)[0]
+            }
             else if json["password"] != nil
             {
                 errorString = (json["password"] as! Array)[0]
+            }
+            else if json["password_confirmation"] != nil
+            {
+                errorString = (json["password_confirmattion"] as! Array)[0]
+            }
+            else if json["message"] != nil
+            {
+                errorString = json["message"] as! String
             }
             else
             {
@@ -233,6 +272,11 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     }
     func sendSMSFromServer()
     {
+        self.textField1.text = ""
+        self.textField2.text = ""
+        self.textField3.text = ""
+        self.textField4.text = ""
+        
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
         postParams["phone"] = self.userCredentials.phone

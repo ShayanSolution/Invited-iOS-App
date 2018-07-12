@@ -58,10 +58,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         
         self.mainScrollView.contentSize.height = self.mainScrollView.frame.size.height
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        
         
         if self.isLoginPage == false
         {
@@ -78,6 +74,16 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             self.signInView.isHidden = false
             self.mainScrollView.isHidden = true
         }
+    }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(true)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton)
@@ -109,7 +115,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     @IBAction func register(_ sender: UIButton)
     {
 
-        
         if (self.phoneTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
@@ -138,14 +143,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
 
-//        var deviceToken = BasicFunctions.getPreferences(kAccessToken)
-//        if deviceToken == nil
-//        {
-//            deviceToken = ""
-//        }
-        postParams["device_token"] = ""
 
-        ServerManager.signUp(postParams) { (result) in
+        ServerManager.validation(postParams) { (result) in
 
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
@@ -193,13 +192,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     func handleServerResponse(_ json: [String: Any])
     {
         
-        if  json["error"] == nil && json["phone"] == nil && json["email"] == nil && json["password"] == nil && json["password_confirmation"] == nil 
+        if  json["error"] == nil && json["phone"] == nil && json["email"] == nil && json["password"] == nil && json["password_confirmation"] == nil
         {
             if json["status"] != nil
             {
-                self.resetData()
-                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
-//                self.sendSMSFromServer()
+//                self.resetData()
+//                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+                self.sendSMSFromServer()
                 return
             }
             
@@ -353,7 +352,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             
             
             
-            BasicFunctions.pushVCinNCwithObject(vc: verifyCodeVC, popTop: true)
+            BasicFunctions.pushVCinNCwithObject(vc: verifyCodeVC, popTop: false)
 
             
         }
@@ -392,7 +391,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if keyboardHeight != nil {
+        if self.keyboardHeight != nil {
+            return
+        }
+        if self.activeField == nil
+        {
             return
         }
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -402,6 +405,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
                 self.contraintContentHeight.constant += self.keyboardHeight
             })
             // move if keyboard hide input field
+            
+            
             let distanceToBottom = self.mainScrollView.frame.size.height - (activeField?.frame.origin.y)! - (activeField?.frame.size.height)!
             let collapseSpace = keyboardHeight - distanceToBottom
             if collapseSpace < 0 {
@@ -421,7 +426,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             {
             self.contraintContentHeight.constant -= self.keyboardHeight
             }
+            
+            if self.lastOffset != nil
+            {
             self.mainScrollView.contentOffset = self.lastOffset
+            }
             
         }
         self.keyboardHeight = nil

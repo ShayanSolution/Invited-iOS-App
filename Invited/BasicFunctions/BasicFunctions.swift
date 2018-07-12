@@ -72,6 +72,8 @@ class BasicFunctions: NSObject {
     }
     class func showSigInVC()
     {
+        BasicFunctions.setBoolPreferences(false, forkey: kIfUserLoggedIn)
+        
         let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
         let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
         (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = vc

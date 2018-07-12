@@ -372,10 +372,17 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         }
         else
         {
-            contactData.isSelected = true
+//            contactData.isSelected = true
+            
+            if contactData.phoneNumber.isEmpty
+            {
+                BasicFunctions.showAlert(vc: self, msg: "This contact has no phone number")
+                return
+            }
+            
             cell.selectedIcon.isHidden = false
-            self.filteredList[indexPath.row]  = contactData
-            self.updatedContactList[indexPath.row]  = contactData
+//            self.filteredList[indexPath.row]  = contactData
+//            self.updatedContactList[indexPath.row]  = contactData
             self.selectedContactList.append(contactData)
         }
         

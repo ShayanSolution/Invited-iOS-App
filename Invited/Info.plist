@@ -41,7 +41,7 @@
 		</dict>
 	</dict>
 	<key>NSContactsUsageDescription</key>
-	<string>Allow the app to access your contacts to invite for event. Your selected contacts will be uploaded to our server for create event. Otherwise, you will dont able to invite people for event.</string>
+	<string>Allow the app to access your contacts to invite for event. Your selected contacts will be uploaded to our server for create event.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow the app to get your current location for create event.</string>
 	<key>UILaunchStoryboardName</key>

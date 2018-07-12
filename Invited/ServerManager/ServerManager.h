@@ -15,6 +15,7 @@ typedef void(^TMARServiceResultBlock)(NSDictionary *result);
 
 
 + (void) signIn:(NSDictionary *) signInData withResulBlock: (TMARServiceResultBlock) resultBlock;
++ (void) validation:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) signUp:(NSDictionary *) signUpData withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) sendSMS:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) verifySMSCode:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock;

@@ -529,7 +529,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
         self.contactsView = ContactsView.instanceFromNib() as! ContactsView
         
-        self.contactsView.frame = CGRect(x: 0 , y: 0, width: Int(self.view.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
+        self.contactsView.frame = CGRect(x: 0 , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
         self.contactsView.contactsTableView.register(UINib(nibName: "ContactCell", bundle: nil), forCellReuseIdentifier: "ContactCell")
         self.contactsView.contactsTableView.delegate = self
         self.contactsView.contactsTableView.dataSource = self
@@ -537,7 +537,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.mainScrollView.addSubview(self.contactsView)
         
         self.createEventView = CreateEventView.instanceFromNib() as! CreateEventView
-        self.createEventView.frame = CGRect(x: Int(self.view.frame.size.width) , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
+        self.createEventView.frame = CGRect(x: Int(self.mainScrollView.frame.size.width) , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
         
 //        self.createEventView.titleTextField.attributedPlaceholder = NSAttributedString(string: "Invite Title",
 //                                                               attributes: [NSAttributedStringKey.foregroundColor: UIColor.darkGray])
@@ -584,7 +584,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.eventStatusView = EventStatusView.instanceFromNib() as! EventStatusView
-        self.eventStatusView.frame = CGRect(x: Int(self.view.frame.size.width * 2) , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
+        self.eventStatusView.frame = CGRect(x: Int(self.mainScrollView.frame.size.width * 2) , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
         
         self.eventStatusView.requestButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
         self.eventStatusView.yourEventsButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
@@ -1956,7 +1956,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
             
-            if result == nil
+            let json = result as? [String : Any]
+            
+            
+            if json == nil
             {
 //                let defaults = UserDefaults.standard
 //                defaults.removeObject(forKey: kUserID)
@@ -1965,11 +1968,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
 //                UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
                 
-                
-                BasicFunctions.setBoolPreferences(false, forkey: kIfUserLoggedIn)
-                
-                
-                
 //                let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
 //                let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
 //                (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = vc
@@ -1977,10 +1975,24 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 BasicFunctions.showSigInVC()
 
             }
+            else if json!["error"] != nil
+            {
+                BasicFunctions.showAlert(vc: self, msg: json!["message"] as! String)
+            }
             else
             {
-                let json = result as! [String : Any]
-                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+                
+                
+                let message = json!["message"] as? String
+                
+                
+                if message != nil && message == "Unauthorized"
+                {
+                    BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                    BasicFunctions.showSigInVC()
+                    
+                }
+                
                 
             }
             
@@ -2819,16 +2831,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            let status = json["status"] as? String
-            if status != nil
-            {
-                if status == "error"
-                {
-                    BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
-                    return
-                    
-                }
-            }
+            
             BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
         }
     }
