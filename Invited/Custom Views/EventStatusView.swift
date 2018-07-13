@@ -12,11 +12,18 @@ class EventStatusView: UIView {
     
     @IBOutlet var mainScrollView: UIScrollView!
     
-    @IBOutlet var requestButton: UIButton!
+    @IBOutlet var invitesReceivedView: UIView!
     
-    @IBOutlet var yourEventsButton: UIButton!
+    @IBOutlet var invitesSentView: UIView!
     
-    @IBOutlet var receivedButton: UIButton!
+    @IBOutlet var myEventsView: UIView!
+    
+    
+    @IBOutlet var invitesReceivedButton: UIButton!
+    
+    @IBOutlet var invitesSentButton: UIButton!
+    
+    @IBOutlet var myEventsButton: UIButton!
     
     @IBOutlet var lineView: UIView!
     

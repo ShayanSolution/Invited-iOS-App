@@ -97,10 +97,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var locationManager = CLLocationManager()
     
     @IBOutlet var lineView: UIView!
+
     
-    @IBOutlet var contactListButton: UIButton!
-    @IBOutlet var createNewButton: UIButton!
-    @IBOutlet var eventstatusButton: UIButton!
+    @IBOutlet var myListsButton: UIButton!
+    @IBOutlet var createInviteButton: UIButton!
+    @IBOutlet var invitesStatusButton: UIButton!
+    
+    @IBOutlet var myListsView: UIView!
+    @IBOutlet var createInviteView: UIView!
+    @IBOutlet var invitesStatusView: UIView!
+    
     
     @IBOutlet var contentView: UIView!
     
@@ -160,6 +166,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        self.mainScrollView.frame.size.width = self.view.frame.size.width
         
 //        self.isStartNavigationButtonTapped = false
         self.isUpdated = false
@@ -255,11 +263,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        }
         else
         {
-            if (self.lineView.frame.origin.x != self.contactListButton.frame.origin.x) {
+            if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
                 
                 UIView.animate(withDuration: 0.25) {
                     
-                    self.lineView.frame.origin.x = self.contactListButton.frame.origin.x
+                    self.lineView.frame.origin.x = self.myListsView.frame.origin.x
                     
                 }
                 
@@ -357,11 +365,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
 //        self.backButtonTapped()
         
-        if (self.lineView.frame.origin.x != self.eventstatusButton.frame.origin.x) {
+        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
 
             UIView.animate(withDuration: 0.25) {
 
-                self.lineView.frame.origin.x = self.eventstatusButton.frame.origin.x
+                self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
 
             }
 
@@ -377,11 +385,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
 
 
-            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.requestButton.frame.origin.x) {
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesReceivedView.frame.origin.x) {
 
                 UIView.animate(withDuration: 0.25) {
 
-                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.requestButton.frame.origin.x
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesReceivedView.frame.origin.x
 
                 }
 
@@ -395,11 +403,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if status == "confirmed"
         {
 
-            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.receivedButton.frame.origin.x) {
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
 
                 UIView.animate(withDuration: 0.25) {
 
-                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.receivedButton.frame.origin.x
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
 
                 }
 
@@ -461,13 +469,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     
-    @IBAction func contactListButtonTapped(_ sender: UIButton)
+    @IBAction func myListsButtonTapped(_ sender: UIButton)
     {
-        if (self.lineView.frame.origin.x != self.contactListButton.frame.origin.x) {
+        if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
             
             UIView.animate(withDuration: 0.25) {
                 
-                self.lineView.frame.origin.x = self.contactListButton.frame.origin.x
+                self.lineView.frame.origin.x = self.myListsView.frame.origin.x
                 
             }
             
@@ -477,13 +485,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.isUpdated = false
     }
     
-    @IBAction func createNewButtonTapped(_ sender: UIButton)
+    @IBAction func createInviteButtonTapped(_ sender: UIButton)
     {
-        if (self.lineView.frame.origin.x != self.createNewButton.frame.origin.x) {
+        if (self.lineView.frame.origin.x != self.createInviteView.frame.origin.x) {
             
             UIView.animate(withDuration: 0.25) {
                 
-                self.lineView.frame.origin.x = self.createNewButton.frame.origin.x
+                self.lineView.frame.origin.x = self.createInviteView.frame.origin.x
                 
             }
             
@@ -507,13 +515,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    @IBAction func eventStatusButtonTapped(_ sender: UIButton)
+    @IBAction func invitesStatusButtonTapped(_ sender: UIButton)
     {
-        if (self.lineView.frame.origin.x != self.eventstatusButton.frame.origin.x) {
+        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
             
             UIView.animate(withDuration: 0.25) {
                 
-                self.lineView.frame.origin.x = self.eventstatusButton.frame.origin.x
+                self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
                 
             }
             
@@ -586,9 +594,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.eventStatusView = EventStatusView.instanceFromNib() as! EventStatusView
         self.eventStatusView.frame = CGRect(x: Int(self.mainScrollView.frame.size.width * 2) , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
         
-        self.eventStatusView.requestButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
-        self.eventStatusView.yourEventsButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
-        self.eventStatusView.receivedButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
+        self.eventStatusView.invitesReceivedButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
+        self.eventStatusView.invitesSentButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
+        self.eventStatusView.myEventsButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
         
         self.setUpStatusScrollView()
         
@@ -703,7 +711,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     
-    @IBAction func tapOnEventStatusViewTabs(_ sender: UIButton)
+    @objc func tapOnEventStatusViewTabs(_ sender: UIButton)
     {
         self.backButtonTapped()
         var point = CGPoint(x: 0, y: 0)
@@ -711,11 +719,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if sender.tag == 1
         {
-        if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.requestButton.frame.origin.x) {
+        if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesReceivedView.frame.origin.x) {
             
             UIView.animate(withDuration: 0.25) {
                 
-                self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.requestButton.frame.origin.x
+                self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesReceivedView.frame.origin.x
                 
             }
             
@@ -727,13 +735,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else if sender.tag == 2
         {
-            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.yourEventsButton.frame.origin.x) {
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
                 
                 
                 
                 UIView.animate(withDuration: 0.25) {
                     
-                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.yourEventsButton.frame.origin.x
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
                     
                 }
                 
@@ -746,13 +754,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.receivedButton.frame.origin.x) {
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
                 
                 
                 
                 UIView.animate(withDuration: 0.25) {
                     
-                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.receivedButton.frame.origin.x
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
                     
                 }
                 
