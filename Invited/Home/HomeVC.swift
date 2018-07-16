@@ -1286,8 +1286,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             self.sentByMeView  = SentByMeView.instanceFromNib() as! SentByMeView
             
-            self.sentByMeView.frame = CGRect(x: 0 , y: 0, width: Int(self.receivedEventsView.frame.size.width), height: Int(self.receivedEventsView.frame.size.height))
-            
+            self.sentByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
             
             
             self.sentByMeView.acceptedUserTableView.register(UINib(nibName: "ContactCell", bundle: nil), forCellReuseIdentifier: "ContactCell")
@@ -1305,15 +1304,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             self.sentByMeView.acceptedUserTableView.reloadData()
             
-            self.receivedEventsView.addSubview(self.sentByMeView)
+            self.view.addSubview(self.sentByMeView)
             
         }
         else
         {
+            
+            
             self.acceptByMeView  = AcceptByMeView.instanceFromNib() as! AcceptByMeView
-            
-            self.acceptByMeView.frame = CGRect(x: 0 , y: 0, width: Int(self.receivedEventsView.frame.size.width), height: Int(self.receivedEventsView.frame.size.height))
-            
+
+            self.acceptByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
+
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
             
@@ -1322,11 +1323,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
             self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
-            
+
             var invitedBy : String!
-            
+
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitedBy.phone)
-            
+
             if fullName == " "
             {
                 invitedBy = eventData.invitedBy.phone
@@ -1335,16 +1336,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 invitedBy = fullName + " " + "(" + eventData.invitedBy.phone + ")"
             }
-            
+
             self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
-            
-            
+
+
             self.acceptByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
-            
+
             self.acceptByMeView.startNavigationButton.tag = sender.tag
             self.acceptByMeView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromReceivedRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
+
+            self.view.addSubview(self.acceptByMeView)
             
-            self.receivedEventsView.addSubview(self.acceptByMeView)
             
         }
         
@@ -1373,7 +1375,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
         self.detailView  = DetailView.instanceFromNib() as! DetailView
         
-        self.detailView.frame = CGRect(x: 0 , y: 0, width: Int(self.requestEventView.frame.size.width), height: Int(self.requestEventView.frame.size.height))
+        self.detailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
         let eventData = self.requestEventList[sender.tag]
         
@@ -1474,13 +1476,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.detailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
         
-        self.requestEventView.addSubview(detailView)
+        self.view.addSubview(detailView)
     }
     @objc func showEventDetailView(sender : UIButton)
     {
         self.eventDetailView  = EventDetailView.instanceFromNib() as! EventDetailView
         
-        self.eventDetailView.frame = CGRect(x: 0 , y: 0, width: Int(self.yourEventsView.frame.size.width), height: Int(self.yourEventsView.frame.size.height))
+        self.eventDetailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
         BasicFunctions.setRoundCornerOfButton(button: self.eventDetailView.startNavigationButton, radius: 5.0)
         
@@ -1525,13 +1527,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        self.eventDetailView.inviedListTableView.dataSource = self
 //        self.eventDetailView.inviedListTableView.delegate = self
         
-        self.yourEventsView.addSubview(self.eventDetailView)
+        self.view.addSubview(self.eventDetailView)
     }
     @objc func showEditView(sender : UIButton!)
     {
         self.editEventView  = CreateEventView.instanceFromNib() as! CreateEventView
         
-        self.editEventView.frame = CGRect(x: 0 , y: 0, width: Int(self.yourEventsView.frame.size.width), height: Int(self.yourEventsView.frame.size.height))
+        self.editEventView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
         self.editEventView.titleTextField.tag = 2
         self.editEventView.timeTextField.tag = 2
@@ -1631,7 +1633,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.editEventView.allButton.isSelected = true
         }
         
-        self.yourEventsView.addSubview(self.editEventView)
+        self.view.addSubview(self.editEventView)
     }
     @objc func backButtonTapped()
     {
@@ -1727,6 +1729,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
             let json = result as! [String : Any]
+            let status = json["status"] as? String
             let message = json["message"] as? String
             
             
@@ -1739,33 +1742,25 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             
-            if json["error"] == nil && json["status"] == nil
+            if json["error"] == nil && status == "success"
             {
                 
                 
-                if message != nil
-                {
-                    BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+                BasicFunctions.showAlert(vc: self, msg: message)
                     
                     
                 
                 self.fetchUserEventsFromServer()
-                }
             }
             else
             {
-                let status = json["status"] as? String
-                if status != nil
-                {
-                    if status == "error"
-                    {
-                        BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
-                        return
-                        
-                    }
-                }
-                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+                
+                BasicFunctions.showAlert(vc: self, msg: message)
+                
+                
             }
+        
+            
             
         }
         

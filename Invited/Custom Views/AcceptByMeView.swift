@@ -28,6 +28,9 @@ class AcceptByMeView: UIView {
     
     
     
+    
+    
+    
     override init (frame : CGRect) {
         super.init(frame : frame)
         // Do what you want.

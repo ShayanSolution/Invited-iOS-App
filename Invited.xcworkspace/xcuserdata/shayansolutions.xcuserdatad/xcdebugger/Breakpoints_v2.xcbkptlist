@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/ServerManager/ServerManager.m"
-            timestampString = "553102555.56723"
+            timestampString = "553448564.749948"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "452"
@@ -25,13 +25,13 @@
                   symbolName = "+[ServerManager updateList:accessToken:withResulBlock:]"
                   moduleName = "Invited"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited%20without%20googlemap/Invited/ServerManager/ServerManager.m"
-                  timestampString = "553188488.7015719"
+                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited/Invited/ServerManager/ServerManager.m"
+                  timestampString = "553448564.828259"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "452"
                   endingLineNumber = "452"
-                  offsetFromSymbolStart = "492">
+                  offsetFromSymbolStart = "495">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -40,13 +40,13 @@
                   symbolName = "__55+[ServerManager updateList:accessToken:withResulBlock:]_block_invoke"
                   moduleName = "Invited"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited%20without%20googlemap/Invited/ServerManager/ServerManager.m"
-                  timestampString = "553188488.704975"
+                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited/Invited/ServerManager/ServerManager.m"
+                  timestampString = "553448564.832029"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "452"
                   endingLineNumber = "452"
-                  offsetFromSymbolStart = "24">
+                  offsetFromSymbolStart = "16">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -55,13 +55,13 @@
                   symbolName = "__destroy_helper_block_.208"
                   moduleName = "Invited"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited%20without%20googlemap/Invited/ServerManager/ServerManager.m"
-                  timestampString = "553188488.707882"
+                  urlString = "file:///Users/shayansolutions/Documents/Haider/Invited/Invited/ServerManager/ServerManager.m"
+                  timestampString = "553448564.836436"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "452"
                   endingLineNumber = "452"
-                  offsetFromSymbolStart = "20">
+                  offsetFromSymbolStart = "16">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -73,7 +73,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Invited/ServerManager/ServerManager.m"
-            timestampString = "553102555.567288"
+            timestampString = "553448564.750033"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "458"
