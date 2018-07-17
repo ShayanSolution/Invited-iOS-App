@@ -1949,59 +1949,72 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func logoutButtonTapped(_ sender: UIButton)
     {
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        
-        
-        
-        ServerManager.signOut(nil, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
+        let alert = UIAlertController.init(title: "Invited", message: "Are you sure you want to logout?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            
+            BasicFunctions.showActivityIndicator(vu: self.view)
             
             
-            BasicFunctions.stopActivityIndicator(vu: self.view)
             
-            
-            let json = result as? [String : Any]
-            
-            
-            if json == nil
-            {
-//                let defaults = UserDefaults.standard
-//                defaults.removeObject(forKey: kUserID)
-//
-//                defaults.synchronize()
-                
-//                UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
-                
-//                let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
-//                let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
-//                (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = vc
-                
-                BasicFunctions.showSigInVC()
-
-            }
-            else if json!["error"] != nil
-            {
-                BasicFunctions.showAlert(vc: self, msg: json!["message"] as! String)
-            }
-            else
-            {
+            ServerManager.signOut(nil, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
                 
                 
-                let message = json!["message"] as? String
+                BasicFunctions.stopActivityIndicator(vu: self.view)
                 
                 
-                if message != nil && message == "Unauthorized"
+                let json = result as? [String : Any]
+                
+                
+                if json == nil
                 {
-                    BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                    //                let defaults = UserDefaults.standard
+                    //                defaults.removeObject(forKey: kUserID)
+                    //
+                    //                defaults.synchronize()
+                    
+                    //                UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+                    
+                    //                let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+                    //                let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
+                    //                (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = vc
+                    
                     BasicFunctions.showSigInVC()
+                    
+                }
+                else if json!["error"] != nil
+                {
+                    BasicFunctions.showAlert(vc: self, msg: json!["message"] as! String)
+                }
+                else
+                {
+                    
+                    
+                    let message = json!["message"] as? String
+                    
+                    
+                    if message != nil && message == "Unauthorized"
+                    {
+                        BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                        BasicFunctions.showSigInVC()
+                        
+                    }
+                    
                     
                 }
                 
                 
+                
             }
             
             
-            
-        }
+                
+                
+            }))
+        self.present(alert, animated: true, completion: nil)
+        
+        
+    
         
         
     }

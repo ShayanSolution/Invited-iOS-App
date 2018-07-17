@@ -29,9 +29,17 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     
     @IBOutlet var sendAgainButton: UIButton!
     
+    @IBOutlet var countDownLabel: UILabel!
+    
+    @IBOutlet var secondsRemainingLabel: UILabel!
+    
+    
+    
     var userCredentials : UserProfileData!
     
     var timer : Timer!
+    
+    var count = 60
     
     
     
@@ -76,20 +84,47 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         sender.isEnabled = false
         sender.alpha = 0.5
         
-        timer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(self.sendAgainButtonEnabled), userInfo: nil, repeats: false)
+        self.secondsRemainingLabel.isHidden = false
+        self.countDownLabel.isHidden = false
+        
+        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         
         self.sendSMSFromServer()
         
         
         
     }
-    @objc func sendAgainButtonEnabled()
+    @objc func update()
     {
-        if self.sendAgainButton.isEnabled == false
+//        if self.sendAgainButton.isEnabled == false
+//        {
+//            self.sendAgainButton.isEnabled = true
+//            self.sendAgainButton.alpha = 1.0
+//        }
+        
+        if self.count == 0
         {
             self.sendAgainButton.isEnabled = true
             self.sendAgainButton.alpha = 1.0
+            
+            self.secondsRemainingLabel.isHidden = true
+            self.countDownLabel.isHidden = true
+            
+            self.count = 60
+            
+            self.countDownLabel.text = String(count)
+            
+            self.timer.invalidate()
+            
         }
+        else
+        {
+            self.countDownLabel.text = String(count)
+            count -= 1
+            
+        }
+        
+        
         
     }
     
@@ -148,6 +183,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         func handleServerResponseofVerification(_ json: [String: Any])
         {
     
+            self.resetAllTextFields()
     
             if  json["error"] == nil && json["Error"] == nil
             {
@@ -157,6 +193,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             }
             else if json["Error"] != nil
             {
+                
                 BasicFunctions.showAlert(vc: self, msg: json["Error"] as! String)
             }
             else
@@ -164,6 +201,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
               BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
             }
     
+            
     
     
         }
@@ -270,12 +308,18 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         }
         
     }
-    func sendSMSFromServer()
+    func resetAllTextFields()
     {
         self.textField1.text = ""
         self.textField2.text = ""
         self.textField3.text = ""
         self.textField4.text = ""
+        
+        self.textField1.becomeFirstResponder()
+    }
+    func sendSMSFromServer()
+    {
+       self.resetAllTextFields()
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
@@ -290,25 +334,18 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     }
     func handleServerResponseOfSendSMS(_ json: [String: Any])
     {
-        if  json["error"] == nil && json["Error"] == nil
+        let status = json["status"] as? String
+        let message = json["message"] as? String
+        
+        if  json["error"] == nil && status == "success"
         {
             
-
+            
+            
         }
         else
         {
-            var errorString : String!
-            
-            if  json["Error"] != nil
-            {
-                errorString = json["Error"] as! String
-            }
-            else
-            {
-                errorString = "Could not communicate with the server."
-            }
-            
-            BasicFunctions.showAlert(vc: self, msg: errorString)
+            BasicFunctions.showAlert(vc: self, msg: message)
             
         }
         

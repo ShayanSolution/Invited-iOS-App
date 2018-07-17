@@ -27,6 +27,7 @@ class CreateEventView: UIView {
     @IBOutlet var createButton: UIButton!
     
     @IBOutlet var createButtonView: UIView!
+    
     @IBOutlet var setListTextField: UITextField!
     
     @IBOutlet var backButton: UIButton!

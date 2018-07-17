@@ -196,9 +196,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         {
             if json["status"] != nil
             {
-//                self.resetData()
-//                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+
                 self.sendSMSFromServer()
+                
                 return
             }
             
@@ -338,7 +338,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     }
     func handleServerResponseOfSendSMS(_ json: [String: Any])
     {
-        if  json["error"] == nil && json["Error"] == nil
+        let status = json["status"] as? String
+        let message = json["message"] as? String
+        
+        if  json["error"] == nil && status == "success"
         {
             let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
             let verifyCodeVC : VerifyCodeVC = storyBoard.instantiateViewController(withIdentifier: "VerifyCodeVC") as! VerifyCodeVC
@@ -358,18 +361,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         }
         else
         {
-            var errorString : String!
-            
-            if  json["Error"] != nil
-            {
-                errorString = json["Error"] as! String
-            }
-            else
-            {
-                errorString = "Could not communicate with the server."
-            }
-            
-            BasicFunctions.showAlert(vc: self, msg: errorString)
+            BasicFunctions.showAlert(vc: self, msg: message)
             
         }
         

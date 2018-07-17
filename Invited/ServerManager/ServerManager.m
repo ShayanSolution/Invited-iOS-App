@@ -120,12 +120,12 @@
                                        {
                                            resultBlock((NSDictionary*)operation.responseObject);
                                        }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Could not communicate with the server."});
-//                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": @"Could not communicate with the server."});
+                                       }
                                        
                                        
                                    }];
