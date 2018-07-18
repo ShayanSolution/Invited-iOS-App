@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import NKVPhonePicker
+
 
 class UserProfileData: NSObject
 {
@@ -20,6 +22,8 @@ class UserProfileData: NSObject
 
 class SignUpVC: UIViewController,UITextFieldDelegate {
     
+    
+    
     @IBOutlet var signUpButton: UIButton!
     @IBOutlet var signInButton: UIButton!
     
@@ -29,12 +33,14 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     
     @IBOutlet var mainScrollView: UIScrollView!
     
-    @IBOutlet var phoneTextField: UITextField!
+    @IBOutlet var phoneTextField: NKVPhonePickerTextField!
+    
     @IBOutlet var emailTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var confirmPasswordTextField: UITextField!
     
-    @IBOutlet var loginPhoneTextField: UITextField!
+    @IBOutlet var loginPhoneTextField: NKVPhonePickerTextField!
+    
     @IBOutlet var loginPasswordTextField: UITextField!
     
     
@@ -55,6 +61,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
         
         self.mainScrollView.contentSize.height = self.mainScrollView.frame.size.height
         
@@ -85,6 +92,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
+//    func countriesViewControllerDidCancel(_ sender: CountriesViewController) {
+//
+//    }
+//
+//    func countriesViewController(_ sender: CountriesViewController, didSelectCountry country: Country) {
+//
+//    }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton)
     {

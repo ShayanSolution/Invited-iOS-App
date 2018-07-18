@@ -11,6 +11,7 @@ pod 'GooglePlaces'
 pod 'GooglePlacePicker'
 pod 'GoogleMaps'
 pod 'SwiftyJSON'
+pod 'NKVPhonePicker'
 
   # Pods for Invited
 
