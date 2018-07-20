@@ -45,7 +45,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with login"});
                                        }
                                        
                                        
@@ -70,8 +70,9 @@
                                        else
                                        {
                                            resultBlock(@{
+
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with validation."});
                                        }
                                        
                                        
@@ -98,7 +99,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with registration."});
                                        }
                                        
                                        
@@ -124,7 +125,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with send sms."});
                                        }
                                        
                                        
@@ -150,7 +151,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with verification."});
                                        }
 //
                                        
@@ -177,7 +178,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with create list."});
                                        }
                                        
                                        
@@ -204,7 +205,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with fetching contact list."});
                                        }
                                        
                                        
@@ -229,7 +230,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": @"Could not communicate with the server."});
+                                                        @"message": @"Something went wrong with create event."});
                                       }
                                       
                                       
@@ -254,7 +255,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with fetching list of invites sent."});
                                        }
                                        
                                        
@@ -280,7 +281,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": @"Could not communicate with the server."});
+                                                        @"message": @"Something went wrong with fetching list of invites received."});
                                       }
                                       
                                       
@@ -306,7 +307,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": @"Could not communicate with the server."});
+                                                        @"message": @"Something went wrong with update event."});
                                       }
                                       
                                       
@@ -332,7 +333,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with accept invite request."});
                                        }
                                        
                                        
@@ -358,7 +359,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with reject invite request."});
                                        }
                                        
                                        
@@ -384,7 +385,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with update device token."});
                                        }
                                        
                                        
@@ -411,7 +412,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with fetching list of my events."});
                                        }
                                        
                                        
@@ -437,7 +438,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": @"Could not communicate with the server."});
+                                                        @"message": @"Something went wrong with logout."});
                                       }
                                       
                                       
@@ -463,7 +464,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": @"Could not communicate with the server."});
+                                                        @"message": @"Something went wrong with update list."});
                                       }
                                       
                                       
@@ -489,7 +490,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": @"Could not communicate with the server."});
+                                                         @"message": @"Something went wrong with delete list."});
                                        }
                                        
                                        
@@ -515,7 +516,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": @"Could not communicate with the server."});
+                                                        @"message": @"Something went wrong with delete event."});
                                       }
                                       
                                       

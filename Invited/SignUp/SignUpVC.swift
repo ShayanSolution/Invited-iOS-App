@@ -156,6 +156,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         postParams["phone"] = self.phoneTextField.text
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
+        
 
 
         ServerManager.validation(postParams) { (result) in
@@ -259,14 +260,14 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             {
                 errorString = (json["password_confirmattion"] as! Array)[0]
             }
-            else if json["message"] != nil
+            else if json["error"] != nil
             {
                 errorString = json["message"] as! String
             }
-            else
-            {
-                errorString = "Could not communicate with the server."
-            }
+//            else
+//            {
+//                errorString = "Something went wrong with validation and login"
+//            }
             
             BasicFunctions.showAlert(vc: self, msg: errorString)
         }
@@ -381,9 +382,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         
         
     }
-    
-    
-    
+
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         activeField = textField.superview
         lastOffset = self.mainScrollView.contentOffset

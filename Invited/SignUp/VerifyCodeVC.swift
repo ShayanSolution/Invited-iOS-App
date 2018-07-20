@@ -295,14 +295,14 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             {
                 errorString = (json["password_confirmattion"] as! Array)[0]
             }
-            else if json["message"] != nil
+            else if json["error"] != nil
             {
                 errorString = json["message"] as! String
             }
-            else
-            {
-                errorString = "Could not communicate with the server."
-            }
+//            else
+//            {
+//                errorString = "Something went wrong with registration and login"
+//            }
             
             BasicFunctions.showAlert(vc: self, msg: errorString)
         }

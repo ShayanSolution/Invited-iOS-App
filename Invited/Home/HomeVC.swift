@@ -400,7 +400,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.fetchRequestsFromServer()
             
         }
-        else if status == "confirmed"
+        else if status == "confirmed"   //  status == "accepted"
         {
 
             if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
