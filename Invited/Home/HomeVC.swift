@@ -2607,7 +2607,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            let message = json["message"] as? String
             if message != nil
             {
             BasicFunctions.showAlert(vc: self, msg: message)
@@ -2707,7 +2706,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else
         {
             
-            let message = json["message"] as? String
             if message != nil
             {
                 BasicFunctions.showAlert(vc: self, msg: message)
@@ -2848,7 +2846,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else
         {
             
-            BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+            BasicFunctions.showAlert(vc: self, msg: message)
         }
     }
     
@@ -2898,6 +2896,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
             let json = result as! [String : Any]
+            let status = json["status"] as? String
             let message = json["message"] as? String
             
             if message != nil && message == "Unauthorized"
@@ -2909,27 +2908,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             
-            if json["error"] == nil && json["status"] == nil
+            if json["error"] == nil && status == "success"
             {
                 
                 self.getContactListFromServer()
             }
             else
             {
-                let status = json["status"] as? String
-                if status != nil
-                {
-                    if status == "error"
-                    {
-                        BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
-                        return
-                        
-                    }
-                }
                 
-                BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+                BasicFunctions.showAlert(vc: self, msg: message)
                 
             }
+                
+            
             
             
         }
