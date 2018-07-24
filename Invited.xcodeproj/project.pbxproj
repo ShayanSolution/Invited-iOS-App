@@ -23,6 +23,7 @@
 		AF4F636920C1B8D500083873 /* ReceivedEventsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF4F636820C1B8D500083873 /* ReceivedEventsView.xib */; };
 		AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */; };
 		AF4F636D20C1BC4100083873 /* ReceivedEventsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */; };
+		AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */; };
 		AF73019B20DBA35200483267 /* RouteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF73019A20DBA35200483267 /* RouteVC.swift */; };
 		AF7C1ACF20BD23BC000D810C /* EventStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7C1ACE20BD23BC000D810C /* EventStatusView.xib */; };
 		AF88848820B3EDCF002F6D4F /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF88848720B3EDCF002F6D4F /* HomeVC.swift */; };
@@ -74,6 +75,7 @@
 		AF4F636820C1B8D500083873 /* ReceivedEventsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceivedEventsView.xib; sourceTree = "<group>"; };
 		AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedEventsCell.swift; sourceTree = "<group>"; };
 		AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReceivedEventsCell.xib; sourceTree = "<group>"; };
+		AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePasswordVC.swift; sourceTree = "<group>"; };
 		AF73019A20DBA35200483267 /* RouteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteVC.swift; sourceTree = "<group>"; };
 		AF7C1ACE20BD23BC000D810C /* EventStatusView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventStatusView.xib; sourceTree = "<group>"; };
 		AF88848720B3EDCF002F6D4F /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 			children = (
 				AFD9028620B2D39C0039E686 /* SignUpVC.swift */,
 				AFEF939120E639790033801A /* VerifyCodeVC.swift */,
+				AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				AFCF818720F33B7B0041FD9D /* AcceptByMeView.swift in Sources */,
 				AFC9DD2C20B54F6500042708 /* ContactsView.swift in Sources */,
 				AF4F635D20C1AFAC00083873 /* YourEventsView.swift in Sources */,
+				AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */,
 				AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */,
 				AFC9DD2420B5336200042708 /* UserProfile.swift in Sources */,
 				AF946FB820C7F3730073A91D /* EventDetailView.swift in Sources */,

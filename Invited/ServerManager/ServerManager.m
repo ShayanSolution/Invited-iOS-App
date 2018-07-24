@@ -167,6 +167,91 @@
     
     
 }
++ (void) sendSMSWithForgetPassword:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    
+    [[ServerManager sharedWebService] POST:@"forget-password/send-code" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
++ (void) verifyForgetPasswordCode:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    
+    [[ServerManager sharedWebService] POST:@"forget-password/verify-code" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
++ (void) updatePassword:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    
+    [[ServerManager sharedWebService] POST:@"forget-password/update-password" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
+
 + (void) createList:(NSDictionary *) inputData accessToken : (NSString*)token  withResulBlock: (TMARServiceResultBlock) resultBlock
 {
     [[ServerManager sharedWebService].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
@@ -178,20 +263,18 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.responseObject)
-//                                       {
-//                                           resultBlock((NSDictionary*)operation.responseObject);
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Something went wrong with create list."});
-//                                       }
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+                                       
                                        
                                        
                                    }];
@@ -209,28 +292,17 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.response.statusCode == 408)
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Request timed out."});
-//                                       }
-//                                       else if (operation.response.statusCode == -1009)
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"The internet connection appears to be offline."});
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": [NSString stringWithFormat:@"Something went wrong with fetching contact list. %ld",(long)operation.response.statusCode]});
-//                                       }
 
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
                                    }];
 }
@@ -245,20 +317,17 @@
      
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                      if (operation.responseObject)
-//                                      {
-//                                          resultBlock((NSDictionary*)operation.responseObject);
-//                                      }
-//                                      else
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"Something went wrong with create event."});
-//                                      }
-                                      
-                                      resultBlock(@{
-                                                    @"error": @"1",
-                                                    @"message": error.localizedDescription});
+
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": error.localizedDescription});
+                                      }
                                       
                                       
                                   }];
@@ -275,24 +344,17 @@
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        
-//                                        if (error.code == NSURLErrorTimedOut)
-//                                       {
+
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
                                            resultBlock(@{
                                                          @"error": @"1",
                                                          @"message": error.localizedDescription});
-//                                        }
-//                                        else if (error.code == -1009)
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"The internet connection appears to be offline."});
-//                                       }
-//                                        else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": [NSString stringWithFormat:@"Something went wrong with fetching list of invites sent. %ld,%ld",(long)error.code,(long)operation.response.statusCode]});
-//                                       }
+                                       }
                                        
                                        
            
@@ -309,29 +371,17 @@
      
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                      if (operation.response.statusCode == 408)
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"Request timed out."});
-//                                      }
-//                                      else if (operation.response.statusCode == -1009)
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"The internet connection appears to be offline."});
-//                                      }
-//                                      else
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": [NSString stringWithFormat:@"Something went wrong with fetching list of invites received. %ld",(long)operation.response.statusCode]});
-//                                      }
-                                      
-                                      resultBlock(@{
-                                                    @"error": @"1",
-                                                    @"message": error.localizedDescription});
-                                      
+
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": error.localizedDescription});
+                                      }
                                       
                                       
                                   }];
@@ -347,20 +397,17 @@
      
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                      if (operation.responseObject)
-//                                      {
-//                                          resultBlock((NSDictionary*)operation.responseObject);
-//                                      }
-//                                      else
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"Something went wrong with update event."});
-//                                      }
-                                      
-                                      resultBlock(@{
-                                                    @"error": @"1",
-                                                    @"message": error.localizedDescription});
+
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": error.localizedDescription});
+                                      }
                                       
                                       
                                       
@@ -377,20 +424,17 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.responseObject)
-//                                       {
-//                                           resultBlock((NSDictionary*)operation.responseObject);
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Something went wrong with accept invite request."});
-//                                       }
-                                       
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
                                        
                                        
@@ -407,20 +451,17 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.responseObject)
-//                                       {
-//                                           resultBlock((NSDictionary*)operation.responseObject);
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Something went wrong with reject invite request."});
-//                                       }
-                                       
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
                                        
                                        
@@ -437,20 +478,17 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.responseObject)
-//                                       {
-//                                           resultBlock((NSDictionary*)operation.responseObject);
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Something went wrong with update device token."});
-//                                       }
-                                       
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
                                        
                                        
@@ -468,28 +506,16 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.response.statusCode == 408)
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Request timed out."});
-//                                       }
-//                                       else if (operation.response.statusCode == -1009)
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"The internet connection appears to be offline."});
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": [NSString stringWithFormat:@"Something went wrong with fetching list of my events. %ld",(long)operation.response.statusCode]});
-//                                       }
-                                       
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
                                        
                                        
@@ -506,20 +532,17 @@
      
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                      if (operation.responseObject)
-//                                      {
-//                                          resultBlock((NSDictionary*)operation.responseObject);
-//                                      }
-//                                      else
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"Something went wrong with logout."});
-//                                      }
-                                      
-                                      resultBlock(@{
-                                                    @"error": @"1",
-                                                    @"message": error.localizedDescription});
+
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": error.localizedDescription});
+                                      }
                                       
                                       
                                       
@@ -536,20 +559,17 @@
      
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                      if (operation.responseObject)
-//                                      {
-//                                          resultBlock((NSDictionary*)operation.responseObject);
-//                                      }
-//                                      else
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"Something went wrong with update list."});
-//                                      }
-                                      
-                                      resultBlock(@{
-                                                    @"error": @"1",
-                                                    @"message": error.localizedDescription});
+
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": error.localizedDescription});
+                                      }
                                       
                                       
                                       
@@ -566,20 +586,17 @@
      
      
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                       if (operation.responseObject)
-//                                       {
-//                                           resultBlock((NSDictionary*)operation.responseObject);
-//                                       }
-//                                       else
-//                                       {
-//                                           resultBlock(@{
-//                                                         @"error": @"1",
-//                                                         @"message": @"Something went wrong with delete list."});
-//                                       }
-                                       
-                                       resultBlock(@{
-                                                     @"error": @"1",
-                                                     @"message": error.localizedDescription});
+
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
                                        
                                        
                                        
@@ -596,20 +613,17 @@
      
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                      if (operation.responseObject)
-//                                      {
-//                                          resultBlock((NSDictionary*)operation.responseObject);
-//                                      }
-//                                      else
-//                                      {
-//                                          resultBlock(@{
-//                                                        @"error": @"1",
-//                                                        @"message": @"Something went wrong with delete event."});
-//                                      }
-                                      
-                                      resultBlock(@{
-                                                    @"error": @"1",
-                                                    @"message": error.localizedDescription});
+
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": error.localizedDescription});
+                                      }
                                       
                                       
                                       

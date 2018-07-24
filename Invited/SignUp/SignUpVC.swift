@@ -65,6 +65,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         
         self.mainScrollView.contentSize.height = self.mainScrollView.frame.size.height
         
+        self.addDoneButtonOnKeyboard(textField: self.loginPhoneTextField)
+        self.addDoneButtonOnKeyboard(textField: self.phoneTextField)
         
         if self.isLoginPage == false
         {
@@ -92,13 +94,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
-//    func countriesViewControllerDidCancel(_ sender: CountriesViewController) {
-//
-//    }
-//
-//    func countriesViewController(_ sender: CountriesViewController, didSelectCountry country: Country) {
-//
-//    }
+    
     
     @IBAction func signUpButtonTapped(_ sender: UIButton)
     {
@@ -124,15 +120,52 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         self.mainScrollView.isHidden = true
     }
     
+    @IBAction func forgetPassword(_ sender: UIButton)
+    {
+        if (self.loginPhoneTextField.code?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select country.")
+            return
+        }
+        else if self.loginPhoneTextField.phoneNumber == self.loginPhoneTextField.code
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
+            return
+            
+        }
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        var postParams = [String: Any]()
+        postParams["phone"] = self.loginPhoneTextField.text
+        
+        
+        
+        
+        ServerManager.sendSMS(withForgetPassword: postParams) { (result) in
+            
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            self.handleServerResponseOfSendSMS(result as! [String : Any], isForget: true)
+            
+        }
+    }
+    
+    
     
     
     @IBAction func register(_ sender: UIButton)
     {
 
-        if (self.phoneTextField.text?.isEmpty)!
+        if (self.phoneTextField.code?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select country.")
+            return
+        }
+        else if self.phoneTextField.phoneNumber == self.phoneTextField.code
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
             return
+            
         }
         else if (self.emailTextField.text?.isEmpty)!
         {
@@ -147,6 +180,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         else if (self.confirmPasswordTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please confirm password.")
+            return
+        }
+        else if self.passwordTextField.text != self.confirmPasswordTextField.text
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Password confirmation does not match.")
             return
         }
 
@@ -169,10 +207,16 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     
     @IBAction func login(_ sender: UIButton)
     {
-        if (self.loginPhoneTextField.text?.isEmpty)!
+        if (self.loginPhoneTextField.code?.isEmpty)!
         {
-            BasicFunctions.showAlert(vc: self, msg: "Please put phone number OR email.")
+            BasicFunctions.showAlert(vc: self, msg: "Please select country.")
             return
+        }
+        else if self.loginPhoneTextField.phoneNumber == self.loginPhoneTextField.code
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
+            return
+            
         }
         else if (self.loginPasswordTextField.text?.isEmpty)!
         {
@@ -347,11 +391,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         ServerManager.sendSMS(postParams) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
-            self.handleServerResponseOfSendSMS(result as! [String : Any])
+            self.handleServerResponseOfSendSMS(result as! [String : Any], isForget: false)
         }
         
     }
-    func handleServerResponseOfSendSMS(_ json: [String: Any])
+    func handleServerResponseOfSendSMS(_ json: [String: Any], isForget : Bool)
     {
         let status = json["status"] as? String
         let message = json["message"] as? String
@@ -362,11 +406,22 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             let verifyCodeVC : VerifyCodeVC = storyBoard.instantiateViewController(withIdentifier: "VerifyCodeVC") as! VerifyCodeVC
             
             let userProfileData = UserProfileData()
-            userProfileData.phone = self.phoneTextField.text!
-            userProfileData.email = self.emailTextField.text!
-            userProfileData.password = self.passwordTextField.text!
+            
+            if isForget == true
+            {
+                userProfileData.phone = self.loginPhoneTextField.text!
+            
+            }
+            else
+            {
+                userProfileData.phone = self.phoneTextField.text!
+                userProfileData.email = self.emailTextField.text!
+                userProfileData.password = self.passwordTextField.text!
+                
+            }
             
             verifyCodeVC.userCredentials = userProfileData
+            verifyCodeVC.isForgetPassword = isForget
             
             
             
@@ -381,6 +436,28 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         }
         
         
+    }
+    func addDoneButtonOnKeyboard(textField:UITextField!)
+    {
+        //ToolBar
+        let toolbar = UIToolbar();
+        toolbar.sizeToFit()
+        
+        
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.doneClick))
+        
+        toolbar.setItems([spaceButton,doneButton], animated: false)
+        
+        
+        // add toolbar to textField
+        textField.inputAccessoryView = toolbar
+    }
+    
+    @objc func doneClick()
+    {
+        self.view.endEditing(true)
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

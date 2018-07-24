@@ -33,7 +33,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     
     @IBOutlet var secondsRemainingLabel: UILabel!
     
-    
+    var isForgetPassword : Bool!
     
     var userCredentials : UserProfileData!
     
@@ -173,10 +173,23 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             postParams["code"] = Int(self.textField1.text! + self.textField2.text! + self.textField3.text! + self.textField4.text!)
             
     
-            ServerManager.verifySMSCode(postParams) { (result) in
-            
-                BasicFunctions.stopActivityIndicator(vu: self.view)
-                self.handleServerResponseofVerification(result as! [String : Any])
+            if self.isForgetPassword == true
+            {
+                ServerManager.verifyForgetPasswordCode(postParams) { (result) in
+                    
+                    BasicFunctions.stopActivityIndicator(vu: self.view)
+                    self.handleServerResponseofVerification(result as! [String : Any])
+                }
+                
+            }
+            else
+            {
+                ServerManager.verifySMSCode(postParams) { (result) in
+                    
+                    BasicFunctions.stopActivityIndicator(vu: self.view)
+                    self.handleServerResponseofVerification(result as! [String : Any])
+                }
+                
             }
     
         }
@@ -184,21 +197,36 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         {
     
             self.resetAllTextFields()
+            
+            let status = json["status"] as? String
+            let message = json["message"] as? String
     
-            if  json["error"] == nil && json["Error"] == nil
+            if  json["error"] == nil && status == "success"
             {
-                self.register()
+                if self.isForgetPassword == true
+                {
+                    let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+                    let updatePasswordVC : UpdatePasswordVC = storyBoard.instantiateViewController(withIdentifier: "UpdatePasswordVC") as! UpdatePasswordVC
+                    updatePasswordVC.userProfileData = self.userCredentials
+                    
+                    BasicFunctions.pushVCinNCwithObject(vc: updatePasswordVC, popTop: false)
+                    
+                }
+                else
+                {
+                    self.register()
+                }
                 
     
             }
-            else if json["Error"] != nil
+            else if status == "error"
             {
                 
                 BasicFunctions.showAlert(vc: self, msg: json["Error"] as! String)
             }
             else
             {
-              BasicFunctions.showAlert(vc: self, msg: json["message"] as! String)
+              BasicFunctions.showAlert(vc: self, msg: message)
             }
     
             
@@ -325,11 +353,27 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         var postParams = [String: Any]()
         postParams["phone"] = self.userCredentials.phone
         
-        ServerManager.sendSMS(postParams) { (result) in
+        if self.isForgetPassword == true
+        {
+            ServerManager.sendSMS(withForgetPassword: postParams) { (result) in
+                
+                
+                BasicFunctions.stopActivityIndicator(vu: self.view)
+                self.handleServerResponseOfSendSMS(result as! [String : Any])
+            }
             
-            BasicFunctions.stopActivityIndicator(vu: self.view)
-            self.handleServerResponseOfSendSMS(result as! [String : Any])
         }
+        else
+        {
+            ServerManager.sendSMS(postParams) { (result) in
+                
+                BasicFunctions.stopActivityIndicator(vu: self.view)
+                self.handleServerResponseOfSendSMS(result as! [String : Any])
+            }
+            
+        }
+        
+        
         
     }
     func handleServerResponseOfSendSMS(_ json: [String: Any])
