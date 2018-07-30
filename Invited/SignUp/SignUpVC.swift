@@ -177,6 +177,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             BasicFunctions.showAlert(vc: self, msg: "Please put password.")
             return
         }
+        else if (self.passwordTextField.text?.count)! < 6
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Password must be at least 6 characters.")
+            return
+        }
         else if (self.confirmPasswordTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please confirm password.")

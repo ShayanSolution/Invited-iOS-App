@@ -720,8 +720,19 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DIf-Qc-kl0">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ld-IZ-EgH">
+                                        <rect key="frame" x="0.0" y="44" width="52" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="AMh-V0-41N"/>
+                                            <constraint firstAttribute="width" constant="52" id="Blh-le-Qwf"/>
+                                        </constraints>
+                                        <state key="normal" image="icArrowBack"/>
+                                        <connections>
+                                            <action selector="backButtonTapped:" destination="EET-aM-4XF" eventType="touchUpInside" id="UIr-mn-4fa"/>
+                                        </connections>
+                                    </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAv-b9-PhQ">
-                                        <rect key="frame" x="20" y="100" width="280" height="74"/>
+                                        <rect key="frame" x="20" y="138" width="280" height="74"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fZL-CL-IEC">
                                                 <rect key="frame" x="0.0" y="0.0" width="280" height="27"/>
@@ -819,7 +830,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gik-5j-BOh">
-                                        <rect key="frame" x="20" y="224" width="280" height="30"/>
+                                        <rect key="frame" x="20" y="262" width="280" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vV-2g-HRF">
                                                 <rect key="frame" x="0.0" y="0.0" width="280" height="30"/>
@@ -847,10 +858,12 @@
                                 <constraints>
                                     <constraint firstItem="Gik-5j-BOh" firstAttribute="leading" secondItem="DIf-Qc-kl0" secondAttribute="leading" constant="20" id="52L-Qi-cog"/>
                                     <constraint firstItem="TAv-b9-PhQ" firstAttribute="leading" secondItem="DIf-Qc-kl0" secondAttribute="leading" constant="20" id="5BE-m6-lIx"/>
+                                    <constraint firstItem="5Ld-IZ-EgH" firstAttribute="top" secondItem="DIf-Qc-kl0" secondAttribute="top" constant="44" id="Q72-7c-1bx"/>
                                     <constraint firstAttribute="trailing" secondItem="Gik-5j-BOh" secondAttribute="trailing" constant="20" id="bKT-pk-meg"/>
                                     <constraint firstAttribute="trailing" secondItem="TAv-b9-PhQ" secondAttribute="trailing" constant="20" id="cTF-ig-Hx5"/>
-                                    <constraint firstItem="TAv-b9-PhQ" firstAttribute="top" secondItem="DIf-Qc-kl0" secondAttribute="top" constant="100" id="dT0-du-Bti"/>
                                     <constraint firstItem="Gik-5j-BOh" firstAttribute="top" secondItem="TAv-b9-PhQ" secondAttribute="bottom" constant="50" id="qqV-Pp-bIK"/>
+                                    <constraint firstItem="5Ld-IZ-EgH" firstAttribute="leading" secondItem="DIf-Qc-kl0" secondAttribute="leading" id="uzm-UX-Ros"/>
+                                    <constraint firstItem="TAv-b9-PhQ" firstAttribute="top" secondItem="5Ld-IZ-EgH" secondAttribute="bottom" constant="50" id="zUD-sO-Lpo"/>
                                 </constraints>
                             </view>
                         </subviews>

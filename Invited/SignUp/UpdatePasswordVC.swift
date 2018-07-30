@@ -20,14 +20,25 @@ class UpdatePasswordVC: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        self.passwordTextField.becomeFirstResponder()
     }
     
+    @IBAction func backButtonTapped(_ sender: UIButton)
+    {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
     
     @IBAction func resetButtonTapped(_ sender: UIButton)
     {
         if (self.passwordTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put password.")
+            return
+        }
+        else if (self.passwordTextField.text?.count)! < 6
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Password must be at least 6 characters.")
             return
         }
         else if (self.confirmPasswordTextField.text?.isEmpty)!
@@ -68,9 +79,29 @@ class UpdatePasswordVC: UIViewController,UITextFieldDelegate {
         if  json["error"] == nil && status == "success"
         {
             self.navigationController?.popToRootViewController(animated: true)
+            BasicFunctions.showAlert(vc: self, msg: message)
+        }
+        else
+        {
+            var errorString : String!
+            
+            if  json["phone"] != nil
+            {
+                errorString = (json["phone"] as! Array)[0]
+            }
+            else if json["password"] != nil
+            {
+                errorString = (json["password"] as! Array)[0]
+            }
+            else if json["password_confirmation"] != nil
+            {
+                errorString = (json["password_confirmattion"] as! Array)[0]
+            }
+            
+            BasicFunctions.showAlert(vc: self, msg: errorString)
         }
         
-        BasicFunctions.showAlert(vc: self, msg: message)
+        
         
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
