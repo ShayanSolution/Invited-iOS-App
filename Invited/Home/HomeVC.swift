@@ -130,7 +130,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     let datePicker = UIDatePicker()
     let timePicker = UIDatePicker()
     
-    var currentLocationCoordinate : CLLocationCoordinate2D!
+    var currentLocationCoordinate : CLLocationCoordinate2D?
     var locationCoordinate : CLLocationCoordinate2D?
     
     var placeSelectedORCancelled : Bool!
@@ -171,6 +171,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
 //        self.isStartNavigationButtonTapped = false
         self.isUpdated = false
+        
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
@@ -426,10 +427,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
 
-        self.currentLocationCoordinate = locations.last?.coordinate
+        if locations.count > 0
+        {
+            self.currentLocationCoordinate = locations.last?.coordinate
+            
+            
+            self.reverseGeocodeCoordinate((locations.last?.coordinate)!)
+            
+        }
         
-
-        self.reverseGeocodeCoordinate((locations.last?.coordinate)!)
         
         
         
@@ -449,13 +455,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
+            if error != nil
+            {
+                BasicFunctions.showAlert(vc: self, msg: error?.localizedDescription)
+                return
+            }
+            
             guard let address = response?.firstResult(), let lines = address.lines else {
                 return
             }
             
             // 3
             self.currentLocationAddress = lines.joined(separator: "\n")
-//            self.createEventView.locationTextField.text = self.currentLocationAddress
+            self.createEventView.locationTextField.text = self.currentLocationAddress
             
             
         }
@@ -481,7 +493,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         let point = CGPoint(x: 0, y: 0)
-        self.mainScrollView.setContentOffset( point, animated: true)
+        self.mainScrollView.setContentOffset( point, animated: false)
         self.isUpdated = false
     }
     
@@ -499,9 +511,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.isUpdated = false
         
         let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
-        self.mainScrollView.setContentOffset( point, animated: true)
+        self.mainScrollView.setContentOffset( point, animated: false)
         
-        self.createEventView.locationTextField.text = self.currentLocationAddress
+//        self.createEventView.locationTextField.text = self.currentLocationAddress
         
 //        self.createEventView.setListTextField.text = ""
 //        self.selectedList = nil
@@ -510,6 +522,30 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         UserDefaults.standard.removeObject(forKey: kSelectedLong)
         UserDefaults.standard.removeObject(forKey: kSelectedAddress)
         UserDefaults.standard.synchronize()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined:
+                print("Not determined")
+                
+                
+                
+            case .authorizedAlways, .authorizedWhenInUse:
+                print("Access")
+                self.locationManager.startUpdatingLocation()
+                
+            case .denied, .restricted:
+                BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your current location in settings.")
+                self.currentLocationCoordinate = nil
+                self.currentLocationAddress = nil
+                self.createEventView.locationTextField.text = ""
+            }
+            
+        } else {
+            BasicFunctions.showAlert(vc: self, msg: "Enable the location services in settings.")
+            
+        }
+        
         
         
         
@@ -528,7 +564,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
         let point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
-        self.mainScrollView.setContentOffset( point, animated: true)
+        self.mainScrollView.setContentOffset( point, animated: false)
         self.fetchRequestsFromServer()
         
     }
@@ -729,7 +765,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         }
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
             self.fetchRequestsFromServer()
 
         }
@@ -748,7 +784,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
             self.fetchUserEventsFromServer()
             
         }
@@ -767,7 +803,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
             self.fetchReceivedRequestsFromServer()
             
         }
@@ -1261,7 +1297,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if textField.tag == 3
         {
             self.view.endEditing(true)
+            if self.currentLocationCoordinate != nil
+            {
             self.showSearchVC()
+            }
+            else
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your current location in settings.")
+            }
         }
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -1703,15 +1746,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func showRouteOnGoogleMap (lat : String , long : String)
     {
+        if self.currentLocationCoordinate != nil
+        {
         // if GoogleMap installed
         if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
             UIApplication.shared.openURL(NSURL(string:
-                "comgooglemaps://?saddr=\(self.currentLocationCoordinate.latitude),\(self.currentLocationCoordinate.longitude)&daddr=\(lat),\(long)&directionsmode=driving")! as URL)
+                "comgooglemaps://?saddr=\(self.currentLocationCoordinate!.latitude),\(self.currentLocationCoordinate!.longitude)&daddr=\(lat),\(long)&directionsmode=driving")! as URL)
             
         } else {
             // if GoogleMap App is not installed
             UIApplication.shared.openURL(NSURL(string:
-                "https://www.google.co.in/maps/dir/?saddr=\(self.currentLocationCoordinate.latitude),\(self.currentLocationCoordinate.longitude)&daddr=\(lat),\(long)&directionsmode=driving")! as URL)
+                "https://www.google.co.in/maps/dir/?saddr=\(self.currentLocationCoordinate!.latitude),\(self.currentLocationCoordinate!.longitude)&daddr=\(lat),\(long)&directionsmode=driving")! as URL)
+        }
+        }
+        else
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your current location in settings.")
         }
         
     }
@@ -1979,6 +2029,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     //                let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
                     //                (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = vc
                     
+                    kContactList.removeAll()
                     BasicFunctions.showSigInVC()
                     
                 }
@@ -2305,8 +2356,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if selectedLat == nil && selectedLong == nil
         {
-            postParams["latitude"] = self.currentLocationCoordinate.latitude
-            postParams["longitude"] = self.currentLocationCoordinate.longitude
+            postParams["latitude"] = self.currentLocationCoordinate?.latitude
+            postParams["longitude"] = self.currentLocationCoordinate?.longitude
         }
         else
         {

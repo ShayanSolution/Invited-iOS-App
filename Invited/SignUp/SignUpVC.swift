@@ -267,13 +267,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             }
             
             
-            let userProfileData = UserProfileData()
             let userID = json["user_id"] as? Int
-            userProfileData.authID = userID!
-            userProfileData.authToken = (json["access_token"] as? String)!
+            let authToken = (json["access_token"] as? String)!
             
-            BasicFunctions.setPreferences(userProfileData.authToken, key: kAccessToken)
-            BasicFunctions.setPreferences(userProfileData.authID, key: kUserID)
+            BasicFunctions.setPreferences(authToken, key: kAccessToken)
+            BasicFunctions.setPreferences(userID, key: kUserID)
             
             kUserList.removeAll()
             
@@ -287,7 +285,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             
             BasicFunctions.setUserLoggedIn()
             BasicFunctions.setHomeVC()
-            BasicFunctions.fetchAllContactsFromDevice()
+            
         }
         else
         {

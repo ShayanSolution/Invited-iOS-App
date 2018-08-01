@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import UserNotifications
+import Contacts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDelegate {
@@ -144,10 +145,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         application.applicationIconBadgeNumber = 0
-        
         if BasicFunctions.getIfUserLoggedIn()
         {
-            BasicFunctions.fetchAllContactsFromDevice()
+        CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
+            if (granted){
+                BasicFunctions.fetchAllContactsFromDevice()
+                
+            }
+        })
         }
     }
 

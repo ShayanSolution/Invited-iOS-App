@@ -47,7 +47,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @IBOutlet var setListNameTextField: UITextField!
     
 //    var results = [CNContact]()
-//    var deviceContactList = [ContactData]()
+    var deviceContactList = [ContactData]()
     var filteredList = [ContactData]()
     var selectedContactList = [ContactData]()
     var updatedContactList = [ContactData]()
@@ -70,12 +70,16 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 
         // Do any additional setup after loading the view.
         
-        
-        
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
         
         BasicFunctions.fetchAllContactsFromDevice()
+        
     }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(true)
+//
+//
+//    }
     override func viewWillAppear(_ animated: Bool) {
         
         if self.isUpdated == true
@@ -84,18 +88,29 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             self.updateButton.isHidden = false
             
             self.setListNameTextField.text = self.listData.name
-            
-//            BasicFunctions.fetchAllContactsFromDevice()
-            
-            
-            
         }
+        
 //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
 //        self.fetchAllContactsFromDevice()
         
         self.checkUpdate()
+        
+        CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
+            if (granted){
+                
+                
+                
+            }
+            else
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your contacts in settings.")
+                
+            }
+        })
+        
+        
     }
     override func viewWillDisappear(_ animated: Bool) {
         
@@ -158,13 +173,15 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //    }
     func checkUpdate()  {
         
+        if kContactList.count > 0
+        {
         
-        
+        self.deviceContactList = kContactList
         
         if self.isUpdated == true
         {
         
-        for contactData in kContactList
+        for contactData in self.deviceContactList
         {
             
             for contact in self.listData.contactList
@@ -215,7 +232,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //        else
 //        {
         
-            self.updatedContactList = kContactList.sorted { $0.name < $1.name }
+            self.updatedContactList = self.deviceContactList.sorted { $0.name < $1.name }
 //            self.filteredList.removeAll()
             
             
@@ -240,7 +257,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         self.contactListTableView.reloadData()
         
-        
+    }
         
     }
     

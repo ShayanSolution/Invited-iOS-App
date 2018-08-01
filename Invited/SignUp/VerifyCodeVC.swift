@@ -301,7 +301,6 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             
             BasicFunctions.setUserLoggedIn()
             BasicFunctions.setHomeVC()
-            BasicFunctions.fetchAllContactsFromDevice()
         }
         else
         {
