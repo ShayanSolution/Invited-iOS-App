@@ -147,13 +147,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()
         {
-        CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
-            if (granted){
-                BasicFunctions.fetchAllContactsFromDevice()
-                
-            }
-        })
+            BasicFunctions.fetchAllContactsFromDevice()
         }
+        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

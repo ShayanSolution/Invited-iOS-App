@@ -178,7 +178,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        
         self.updateDeviceToken()
         
         self.placeSelectedORCancelled = false
@@ -202,7 +201,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func appDidBecomeActive()
     {
-//        self.locationManager.startUpdatingLocation()
+        if self.currentLocationCoordinate == nil
+        {
+            self.locationManager.startUpdatingLocation()
+        }
         self.requestEventView.requestEventTableView.reloadData()
         self.receivedEventsView.receivedEventsTableView.reloadData()
         
@@ -535,14 +537,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.locationManager.startUpdatingLocation()
                 
             case .denied, .restricted:
-                BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your current location in settings.")
+                BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your location. Please allow it in Settings.")
                 self.currentLocationCoordinate = nil
                 self.currentLocationAddress = nil
                 self.createEventView.locationTextField.text = ""
             }
             
         } else {
-            BasicFunctions.showAlert(vc: self, msg: "Enable the location services in settings.")
+            BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your location. Please allow it in Settings.")
             
         }
         
@@ -1303,7 +1305,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else
             {
-                BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your current location in settings.")
+                BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your location. Please allow it in Settings.")
             }
         }
     }
@@ -1761,7 +1763,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your current location in settings.")
+            BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your location. Please allow it in Settings.")
         }
         
     }
@@ -2029,7 +2031,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     //                let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
                     //                (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = vc
                     
-                    kContactList.removeAll()
+                    
                     BasicFunctions.showSigInVC()
                     
                 }

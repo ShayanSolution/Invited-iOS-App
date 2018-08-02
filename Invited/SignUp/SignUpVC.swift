@@ -285,6 +285,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             
             BasicFunctions.setUserLoggedIn()
             BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
             
         }
         else

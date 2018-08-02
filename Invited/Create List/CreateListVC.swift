@@ -72,7 +72,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
         
-        BasicFunctions.fetchAllContactsFromDevice()
+//        BasicFunctions.fetchAllContactsFromDevice()
         
     }
 //    override func viewDidAppear(_ animated: Bool) {
@@ -98,20 +98,16 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         self.checkUpdate()
         
         CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
-            if (granted){
+            if (!granted){
                 
-                
-                
-            }
-            else
-            {
-                BasicFunctions.showAlert(vc: self, msg: "Allow the app to access your contacts in settings.")
-                
+                BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your contacts. Please allow it in Settings.")
             }
         })
         
         
     }
+    
+    
     override func viewWillDisappear(_ animated: Bool) {
         
 //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)

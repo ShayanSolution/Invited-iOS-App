@@ -132,6 +132,28 @@ class BasicFunctions: NSObject {
         
         (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = homeNC
     }
+    class func showSettingsAlert(vc:UIViewController!, msg:String!)
+    {
+        let alert = UIAlertController.init(title: "Error", message: msg, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Open Settings", style: .default, handler: { action in
+            
+            if let url = URL(string:UIApplicationOpenSettingsURLString) {
+                if UIApplication.shared.canOpenURL(url) {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    } else {
+                        // Fallback on earlier versions
+                        
+                        UIApplication.shared.openURL(url)
+                    }
+                }
+            }
+            
+        }))
+        alert.addAction(UIAlertAction(title: "Don't Allow", style: .default, handler: nil))
+        vc.present(alert, animated: true, completion: nil)
+        
+    }
     
     class func pushVCinNCwithName(_ vcName: String?, popTop: Bool) {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
