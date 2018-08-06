@@ -12,6 +12,7 @@ import GooglePlaces
 import UserNotifications
 import Contacts
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDelegate {
 
@@ -147,7 +148,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()
         {
-            BasicFunctions.fetchAllContactsFromDevice()
+            CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
+                if (granted){
+                    
+                    BasicFunctions.fetchAllContactsFromDevice()
+                }
+            })
         }
         
     }

@@ -270,13 +270,29 @@ class BasicFunctions: NSObject {
                     let phoneNOs=contact.phoneNumbers
                     for item in phoneNOs
                     {
+                        print(item.value.stringValue)
                         contactData.phoneNumber = item.value.stringValue
                     }
                 }
                 
+//                if kContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) }) && kContactList.contains(where: { $0.name == contactData.name })
+//                {
+//
+//                }
+//                else
+//                {
+//                    kContactList.append(contactData)
+//                }
+                if contactData.phoneNumber != ""
+                {
+                   kContactList.append(contactData)
+                }
                 
-                kContactList.append(contactData)
+                
             }
+            
+            
+            
 
             
             return results
@@ -293,8 +309,10 @@ class BasicFunctions: NSObject {
         {
         for contctData in kContactList
         {
+            contctData.phoneNumber = contctData.phoneNumber.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
             if contctData.phoneNumber.stringByRemovingWhitespaces.suffix(9) == phoneNumber.stringByRemovingWhitespaces.suffix(9)
             {
+                
                 return contctData.name
             }
         }

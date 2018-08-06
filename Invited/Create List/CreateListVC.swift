@@ -72,7 +72,6 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
         
-//        BasicFunctions.fetchAllContactsFromDevice()
         
     }
 //    override func viewDidAppear(_ animated: Bool) {
@@ -177,41 +176,58 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         if self.isUpdated == true
         {
         
-        for contactData in self.deviceContactList
-        {
+//        for contactData in self.deviceContactList
+//        {
+//
+//            for contact in self.listData.contactList
+//            {
+//
+////            if contactData.phoneNumber.stringByRemovingWhitespaces ==  contact.phoneNumber.stringByRemovingWhitespaces
+//
+//            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
+//            {
+//
+//                break
+//            }
+//            else if contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) ==  contact.phoneNumber.stringByRemovingWhitespaces.suffix(9)
+//            {
+////                contactData.isSelected = true
+//                self.selectedContactList.append(contactData)
+//                break
+//
+//            }
+//
+//
+//            }
+//
+//
+////            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
+////            {
+////
+////
+////            }
+////            else
+////            {
+////                self.filteredList.append(contactData)
+////            }
+//
+//
+//        }
             
             for contact in self.listData.contactList
             {
-            
-//            if contactData.phoneNumber.stringByRemovingWhitespaces ==  contact.phoneNumber.stringByRemovingWhitespaces
                 
-            if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
-            {
-                
-                break
+                if self.deviceContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contact.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
+                {
+                    
+                    self.selectedContactList.append(contact)
+                    
+                }
+                else
+                {
+                    self.selectedContactList.append(contact)
+                }
             }
-            else if contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) ==  contact.phoneNumber.stringByRemovingWhitespaces.suffix(9)
-            {
-//                contactData.isSelected = true
-                self.selectedContactList.append(contactData)
-                break
-                
-            }
-                
-            }
-            
-//            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
-//            {
-//
-//
-//            }
-//            else
-//            {
-//                self.filteredList.append(contactData)
-//            }
-            
-            
-        }
             
 //            self.updatedContactList = self.filteredList.sorted { $0.name < $1.name }
 //            self.filteredList.removeAll()
@@ -235,21 +251,21 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //        }
 //        self.filteredList = self.updatedContactList
         
-        for contactdata in self.updatedContactList
-        {
-            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactdata.phoneNumber.stringByRemovingWhitespaces.suffix(9) }) && self.filteredList.contains(where: { $0.name == contactdata.name })
-            {
-                
-            }
-            else
-            {
-                self.filteredList.append(contactdata)
-            }
-            
-        }
+//        for contactdata in self.updatedContactList
+//        {
+//            if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactdata.phoneNumber.stringByRemovingWhitespaces.suffix(9) }) && self.filteredList.contains(where: { $0.name == contactdata.name })
+//            {
+//
+//            }
+//            else
+//            {
+//                self.filteredList.append(contactdata)
+//            }
+//
+//        }
         
-        self.updatedContactList.removeAll()
-        self.updatedContactList = self.filteredList
+//        self.updatedContactList.removeAll()
+        self.filteredList = self.updatedContactList
         
         self.contactListTableView.reloadData()
         
@@ -326,7 +342,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredList.count
+        return self.filteredList.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
