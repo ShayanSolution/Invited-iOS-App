@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 import GoogleMaps
 import Contacts
-//import CoreLocation
+import SQLite3
 
 extension NSObject {
 var className: String {
@@ -21,6 +21,8 @@ var className: String {
 
 
 class BasicFunctions: NSObject {
+    
+
     
     class func setBorderOfView(view:UIView) -> Void {
         view.layer.cornerRadius = 2.0
@@ -221,6 +223,10 @@ class BasicFunctions: NSObject {
     
     class func fetchAllContactsFromDevice()  {
         
+        var id : Int32 = 0
+        let db = self.openDatabase()
+        self.createTable(db: db)
+        
         
         if #available(iOS 9.0, *) {
             var results = [CNContact]()
@@ -259,7 +265,6 @@ class BasicFunctions: NSObject {
                 }
             }
             
-            kContactList.removeAll()
             
             for contact in results
             {
@@ -270,7 +275,7 @@ class BasicFunctions: NSObject {
                     let phoneNOs=contact.phoneNumbers
                     for item in phoneNOs
                     {
-                        print(item.value.stringValue)
+//                        print(item.value.stringValue)
                         contactData.phoneNumber = item.value.stringValue
                     }
                 }
@@ -285,15 +290,12 @@ class BasicFunctions: NSObject {
 //                }
                 if contactData.phoneNumber != ""
                 {
-                   kContactList.append(contactData)
+                    id = id + 1
+                    self.insert(id : id, name: contactData.name as NSString, phone: contactData.phoneNumber as NSString, db: db)
                 }
                 
                 
             }
-            
-            
-            
-
             
             return results
         }()
@@ -303,6 +305,218 @@ class BasicFunctions: NSObject {
 
 
 }
+    class func openDatabase() -> OpaquePointer? {
+        var db: OpaquePointer? = nil
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                      .appendingPathComponent("num.sqlite")
+        if sqlite3_open(fileURL.path, &db) == SQLITE_OK {
+            print("Successfully opened connection to database at \(fileURL.path)")
+            return db
+        } else {
+            print("Unable to open database.")
+            
+        }
+        return nil
+    }
+    class func createTable(db : OpaquePointer?) {
+        
+        
+        let createTableString = """
+                                CREATE TABLE IF NOT EXISTS Contact(Id INT PRIMARY KEY NOT NULL,
+                                Name CHAR(255), Phone CHAR(255));
+                                """
+
+
+        
+        // 1
+        var createTableStatement: OpaquePointer? = nil
+        // 2
+        if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK {
+            // 3
+            if sqlite3_step(createTableStatement) == SQLITE_DONE {
+                print("Contact table created.")
+            } else {
+                print("Contact table could not be created.")
+            }
+        } else {
+            print("CREATE TABLE statement could not be prepared.")
+        }
+        // 4
+        sqlite3_finalize(createTableStatement)
+        
+        self.delete(db: db)
+    }
+    class func insert(id : Int32 ,name : NSString , phone : NSString , db : OpaquePointer?) {
+        
+    
+        let insertStatementString = "INSERT INTO Contact (Id,Name, Phone) VALUES (?, ?, ?);"
+        
+        
+        var insertStatement: OpaquePointer? = nil
+        
+        if sqlite3_reset(insertStatement) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error resetting prepared statement: \(errmsg)")
+            }
+        
+        // 1
+        if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
+            
+            
+            sqlite3_bind_int(insertStatement, 1, id)
+            sqlite3_bind_text(insertStatement, 2, name.utf8String, -1, nil)
+            sqlite3_bind_text(insertStatement, 3, phone.utf8String, -1, nil)
+            
+            // 4
+            if sqlite3_step(insertStatement) == SQLITE_DONE {
+                print("Successfully inserted row.")
+            } else {
+                print("Could not insert row.")
+            }
+        } else {
+            print("INSERT statement could not be prepared.")
+        }
+        // 5
+        sqlite3_finalize(insertStatement)
+    }
+    class func delete(db : OpaquePointer?) {
+        
+        let db = self.openDatabase()
+        
+        let deleteStatementStirng = "DELETE FROM Contact;"
+
+        var deleteStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
+            if sqlite3_step(deleteStatement) == SQLITE_DONE {
+                print("Successfully deleted row.")
+            } else {
+                print("Could not delete row.")
+            }
+        } else {
+            print("DELETE statement could not be prepared")
+        }
+        
+        sqlite3_finalize(deleteStatement)
+    }
+    class func query() -> [ContactData]
+    {
+        
+        kContactList.removeAll()
+        
+        let db = BasicFunctions.openDatabase()
+        
+        let queryStatementString = "SELECT * FROM Contact;"
+        
+        
+        var queryStatement: OpaquePointer? = nil
+        
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            
+            while(sqlite3_step(queryStatement) == SQLITE_ROW){
+                
+                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
+                let name = String(cString: queryResultCol1!)
+                
+                let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
+                let phone = String(cString: queryResultCol2!)
+                
+                
+                print("\(name) | \(phone)")
+                
+                let contactData = ContactData()
+                contactData.name = name
+                contactData.phoneNumber = phone
+                
+                kContactList.append(contactData)
+                
+            }
+        } else {
+            print("SELECT statement could not be prepared")
+        }
+        
+        // 6
+        sqlite3_finalize(queryStatement)
+        
+        return kContactList
+    }
+
+
+//    class func storeDataInDB()
+//    {
+//        let db = self.openDatabase()
+//
+//    
+//        if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS Contacts ( id INTEGER PRIMARY KEY AUTOINCREMENT ,name CHAR(255), phone CHAR(255))", nil, nil, nil) != SQLITE_OK {
+//            let errmsg = String(cString: sqlite3_errmsg(db)!)
+//            print("error creating table: \(errmsg)")
+//        }
+//
+//        var stmt: OpaquePointer?
+//        if sqlite3_prepare_v2(db, "DELETE FROM Contacts", -1, &stmt, nil) == SQLITE_OK {
+//            if sqlite3_step(stmt) == SQLITE_DONE {
+//                print("Successfully deleted row.")
+//            } else {
+//                print("Could not delete row.")
+//            }
+//        } else {
+//            print("DELETE statement could not be prepared")
+//        }
+//
+//
+//
+//
+//        for contactData in kContactList
+//        {
+//            var stmt: OpaquePointer?
+//
+//            let queryString = "INSERT INTO Contacts (name, phone) VALUES (?,?)"
+//
+//            if sqlite3_prepare_v2(db, queryString, -1, &stmt, nil) != SQLITE_OK {
+//                let errmsg = String(cString: sqlite3_errmsg(db)!)
+//                print("error preparing insert: \(errmsg)")
+//            }
+//
+//            if sqlite3_reset(stmt) != SQLITE_OK {
+//                let errmsg = String(cString: sqlite3_errmsg(db)!)
+//                print("error resetting prepared statement: \(errmsg)")
+//            }
+//
+////            let name: NSString = contactData.name as NSString
+////            let phone: NSString = contactData.phoneNumber as NSString
+//
+//            if sqlite3_bind_text(stmt, 1, contactData.name, -1, nil) != SQLITE_OK{
+//                let errmsg = String(cString: sqlite3_errmsg(db)!)
+//                print("failure binding name: \(errmsg)")
+//                return
+//            }
+//
+//            if sqlite3_bind_text(stmt, 2, contactData.phoneNumber, -1, nil) != SQLITE_OK{
+//                let errmsg = String(cString: sqlite3_errmsg(db)!)
+//                print("failure binding phone: \(errmsg)")
+//                return
+//            }
+//
+//
+//
+//            if sqlite3_step(stmt) != SQLITE_DONE {
+//                let errmsg = String(cString: sqlite3_errmsg(db)!)
+//                print("failure inserting contact: \(errmsg)")
+//                return
+//            }
+//
+//            if sqlite3_finalize(stmt) != SQLITE_OK {
+//                let errmsg = String(cString: sqlite3_errmsg(db)!)
+//                print("error finalizing prepared statement: \(errmsg)")
+//            }
+//
+//            stmt = nil
+//
+//
+//        }
+//
+//        kContactList.removeAll()
+//    }
+    
     class func getNameFromContactList(phoneNumber : String) -> String
     {
         if kContactList.count > 0
@@ -310,7 +524,8 @@ class BasicFunctions: NSObject {
         for contctData in kContactList
         {
             contctData.phoneNumber = contctData.phoneNumber.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
-            if contctData.phoneNumber.stringByRemovingWhitespaces.suffix(9) == phoneNumber.stringByRemovingWhitespaces.suffix(9)
+            let phone = phoneNumber.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
+            if contctData.phoneNumber.stringByRemovingWhitespaces.suffix(9) == phone.stringByRemovingWhitespaces.suffix(9)
             {
                 
                 return contctData.name

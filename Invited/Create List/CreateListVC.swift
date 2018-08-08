@@ -8,6 +8,7 @@
 
 import UIKit
 import Contacts
+import SQLite3
 
 class ContactData: NSObject
 {
@@ -59,6 +60,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     var listData : UserList!
     
     
+    
     @IBOutlet var createButton: UIButton!
     
     @IBOutlet var updateButton: UIButton!
@@ -101,6 +103,10 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your contacts. Please allow it in Settings.")
             }
+            else
+            {
+                
+            }
         })
         
         
@@ -126,52 +132,53 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         BasicFunctions.setLeftPaddingOfTextField(textField: self.searchTextField, padding: 10.0)
     }
     
-//    func fetchAllContactsFromDevice()  {
-//         if #available(iOS 9.0, *) {
-//            var contacts: [CNContact] = {
-//                let contactStore = CNContactStore()
-//                let keysToFetch = [
-//                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-//                    CNContactEmailAddressesKey,
-//                    CNContactPhoneNumbersKey,
-//                    CNContactImageDataAvailableKey,
-//                    CNContactThumbnailImageDataKey] as [Any]
-//                
-//                // Get all the containers
-//                var allContainers: [CNContainer] = []
-//                do {
-//                    allContainers = try contactStore.containers(matching: nil)
-//                } catch {
-//                    print("Error fetching containers")
-//                }
-//                
-//                
-//                
-//                // Iterate all containers and append their contacts to our results array
-//                for container in allContainers {
-//                    let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
-//                    
-//                    do {
-//                        let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
-//                        self.results.append(contentsOf: containerResults)
-////                        self.storeDataInModelObjects()
-//                    } catch {
-//                        print("Error fetching results for container")
-//                    }
-//                }
-//                self.storeDataInModelObjects()
-//                return self.results
-//            }()
-//        } else {
-//            // Fallback on earlier versions
+    
+    
+    
+
+    
+    
+//    func fetchContactsFromDB(){
+//
+//        let queryString = "SELECT * FROM Contacts"
+//
+//        var stmt:OpaquePointer?
+//
+//        if sqlite3_prepare_v2(db, queryString, -1, &stmt, nil) != SQLITE_OK {
+//            let errmsg = String(cString: sqlite3_errmsg(db)!)
+//            print("error preparing select: \(errmsg)")
 //        }
+//
+//        while(sqlite3_step(stmt) == SQLITE_ROW){
+//            let name = String(cString: sqlite3_column_text(stmt, 1))
+//            let phone = String(cString: sqlite3_column_text(stmt, 2))
+//
+//            let contactData = ContactData()
+//            contactData.name = name
+//            contactData.phoneNumber = phone
+//            self.deviceContactList.append(contactData)
+//        }
+//
+//        if sqlite3_finalize(stmt) != SQLITE_OK {
+//            let errmsg = String(cString: sqlite3_errmsg(db)!)
+//            print("error finalizing prepared statement: \(errmsg)")
+//        }
+//
+//        stmt = nil
+//
+//        if sqlite3_close(db) != SQLITE_OK {
+//            print("error closing database")
+//        }
+//
+//        db = nil
+//
+//        self.checkUpdate()
 //    }
     func checkUpdate()  {
         
         if kContactList.count > 0
         {
-        
-        self.deviceContactList = kContactList
+            self.deviceContactList = kContactList
         
         if self.isUpdated == true
         {
