@@ -398,13 +398,13 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrc-fx-jkf">
-                                                <rect key="frame" x="168" y="180" width="132" height="40"/>
+                                                <rect key="frame" x="160" y="175" width="140" height="40"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="132" id="v0n-GT-jHN"/>
+                                                    <constraint firstAttribute="width" constant="140" id="v0n-GT-jHN"/>
                                                     <constraint firstAttribute="height" constant="40" id="yqF-Dm-RmS"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <state key="normal" title="Forget Password"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" title="Forgot Password?"/>
                                                 <connections>
                                                     <action selector="forgetPassword:" destination="mZx-AC-c1a" eventType="touchUpInside" id="66N-5a-EJq"/>
                                                 </connections>
@@ -413,7 +413,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Rrc-fx-jkf" secondAttribute="trailing" constant="20" id="5Do-g7-rAh"/>
-                                            <constraint firstItem="Rrc-fx-jkf" firstAttribute="top" secondItem="Hj3-CU-DUC" secondAttribute="bottom" constant="15" id="6RH-du-U1O"/>
+                                            <constraint firstItem="Rrc-fx-jkf" firstAttribute="top" secondItem="Hj3-CU-DUC" secondAttribute="bottom" constant="10" id="6RH-du-U1O"/>
                                             <constraint firstItem="Hj3-CU-DUC" firstAttribute="top" secondItem="1hb-I5-Kkd" secondAttribute="bottom" constant="40" id="Cay-bH-EHG"/>
                                             <constraint firstAttribute="trailing" secondItem="1hb-I5-Kkd" secondAttribute="trailing" constant="20" id="VRu-FK-9UG"/>
                                             <constraint firstItem="Hj3-CU-DUC" firstAttribute="leading" secondItem="59m-Gv-bNo" secondAttribute="leading" constant="20" id="ajB-4t-0Ar"/>

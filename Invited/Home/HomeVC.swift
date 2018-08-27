@@ -800,7 +800,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
                     
-                }
+                }                       
                 
             }
             
@@ -895,7 +895,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let date = dateformatter.date(from: eventData.eventTime)
             
-            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+//            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
             
             dateformatter.dateStyle = .medium
             dateformatter.timeStyle = .short
@@ -1058,7 +1058,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let date = dateformatter.date(from: eventData.eventTime)
             
-            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+//            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
             
             dateformatter.dateStyle = .medium
             dateformatter.timeStyle = .short
@@ -2185,10 +2185,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         toolbar.sizeToFit()
         
         //done button & cancel button
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.cancelClick))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.doneTimePicker(sender:)))
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.doneTimePicker(sender:)))
         doneButton.tag = textField.tag
         toolbar.setItems([cancelButton,spaceButton,doneButton], animated: false)
         
@@ -2244,10 +2244,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         toolbar.sizeToFit()
         
         //done button & cancel button
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.cancelClick))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.donedatePicker(sender:)))
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.donedatePicker(sender:)))
         doneButton.tag = textField.tag
         toolbar.setItems([cancelButton,spaceButton,doneButton], animated: false)
         
@@ -2986,7 +2986,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
+        toolBar.isTranslucent = true 
         toolBar.tintColor = UIColor.blue
         toolBar.sizeToFit()
         
@@ -3062,7 +3062,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
 
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.bordered, target: self, action: #selector(self.cancelClick))
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.cancelClick))
 
         toolbar.setItems([spaceButton,doneButton], animated: false)
 
