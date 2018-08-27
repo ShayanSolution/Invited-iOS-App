@@ -197,6 +197,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        tapRecognizer.addTarget(self, action: #selector(self.didTapView))
 //        self.view.addGestureRecognizer(tapRecognizer)
         
+        CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
+            if (granted){
+                
+                kContactList = BasicFunctions.query()
+            }
+            
+        })
+        
     
     }
     @objc func appDidBecomeActive()

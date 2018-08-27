@@ -32,6 +32,8 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
