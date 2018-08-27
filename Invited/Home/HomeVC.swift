@@ -800,7 +800,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
                     
-                }                       
+                }
                 
             }
             
