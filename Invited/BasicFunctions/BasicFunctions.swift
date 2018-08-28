@@ -260,6 +260,7 @@ class BasicFunctions: NSObject {
             }
             
             kContactList.removeAll()
+            //
             
             for contact in results
             {
