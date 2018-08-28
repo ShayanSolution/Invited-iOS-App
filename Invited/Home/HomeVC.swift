@@ -201,6 +201,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if (granted){
                 
                 kContactList = BasicFunctions.query()
+                //
             }
             
         })
