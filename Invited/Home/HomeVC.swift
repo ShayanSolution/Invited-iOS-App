@@ -542,7 +542,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 
             case .authorizedAlways, .authorizedWhenInUse:
-//                print("Access")
+                print("Access")
                 self.locationManager.startUpdatingLocation()
                 
             case .denied, .restricted:
