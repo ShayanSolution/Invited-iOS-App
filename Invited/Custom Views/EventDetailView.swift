@@ -10,12 +10,12 @@ import UIKit
 
 class EventDetailView: UIView {
     
+    @IBOutlet var titleTextView: UITextView!
     
     @IBOutlet var listName: UILabel!
     
     @IBOutlet var createdDate: UILabel!
     
-    @IBOutlet var title: UILabel!
     
     @IBOutlet var totalInvited: UILabel!
     
@@ -28,8 +28,6 @@ class EventDetailView: UIView {
     @IBOutlet var startNavigationButton: UIButton!
     
     
-    
-    @IBOutlet var inviedListTableView: UITableView!
     
     override init (frame : CGRect) {
         super.init(frame : frame)

@@ -10,7 +10,10 @@ import UIKit
 
 class CreateEventView: UIView {
     
-    @IBOutlet var titleTextField: UITextField!
+    
+    
+    @IBOutlet var titleTextView: UITextView!
+    
     
     @IBOutlet var timeTextField: UITextField!
     

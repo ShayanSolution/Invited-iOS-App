@@ -29,8 +29,6 @@ class ReceivedEventsCell: UITableViewCell {
     
     @IBOutlet var totalInvited: UILabel!
     
-    @IBOutlet var paymentMethod: UILabel!
-    
     
     @IBOutlet var startNavigationButton: UIButton!
     

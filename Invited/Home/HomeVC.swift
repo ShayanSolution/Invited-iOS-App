@@ -91,7 +91,7 @@ extension NSMutableAttributedString {
 }
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate {
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate {
     
     
     var locationManager = CLLocationManager()
@@ -135,7 +135,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     var placeSelectedORCancelled : Bool!
     
-    var selectedButton : UIButton!
+//    var selectedButton : UIButton!
     
     var currentLocationAddress : String?
     var selectedLocationAddress : String?
@@ -175,6 +175,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
+        
+        self.detailView  = DetailView.instanceFromNib() as! DetailView
+        self.eventDetailView  = EventDetailView.instanceFromNib() as! EventDetailView
         
         
         
@@ -217,6 +220,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.requestEventView.requestEventTableView.reloadData()
         self.receivedEventsView.receivedEventsTableView.reloadData()
         
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.detailView.titleTextView.setContentOffset(.zero, animated: false)
+        self.eventDetailView.titleTextView.setContentOffset(.zero, animated: true)
     }
     
     
@@ -542,7 +551,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 
             case .authorizedAlways, .authorizedWhenInUse:
-                print("Accessed")
+                print("Access")
                 self.locationManager.startUpdatingLocation()
                 
             case .denied, .restricted:
@@ -599,14 +608,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        self.createEventView.titleTextField.attributedPlaceholder = NSAttributedString(string: "Invite Title",
 //                                                                                       attributes: [NSAttributedStringKey.foregroundColor: UIColor.darkGray])
         
-        self.createEventView.titleTextField.tag = 1
+//        self.createEventView.titleTextView.tag = 1
         self.createEventView.timeTextField.tag = 1
         self.createEventView.dateTextField.tag = 1
         self.createEventView.locationTextField.tag = 3
         self.createEventView.setNumberOfPeopleTextfield.tag = 1
         self.createEventView.setListTextField.tag = 1
         
-        self.createEventView.titleTextField.delegate = self
+        self.createEventView.titleTextView.delegate = self
         self.createEventView.setNumberOfPeopleTextfield.delegate = self
         self.createEventView.timeTextField.delegate = self
         self.createEventView.dateTextField.delegate = self
@@ -620,14 +629,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.addDoneButtonOnKeyboard(textField: self.createEventView.setNumberOfPeopleTextfield)
         
-        self.createEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-        self.createEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        self.addDoneButtonOnTextViewKeyboard(textView: self.createEventView.titleTextView)
         
-        self.createEventView.titleTextField.text = self.currentLocationAddress
+//        self.createEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+//        self.createEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         
-        self.createEventView.allButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+//        self.createEventView.locationTextField.text = self.currentLocationAddress
         
-        self.selectedButton = createEventView.iWillPayButton
+//        self.createEventView.allButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        
+//        self.selectedButton = createEventView.iWillPayButton
         
         
         
@@ -822,20 +833,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    @objc func radioButtonTapped(sender:UIButton)
-    {
-        for button in (sender.superview?.subviews)!
-        {
-            if button.isKind(of: UIButton.self)
-            {
-                (button as! UIButton).isSelected = false
-            }
-        }
-        
-        sender.isSelected = true
-        self.selectedButton = sender
-        
-    }
+//    @objc func radioButtonTapped(sender:UIButton)
+//    {
+//        for button in (sender.superview?.subviews)!
+//        {
+//            if button.isKind(of: UIButton.self)
+//            {
+//                (button as! UIButton).isSelected = false
+//            }
+//        }
+//
+//        sender.isSelected = true
+//        self.selectedButton = sender
+//
+//    }
     
     
     
@@ -1097,7 +1108,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             receivedEventsCell?.acceptedORSentByMe.text = eventData.eventType
             receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Event name : ").normal(eventData.title)
-            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
+//            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             
@@ -1291,6 +1302,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         return true
     }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        
+        if textView.text == "Invite Title"
+        {
+            textView.text = ""
+            textView.textColor = UIColor.black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
+        if textView.text == ""
+        {
+            textView.text = "Invite Title"
+            textView.textColor = UIColor.lightGray
+            
+        }
+    }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
@@ -1427,7 +1455,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func showDetailView(sender:UIButton)
     {
-        self.detailView  = DetailView.instanceFromNib() as! DetailView
+        
         
         self.detailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
@@ -1465,7 +1493,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             invitedBy = fullName + " " + "(" + eventData.phone + ")"
         }
         
-        self.detailView.title.text = eventData.title
+        self.detailView.titleTextView.text = eventData.title
+        
+        
         self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
         self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
         self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
@@ -1499,22 +1529,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         
-        var paymentMethodString : String!
-        
-        if eventData.paymentMethod == 1
-        {
-            paymentMethodString = "Inviter"
-        }
-        else if eventData.paymentMethod == 2
-        {
-            paymentMethodString = "You"
-        }
-        else
-        {
-            paymentMethodString = "Shared"
-        }
-        
-        self.detailView.whoWillPay.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(paymentMethodString)
+//        var paymentMethodString : String!
+//
+//        if eventData.paymentMethod == 1
+//        {
+//            paymentMethodString = "Inviter"
+//        }
+//        else if eventData.paymentMethod == 2
+//        {
+//            paymentMethodString = "You"
+//        }
+//        else
+//        {
+//            paymentMethodString = "Shared"
+//        }
         
         BasicFunctions.setRoundCornerOfButton(button: self.detailView.acceptButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.detailView.rejectButton, radius: 5.0)
@@ -1534,7 +1562,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func showEventDetailView(sender : UIButton)
     {
-        self.eventDetailView  = EventDetailView.instanceFromNib() as! EventDetailView
+        
         
         self.eventDetailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
@@ -1563,7 +1591,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        formatter2.dateFormat = "hh:mm a"
         
         
-        self.eventDetailView.title.text = eventData.title
+        self.eventDetailView.titleTextView.text = eventData.title
         self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
         self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
         self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
@@ -1589,7 +1617,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.editEventView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
-        self.editEventView.titleTextField.tag = 2
+//        self.editEventView.titleTextView.tag = 2
         self.editEventView.timeTextField.tag = 2
         self.editEventView.dateTextField.tag = 2
         self.editEventView.locationTextField.tag = 3
@@ -1599,12 +1627,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.selectedList = nil
         
         
-        self.editEventView.titleTextField.delegate = self
+        self.editEventView.titleTextView.delegate = self
         self.editEventView.setNumberOfPeopleTextfield.delegate = self
         self.editEventView.timeTextField.delegate = self
         self.editEventView.dateTextField.delegate = self
         self.editEventView.locationTextField.delegate = self
         self.editEventView.setListTextField.delegate = self
+        
+        self.editEventView.titleTextView.textColor = UIColor.black
         
         self.isUpdated = true
         
@@ -1621,9 +1651,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.addDoneButtonOnKeyboard(textField: self.editEventView.setNumberOfPeopleTextfield)
         
-        self.editEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-        self.editEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-        self.editEventView.allButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        self.addDoneButtonOnTextViewKeyboard(textView: self.editEventView.titleTextView)
+        
+//        self.editEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+//        self.editEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+//        self.editEventView.allButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         
         self.editEventView.backButton.isHidden = false
         self.editEventView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -1652,7 +1684,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
         formatter2.dateFormat = "hh:mm a"
         
-        self.editEventView.titleTextField.text = eventData.title
+        self.editEventView.titleTextView.text = eventData.title
         self.editEventView.timeTextField.text = formatter2.string(from: time!)
         self.editEventView.dateTextField.text = formatter1.string(from: date!)
         self.editEventView.locationTextField.text = eventData.eventAddress
@@ -1668,24 +1700,24 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        if eventData.paymentMethod == 1
-        {
-            self.editEventView.iWillPayButton.isSelected = true
-            self.editEventView.youWillPayButton.isSelected = false
-            self.editEventView.allButton.isSelected = false
-        }
-        else if eventData.paymentMethod == 2
-        {
-            self.editEventView.iWillPayButton.isSelected = false
-            self.editEventView.youWillPayButton.isSelected = true
-            self.editEventView.allButton.isSelected = false
-        }
-        else
-        {
-            self.editEventView.iWillPayButton.isSelected = false
-            self.editEventView.youWillPayButton.isSelected = false
-            self.editEventView.allButton.isSelected = true
-        }
+//        if eventData.paymentMethod == 1
+//        {
+//            self.editEventView.iWillPayButton.isSelected = true
+//            self.editEventView.youWillPayButton.isSelected = false
+//            self.editEventView.allButton.isSelected = false
+//        }
+//        else if eventData.paymentMethod == 2
+//        {
+//            self.editEventView.iWillPayButton.isSelected = false
+//            self.editEventView.youWillPayButton.isSelected = true
+//            self.editEventView.allButton.isSelected = false
+//        }
+//        else
+//        {
+//            self.editEventView.iWillPayButton.isSelected = false
+//            self.editEventView.youWillPayButton.isSelected = false
+//            self.editEventView.allButton.isSelected = true
+//        }
         
         self.view.addSubview(self.editEventView)
     }
@@ -2305,7 +2337,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func createButtonTapped()
     {
-        if (self.createEventView.titleTextField.text?.isEmpty)!
+        if (self.createEventView.titleTextView.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
@@ -2339,8 +2371,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
         
-        
-        
         BasicFunctions.showActivityIndicator(vu: self.view)
         
         let dateFormatter = DateFormatter()
@@ -2355,9 +2385,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         var postParams = [String:Any]()
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
-        postParams["title"] = self.createEventView.titleTextField.text
+        postParams["title"] = self.createEventView.titleTextView.text
         postParams["event_time"] = dateFormatter.string(from: self.datePicker.date) + " " + date24 + ":00"
-        postParams["payment_method"] = self.selectedButton.tag
+        postParams["payment_method"] = 1
         postParams["event_address"] = self.createEventView.locationTextField.text
         postParams["list_id"] = self.selectedList?.id
         postParams["max_invited"] = self.createEventView.setNumberOfPeopleTextfield.text
@@ -2401,15 +2431,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if json["error"] == nil
             {
                 
-                self.createEventView.titleTextField.text = ""
+                self.createEventView.titleTextView.text = "Invite Title"
+                self.createEventView.titleTextView.textColor = UIColor.lightGray
                 self.createEventView.timeTextField.text = ""
                 self.createEventView.dateTextField.text = ""
                 self.createEventView.locationTextField.text = self.currentLocationAddress
                 self.createEventView.setListTextField.text = ""
                 self.createEventView.setNumberOfPeopleTextfield.text = ""
-                self.createEventView.iWillPayButton.isSelected = true
-                self.createEventView.youWillPayButton.isSelected = false
-                self.createEventView.allButton.isSelected = false
+//                self.createEventView.iWillPayButton.isSelected = true
+//                self.createEventView.youWillPayButton.isSelected = false
+//                self.createEventView.allButton.isSelected = false
                 self.selectedList = nil
                 
                 UserDefaults.standard.removeObject(forKey: kSelectedLat)
@@ -2441,7 +2472,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func updateButtonTapped(sender : UIButton)
     {
-        if (self.editEventView.titleTextField.text?.isEmpty)!
+        if (self.editEventView.titleTextView.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
@@ -2489,9 +2520,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         var postParams = [String:Any]()
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
-        postParams["title"] = self.editEventView.titleTextField.text
+        postParams["title"] = self.editEventView.titleTextView.text
         postParams["event_time"] = dateFormatter.string(from: self.datePicker.date) + " " + date24 + ":00"
-        postParams["payment_method"] = self.selectedButton.tag
+        postParams["payment_method"] = 1
         postParams["event_address"] = self.editEventView.locationTextField.text
         postParams["event_id"] = sender.tag
         postParams["max_invited"] = self.editEventView.setNumberOfPeopleTextfield.text
@@ -2540,15 +2571,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if json["error"] == nil
             {
                 
-                self.editEventView.titleTextField.text = ""
+                self.editEventView.titleTextView.text = "Invite Title"
+                self.editEventView.titleTextView.textColor = UIColor.lightGray
                 self.editEventView.timeTextField.text = ""
                 self.editEventView.dateTextField.text = ""
                 self.editEventView.locationTextField.text = self.currentLocationAddress
                 self.editEventView.setListTextField.text = ""
                 self.editEventView.setNumberOfPeopleTextfield.text = ""
-                self.editEventView.iWillPayButton.isSelected = true
-                self.editEventView.youWillPayButton.isSelected = false
-                self.editEventView.allButton.isSelected = false
+//                self.editEventView.iWillPayButton.isSelected = true
+//                self.editEventView.youWillPayButton.isSelected = false
+//                self.editEventView.allButton.isSelected = false
                 self.listID = nil
                 self.updateSelectedList = nil
                 
@@ -3078,6 +3110,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
         // add toolbar to textField
         textField.inputAccessoryView = toolbar
+    }
+    func addDoneButtonOnTextViewKeyboard(textView:UITextView!)
+    {
+        //ToolBar
+        let toolbar = UIToolbar();
+        toolbar.sizeToFit()
+        
+        
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.cancelClick))
+        
+        toolbar.setItems([spaceButton,doneButton], animated: false)
+        
+        
+        // add toolbar to textField
+        textView.inputAccessoryView = toolbar
     }
     
     @objc func doneButtonAction()

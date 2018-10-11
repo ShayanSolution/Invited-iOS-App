@@ -14,7 +14,7 @@ class DetailView: UIView {
     
     @IBOutlet var createdBy: UILabel!
     
-    @IBOutlet var title: UILabel!
+    @IBOutlet var titleTextView: UITextView!
     
     @IBOutlet var totalInvited: UILabel!
     
@@ -22,7 +22,6 @@ class DetailView: UIView {
     
     @IBOutlet var createdDate: UILabel!
     
-    @IBOutlet var whoWillPay: UILabel!
     
     @IBOutlet var location: UILabel!
     
