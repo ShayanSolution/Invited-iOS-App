@@ -176,8 +176,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
         
-        self.detailView  = DetailView.instanceFromNib() as! DetailView
-        self.eventDetailView  = EventDetailView.instanceFromNib() as! EventDetailView
+        self.detailView  = DetailView.instanceFromNib() as? DetailView
+        self.eventDetailView  = EventDetailView.instanceFromNib() as? EventDetailView
+        self.acceptByMeView  = AcceptByMeView.instanceFromNib() as? AcceptByMeView
         
         
         
@@ -226,6 +227,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.detailView.titleTextView.setContentOffset(.zero, animated: false)
         self.eventDetailView.titleTextView.setContentOffset(.zero, animated: true)
+        self.acceptByMeView.titleTextView.setContentOffset(.zero, animated: true)
     }
     
     
@@ -533,6 +535,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
         
+//        self.createEventView.titleTextView.text = "Invite Title"
+//        self.createEventView.titleTextView.textColor = UIColor.lightGray
+//        self.createEventView.setNumberOfPeopleTextfield.text = ""
+//        self.createEventView.setListTextField.text = ""
+//        self.createEventView.dateTextField.text = ""
+//        self.createEventView.timeTextField.text = ""
+        
+        
+        
 //        self.createEventView.locationTextField.text = self.currentLocationAddress
         
 //        self.createEventView.setListTextField.text = ""
@@ -738,13 +749,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
         if kUserList.count != 0 && row != 0
         {
-        self.selectedList = kUserList[row - 1]
+            self.selectedList = kUserList[row - 1]
+            
+            let count = self.selectedList?.contactList.count
+            self.createEventView.setNumberOfPeopleTextfield.text = String(count!)
         
         }
         else
         {
             self.selectedList = nil
             self.createEventView.setListTextField.text = ""
+            self.createEventView.setNumberOfPeopleTextfield.text = ""
             
         }
         }
@@ -754,6 +769,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 self.updateSelectedList = kUserList[row - 1]
                 
+                let count = self.updateSelectedList?.contactList.count
+                self.editEventView.setNumberOfPeopleTextfield.text = String(count!)
+                
             }
             else
             {
@@ -761,6 +779,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.listID = nil
                 
                 self.editEventView.setListTextField.text = ""
+                self.editEventView.setNumberOfPeopleTextfield.text = ""
                 
             }
             
@@ -952,7 +971,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
             requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
-            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+//            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
             
             requestEventCell?.expandButton.tag = indexPath.row
             requestEventCell?.startNavigationButton.tag = indexPath.row
@@ -997,8 +1016,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 requestEventCell?.startNavigationButton.isHidden = true
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
-                requestEventCell?.acceptORRejectLabel.text = "Too late, event has been closed."
-                requestEventCell?.acceptORRejectLabel.textColor = UIColor.black
+                requestEventCell?.acceptORRejectLabel.text = "Too Late! Offer is no longer valid."
+                requestEventCell?.acceptORRejectLabel.textColor = UIColor.red
                 
             }
             
@@ -1110,7 +1129,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Event name : ").normal(eventData.title)
 //            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
-            receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+            
             
 //            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
@@ -1120,13 +1139,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
                 
+                receivedEventsCell?.totalInvitedHeightConstraint.constant = 40
+                receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+                
                 
             }
             else
             {
                 receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
+                receivedEventsCell?.totalInvitedHeightConstraint.constant = 0
+                
+                
                 
             }
+            
+            receivedEventsCell?.updateConstraints()
             
 
             
@@ -1392,17 +1419,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else
         {
             
-            
-            self.acceptByMeView  = AcceptByMeView.instanceFromNib() as! AcceptByMeView
 
             self.acceptByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
 
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
             
-            self.acceptByMeView.title.attributedText = NSMutableAttributedString().bold("Event name : ").normal(eventData.title)
+            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Event name : ").normal(eventData.title)
             self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
-            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+//            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
             self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
 
@@ -1500,7 +1525,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
         self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
         self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
-        self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+//        self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
         
         self.detailView.acceptButton.tag = sender.tag
         self.detailView.rejectButton.tag = sender.tag
@@ -1511,6 +1536,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.detailView.acceptORRejectButtonView.isHidden = true
             self.detailView.startNavigationView.isHidden = true
             self.detailView.rejectLabel.isHidden = false
+            self.detailView.rejectLabel.text = "Rejected"
+            self.detailView.rejectLabel.textColor = UIColor.red
         }
         else if eventData.confirmed == 1
         {
@@ -1519,13 +1546,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.detailView.rejectLabel.isHidden = true
             
         }
+        else if eventData.confirmed == 2
+        {
+            self.detailView.acceptORRejectButtonView.isHidden = false
+            self.detailView.startNavigationView.isHidden = true
+            self.detailView.rejectLabel.isHidden = true
+            
+        }
         else if eventData.confirmed == 3
         {
             self.detailView.acceptORRejectButtonView.isHidden = true
             self.detailView.startNavigationView.isHidden = true
             self.detailView.rejectLabel.isHidden = false
-            self.detailView.rejectLabel.text = "Too late. Event has been closed."
-            self.detailView.rejectLabel.textColor = UIColor.black
+            self.detailView.rejectLabel.text = "Too Late! Offer is no longer valid."
+            self.detailView.rejectLabel.textColor = UIColor.red
             
         }
         

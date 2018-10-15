@@ -23,7 +23,6 @@ class RequestEventCell: UITableViewCell {
     
     @IBOutlet var createdBy: UILabel!
     
-    @IBOutlet var totalInvited: UILabel!
     
     @IBOutlet var date: UILabel!
     

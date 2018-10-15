@@ -33,7 +33,7 @@
                                         <state key="normal" image="iconExpandTile"/>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rkp 2010 alumni get together" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01y-86-3mn">
-                                        <rect key="frame" x="40" y="0.0" width="245" height="81"/>
+                                        <rect key="frame" x="40" y="5" width="245" height="71"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="0.0" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -50,9 +50,8 @@
                                 <constraints>
                                     <constraint firstItem="DQa-Sg-iJS" firstAttribute="top" secondItem="f9D-cm-yWe" secondAttribute="top" id="1QE-yv-2jJ"/>
                                     <constraint firstAttribute="trailing" secondItem="2dz-O8-rPb" secondAttribute="trailing" constant="15" id="6SD-ej-jaN"/>
-                                    <constraint firstItem="2dz-O8-rPb" firstAttribute="top" secondItem="01y-86-3mn" secondAttribute="bottom" id="Dfa-WE-fuN"/>
-                                    <constraint firstAttribute="height" constant="81.5" id="QaV-PL-2hm"/>
-                                    <constraint firstItem="01y-86-3mn" firstAttribute="top" secondItem="f9D-cm-yWe" secondAttribute="top" id="RQo-aZ-Sd2"/>
+                                    <constraint firstItem="2dz-O8-rPb" firstAttribute="top" secondItem="01y-86-3mn" secondAttribute="bottom" constant="5" id="Dfa-WE-fuN"/>
+                                    <constraint firstItem="01y-86-3mn" firstAttribute="top" secondItem="f9D-cm-yWe" secondAttribute="top" constant="5" id="RQo-aZ-Sd2"/>
                                     <constraint firstItem="01y-86-3mn" firstAttribute="leading" secondItem="f9D-cm-yWe" secondAttribute="leading" constant="40" id="UBS-cK-uO6"/>
                                     <constraint firstAttribute="bottom" secondItem="2dz-O8-rPb" secondAttribute="bottom" id="Umu-3J-vh1"/>
                                     <constraint firstItem="2dz-O8-rPb" firstAttribute="leading" secondItem="f9D-cm-yWe" secondAttribute="leading" constant="15" id="YYQ-c0-Eef"/>
@@ -186,6 +185,7 @@
                             <constraint firstAttribute="trailing" secondItem="wB8-6a-gvA" secondAttribute="trailing" constant="15" id="Us9-Ic-76p"/>
                             <constraint firstItem="f9D-cm-yWe" firstAttribute="leading" secondItem="P7u-PA-8Y3" secondAttribute="leading" id="Y3b-yF-0Du"/>
                             <constraint firstItem="wB8-6a-gvA" firstAttribute="top" secondItem="NDy-ob-lab" secondAttribute="bottom" constant="15" id="fU8-io-J9V"/>
+                            <constraint firstAttribute="bottom" secondItem="xRg-5l-0f6" secondAttribute="bottom" constant="9.5" id="sZz-WX-K6f"/>
                         </constraints>
                     </view>
                 </subviews>

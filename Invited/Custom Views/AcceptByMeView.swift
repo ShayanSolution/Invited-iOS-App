@@ -12,19 +12,19 @@ class AcceptByMeView: UIView {
     
     @IBOutlet var backButton: UIButton!
     
-    @IBOutlet var title: UILabel!
+    @IBOutlet var titleTextView: UITextView!
     
     @IBOutlet var invitedBy: UILabel!
     
     @IBOutlet var eventDate: UILabel!
-    
-    @IBOutlet var totalInvited: UILabel!
     
     @IBOutlet var eventReceivedDate: UILabel!
     
     @IBOutlet var location: UILabel!
     
     @IBOutlet var startNavigationButton: UIButton!
+    
+    
     
     
     

@@ -21,14 +21,17 @@ class ReceivedEventsCell: UITableViewCell {
     
     @IBOutlet var invitedBy: UILabel!
     
+    
+    @IBOutlet var totalInvitedHeightConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet var totalInvited: UILabel!
+    
     @IBOutlet var listName: UILabel!
     
     @IBOutlet var eventCreatedDate: UILabel!
     
     @IBOutlet var address: UILabel!
-    
-    @IBOutlet var totalInvited: UILabel!
-    
     
     @IBOutlet var startNavigationButton: UIButton!
     
