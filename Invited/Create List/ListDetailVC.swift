@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     
     @IBOutlet var contactListTableView: UITableView!
@@ -208,7 +209,8 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //        self.listData.contactList.removeAll()
 //        self.listData.contactList = self.searchData
         
-        if #available(iOS 9.0, *) {
+        
+        
             let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC") as! CreateListVC
             createListVC.listData = self.listData
             createListVC.isUpdated = true
@@ -216,9 +218,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             
             self.present(createListVC, animated: true, completion: nil)
             
-        } else {
-            // Fallback on earlier versions
-        }
+
         
     }
     

@@ -398,7 +398,7 @@ class BasicFunctions: NSObject {
         
         sqlite3_finalize(deleteStatement)
     }
-    class func query() -> [ContactData]
+    class func query()
     {
         
         kContactList.removeAll()
@@ -437,7 +437,6 @@ class BasicFunctions: NSObject {
         // 6
         sqlite3_finalize(queryStatement)
         
-        return kContactList
     }
 
 

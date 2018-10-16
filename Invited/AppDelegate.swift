@@ -152,6 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                 if (granted){
                     
                     BasicFunctions.fetchAllContactsFromDevice()
+                    BasicFunctions.query()
                 }
             })
         }

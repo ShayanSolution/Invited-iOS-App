@@ -81,7 +81,9 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //
 //
 //    }
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(true)
         
         if self.isUpdated == true
         {
@@ -91,12 +93,11 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             self.setListNameTextField.text = self.listData.name
         }
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-
-//        self.fetchAllContactsFromDevice()
+        //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        self.checkUpdate()
+        //        self.fetchAllContactsFromDevice()
+        
         
         CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
             if (!granted){
@@ -105,9 +106,20 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             }
             else
             {
+                if kContactList.count == 0
+                {
+                    BasicFunctions.query()
+                }
                 
             }
         })
+        
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        self.checkUpdate()
         
         
     }

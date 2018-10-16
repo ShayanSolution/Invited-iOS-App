@@ -201,14 +201,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        tapRecognizer.addTarget(self, action: #selector(self.didTapView))
 //        self.view.addGestureRecognizer(tapRecognizer)
         
-        CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
-            if (granted){
-                
-                kContactList = BasicFunctions.query()
-                //
-            }
-            
-        })
+//        CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
+//            if (granted){
+//                
+//                BasicFunctions.query()
+//                //
+//            }
+//            
+//        })
         
     
     }
@@ -498,6 +498,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func addButtonTapped(_ sender: UIButton)
     {
+//                CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
+//                    if (granted){
+//        
+//                        BasicFunctions.query()
+//                        //
+//                    }
+//        
+//                })
+        
         let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
         self.present(createListVC!, animated: true, completion: nil)
     }
