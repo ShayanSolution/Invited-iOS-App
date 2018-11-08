@@ -18,6 +18,10 @@ class SentByMeView: UIView {
     
     @IBOutlet var backButton: UIButton!
     
+    @IBOutlet var sendReportButton: UIButton!
+    
+    @IBOutlet var sendReportViewHeightConstraint: NSLayoutConstraint!
+    
     
     
     override init (frame : CGRect) {

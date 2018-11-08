@@ -304,10 +304,12 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         if textfield.text?.count != 0
         {
             for contactData in self.updatedContactList {
-                let range = contactData.name.lowercased().range(of: textfield.text!.lowercased(), options: .caseInsensitive, range: nil,   locale: nil)
+                let textRange = contactData.name.lowercased().range(of: textfield.text!.lowercased(), options: .caseInsensitive, range: nil,   locale: nil)
+                let phoneRange = contactData.phoneNumber.range(of: textfield.text!, options: .caseInsensitive, range: nil,   locale: nil)
                 
 
-                if range != nil {
+                if textRange != nil || phoneRange != nil
+                {
                     
 //                    if self.filteredList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
 //                    {
@@ -383,7 +385,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         }
         else
         {
-            cell?.nameLabel.text = contactData.name
+            cell?.nameLabel.text = String(format: "%@ (%@)", contactData.name,contactData.phoneNumber)
         }
         
         if self.selectedContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) })
@@ -519,7 +521,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         postParams["list_id"] = self.listData.id
         postParams["list_name"] = self.setListNameTextField.text
         
-        ServerManager.updateList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
+        ServerManager.updateList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -562,7 +564,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             {
                 if controller is ListDetailVC
                 {
-                    presentViewcontroller = controller as! ListDetailVC
+                    presentViewcontroller = controller as? ListDetailVC
                     break
                 }
             }
@@ -587,7 +589,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         for contact in self.selectedContactList
         {
             var contactDic = [String: Any]()
-            contactDic["name"] = contact.name
+            contactDic["name"] = BasicFunctions.getNameFromContactList(phoneNumber: contact.phoneNumber)
         
             contactDic["phone"] = contact.phoneNumber.stringByRemovingWhitespaces
             

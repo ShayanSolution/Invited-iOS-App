@@ -425,7 +425,7 @@ class BasicFunctions: NSObject {
                 
                 let contactData = ContactData()
                 contactData.name = name
-                contactData.phoneNumber = phone
+                contactData.phoneNumber = phone.stringByRemovingWhitespaces
                 
                 kContactList.append(contactData)
                 

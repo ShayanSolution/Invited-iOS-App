@@ -63,7 +63,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         // Do any additional setup after loading the view.
         
         
-        self.mainScrollView.contentSize.height = self.mainScrollView.frame.size.height
+        
+//        self.contraintContentHeight.constant = 700.0
         
         self.addDoneButtonOnKeyboard(textField: self.loginPhoneTextField)
         self.addDoneButtonOnKeyboard(textField: self.phoneTextField)
@@ -91,8 +92,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.mainScrollView.contentSize.height = 700.0
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     

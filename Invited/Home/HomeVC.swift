@@ -1402,7 +1402,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if eventData.eventType == "Sent by me."
         {
-            self.sentByMeView  = SentByMeView.instanceFromNib() as! SentByMeView
+            self.sentByMeView  = SentByMeView.instanceFromNib() as? SentByMeView
             
             self.sentByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
             
@@ -1416,6 +1416,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.numberOfInvitationAccepted.attributedText = NSMutableAttributedString().bold("Number of invitation Accepted : ").normal(String(eventData.numberOfInvitationAccepted))
             
             self.sentByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
+            self.sentByMeView.sendReportButton.addTarget(self, action: #selector(self.sendReport), for: UIControlEvents.touchUpInside)
             
             self.acceptedEventList.removeAll()
             self.acceptedEventList = eventData.acceptedEventList
@@ -1427,8 +1428,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            
-
             self.acceptByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
 
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
@@ -1460,16 +1459,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             self.acceptByMeView.startNavigationButton.tag = sender.tag
             self.acceptByMeView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromReceivedRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
-
+            
+            
             self.view.addSubview(self.acceptByMeView)
             
             
         }
-        
-        
-        
-        
-        
         
 //        self.specificReceivedRequestEventList.removeAll()
 //
@@ -1485,12 +1480,29 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         // Testing github.
         
     }
-    
+    @objc func sendReport()
+    {
+        let alertController = UIAlertController(title: "Enter Email Address", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter Email Address"
+        }
+        let sendAction = UIAlertAction(title: "Send", style: UIAlertActionStyle.default, handler: { alert -> Void in
+
+//            BasicFunctions.showAlert(vc: self, msg: "Email is not correct.")
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: {
+            (action : UIAlertAction!) -> Void in })
+        
+        
+        alertController.addAction(sendAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     @objc func showDetailView(sender:UIButton)
     {
-        
-        
+    
         self.detailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
         let eventData = self.requestEventList[sender.tag]
@@ -2165,7 +2177,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String : Any]()
         postParams["user_id"] = BasicFunctions.getPreferencesForInt(kUserID)
         
-        ServerManager.getContactList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
+        ServerManager.getContactList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -2200,7 +2212,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if (json["user_contact_list"] as? [[String : Any]]) != nil
         {
             
-            contactListArray = json["user_contact_list"] as! [[String : Any]]
+            contactListArray = json["user_contact_list"] as? [[String : Any]]
         
 
         for list in contactListArray {
@@ -2212,20 +2224,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             var contactsArray : [[String : Any]]!
             if list["contacts"] as? [[String : Any]]  != nil
             {
-                contactsArray = list["contacts"] as! [[String : Any]]
+                contactsArray = list["contacts"] as? [[String : Any]]
             }
             
             for contact in contactsArray
             {
                 let contactData = ContactData()
-                if contact["name"] as? String != nil
-                {
-                contactData.name = contact["name"] as! String
-                }
+                
                 if contact["phone"] as? String != nil
                 {
-                contactData.phoneNumber = contact["phone"] as! String
+                    contactData.phoneNumber = contact["phone"] as! String
                 }
+                
+//                if contact["name"] as? String != nil
+//                {
+                    contactData.name = BasicFunctions.getNameFromContactList(phoneNumber: contactData.phoneNumber)
+//                }
+                
                 
                 
                 userListObject.contactList.append(contactData)
@@ -2454,7 +2469,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        ServerManager.createEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
+        ServerManager.createEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -2595,7 +2610,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         
-        ServerManager.updateEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
+        ServerManager.updateEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             

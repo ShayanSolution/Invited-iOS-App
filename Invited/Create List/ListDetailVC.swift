@@ -41,14 +41,31 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         super.viewWillAppear(true)
         
         self.searchData = self.listData.contactList
+        self.contactListTableView.reloadData()
         
+    }
+    func replaceServerNamesWithLocalNames()
+    {
+        self.searchData.removeAll()
+        for contact in self.listData.contactList
+        {
+            
+            if kContactList.contains(where: { $0.phoneNumber.suffix(9) == contact.phoneNumber.suffix(9) })
+            {
+                
+                contact.name = BasicFunctions.getNameFromContactList(phoneNumber: contact.phoneNumber)
+                
+            }
+            
+        }
         
+        self.searchData = self.listData.contactList
         self.contactListTableView.reloadData()
         
     }
     @objc func appDidBecomeActive()
     {
-        self.contactListTableView.reloadData()
+        self.replaceServerNamesWithLocalNames()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -62,9 +79,11 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         if self.searchTextField.text?.count != 0 {
             for contactData in self.listData.contactList
             {
-                let range = contactData.name.lowercased().range(of: textfield.text!.lowercased(), options: .caseInsensitive, range: nil,   locale: nil)
+                let textRange = contactData.name.lowercased().range(of: textfield.text!.lowercased(), options: .caseInsensitive, range: nil,   locale: nil)
+                let phoneRange = contactData.phoneNumber.range(of: textfield.text!, options: .caseInsensitive, range: nil,   locale: nil)
                 
-                if range != nil {
+                if textRange != nil || phoneRange != nil
+                {
 //
 //                    if self.searchData.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces == contactData.phoneNumber.stringByRemovingWhitespaces })
 //                    {
