@@ -22,8 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        GMSPlacesClient.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
-        GMSServices.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
+        GMSPlacesClient.provideAPIKey("")
+        GMSServices.provideAPIKey("")
+        
+//        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
         
         if BasicFunctions.getIfUserLoggedIn()
         {
@@ -31,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         }
         
         self.registerForPushNotifications(application: application)
+        
         
 //        if launchOptions != nil
 //        {
@@ -125,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         
         print("Notification data: \(response.notification.request.content.userInfo)")
-        NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as! [AnyHashable : Any] )
+        NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [AnyHashable : Any] )
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

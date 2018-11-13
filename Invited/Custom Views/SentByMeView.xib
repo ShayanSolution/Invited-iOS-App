@@ -117,11 +117,11 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <tableView clipsSubviews="YES" tag="5" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="91" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="85e-Gj-H87">
-                            <rect key="frame" x="20" y="209" width="280" height="299"/>
+                            <rect key="frame" x="20" y="209" width="280" height="289"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hZ-Hf-lv9">
-                            <rect key="frame" x="80" y="518" width="160" height="40"/>
+                            <rect key="frame" x="80" y="508" width="160" height="40"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ngf-0x-YS5">
                                     <rect key="frame" x="0.0" y="0.0" width="160" height="40"/>
@@ -154,7 +154,7 @@
                         <constraint firstItem="rSA-5S-pAX" firstAttribute="leading" secondItem="NZn-v7-dTB" secondAttribute="leading" constant="37.5" id="VN1-07-TXU"/>
                         <constraint firstItem="85e-Gj-H87" firstAttribute="top" secondItem="rSA-5S-pAX" secondAttribute="bottom" constant="20" id="ZYL-Xp-A98"/>
                         <constraint firstAttribute="trailing" secondItem="85e-Gj-H87" secondAttribute="trailing" constant="20" id="aY0-Va-Ty4"/>
-                        <constraint firstAttribute="bottom" secondItem="7hZ-Hf-lv9" secondAttribute="bottom" constant="10" id="c71-vc-Q92"/>
+                        <constraint firstAttribute="bottom" secondItem="7hZ-Hf-lv9" secondAttribute="bottom" constant="20" id="c71-vc-Q92"/>
                         <constraint firstAttribute="trailing" secondItem="wXp-w3-74j" secondAttribute="trailing" constant="37.5" id="eUT-b7-wFA"/>
                         <constraint firstItem="7hZ-Hf-lv9" firstAttribute="top" secondItem="85e-Gj-H87" secondAttribute="bottom" constant="10" id="nn7-id-KvP"/>
                         <constraint firstItem="wXp-w3-74j" firstAttribute="leading" secondItem="NZn-v7-dTB" secondAttribute="leading" constant="37.5" id="q2Q-WH-fbe"/>

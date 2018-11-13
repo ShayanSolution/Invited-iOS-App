@@ -629,5 +629,33 @@
                                       
                                   }];
 }
++ (void) sendReport:(NSDictionary *) inputData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService] POST:@"send-report" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": error.localizedDescription});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
 
 @end

@@ -61,9 +61,7 @@ class BasicFunctions: NSObject {
     }
     class func showActivityIndicator(vu : UIView) -> Void
     {
-        let hud = MBProgressHUD.showAdded(to: vu, animated: true)
-        
-        
+        _ = MBProgressHUD.showAdded(to: vu, animated: true)
         
     }
     class func stopActivityIndicator(vu : UIView) -> Void
