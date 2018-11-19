@@ -214,10 +214,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func appDidBecomeActive()
     {
-        if self.currentLocationCoordinate == nil
-        {
-            self.locationManager.startUpdatingLocation()
-        }
+        
+        self.locationManager.startUpdatingLocation()
         self.requestEventView.requestEventTableView.reloadData()
         self.receivedEventsView.receivedEventsTableView.reloadData()
         
@@ -452,6 +450,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if locations.count > 0
         {
             self.currentLocationCoordinate = locations.last?.coordinate
+            kCurrentLocation = self.currentLocationCoordinate
             
             
             self.reverseGeocodeCoordinate((locations.last?.coordinate)!)
@@ -572,7 +571,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             case .authorizedAlways, .authorizedWhenInUse:
                 print("Access")
-                self.locationManager.startUpdatingLocation()
+//                self.locationManager.startUpdatingLocation()
                 
             case .denied, .restricted:
                 BasicFunctions.showSettingsAlert(vc: self, msg: "Invited requires access to your location. Please allow it in Settings.")
@@ -605,7 +604,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
-        self.fetchRequestsFromServer()
+        
+        
+        if self.eventStatusView.lineView.frame.origin.x == 0
+        {
+            self.fetchRequestsFromServer()
+        }
+        else if self.eventStatusView.lineView.frame.origin.x == self.eventStatusView.invitesSentView.frame.origin.x
+        {
+            self.fetchUserEventsFromServer()
+        }
+        else
+        {
+            self.fetchReceivedRequestsFromServer()
+        }
         
     }
     
@@ -669,7 +681,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        self.eventStatusView = EventStatusView.instanceFromNib() as! EventStatusView
+        self.eventStatusView = EventStatusView.instanceFromNib() as? EventStatusView
         self.eventStatusView.frame = CGRect(x: Int(self.mainScrollView.frame.size.width * 2) , y: 0, width: Int(self.mainScrollView.frame.size.width), height: Int(self.mainScrollView.frame.size.height))
         
         self.eventStatusView.invitesReceivedButton.addTarget(self, action: #selector(self.tapOnEventStatusViewTabs(_:)), for: UIControlEvents.touchUpInside)
@@ -687,7 +699,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     func setUpStatusScrollView()
     {
-         self.requestEventView = RequestEventView.instanceFromNib() as! RequestEventView
+        self.requestEventView = RequestEventView.instanceFromNib() as? RequestEventView
         
         self.requestEventView.frame = CGRect(x: 0 , y: 0, width: Int(self.eventStatusView.mainScrollView.frame.size.width), height: Int(self.eventStatusView.mainScrollView.frame.size.height))
         
@@ -699,7 +711,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.eventStatusView.mainScrollView.addSubview(self.requestEventView)
         
         
-        self.yourEventsView = YourEventsView.instanceFromNib() as! YourEventsView
+        self.yourEventsView = YourEventsView.instanceFromNib() as? YourEventsView
         
         self.yourEventsView.frame = CGRect(x: Int(self.view.frame.size.width) , y: 0, width: Int(self.eventStatusView.mainScrollView.frame.size.width), height: Int(self.eventStatusView.mainScrollView.frame.size.height))
         
@@ -711,7 +723,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.eventStatusView.mainScrollView.addSubview(self.yourEventsView)
         
         
-        self.receivedEventsView = ReceivedEventsView.instanceFromNib() as! ReceivedEventsView
+        self.receivedEventsView = ReceivedEventsView.instanceFromNib() as? ReceivedEventsView
         
         self.receivedEventsView.frame = CGRect(x: Int(self.view.frame.size.width * 2) , y: 0, width: Int(self.eventStatusView.mainScrollView.frame.size.width), height: Int(self.eventStatusView.mainScrollView.frame.size.height))
         
@@ -1067,7 +1079,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.dateFormat = "hh:mm a"
 
             yourEventsCell?.title.text = eventData.title
-            yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+            yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
             yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
             yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
@@ -1146,7 +1158,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if eventData.eventType == "Sent by me."
             {
-                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
                 
                 receivedEventsCell?.totalInvitedHeightConstraint.constant = 40
                 receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
@@ -1666,7 +1678,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     @objc func showEventDetailView(sender : UIButton)
     {
         
-        
         self.eventDetailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
         
         BasicFunctions.setRoundCornerOfButton(button: self.eventDetailView.startNavigationButton, radius: 5.0)
@@ -1695,7 +1706,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.eventDetailView.titleTextView.text = eventData.title
-        self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+        self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
         self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
         self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
         self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
@@ -1997,7 +2008,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             if status == "error"
             {
-                BasicFunctions.showAlert(vc: self, msg: status!)
+                BasicFunctions.showAlert(vc: self, msg: message!)
+                self.fetchRequestsFromServer()
                 return
             }
             else if status == "closed"
@@ -2023,8 +2035,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            let message = json["message"] as? String
-            
             if message != nil
             {
                 BasicFunctions.showAlert(vc: self, msg: message!)
@@ -2069,7 +2079,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             if status == "error"
             {
-                BasicFunctions.showAlert(vc: self, msg: status!)
+                BasicFunctions.showAlert(vc: self, msg: "Event has been deleted.")
+                self.fetchRequestsFromServer()
                 return
             }
             

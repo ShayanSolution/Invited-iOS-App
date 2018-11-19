@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.13</string>
 	<key>CFBundleVersion</key>
-	<string>1.19</string>
+	<string>1.22</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>googlechromes</string>

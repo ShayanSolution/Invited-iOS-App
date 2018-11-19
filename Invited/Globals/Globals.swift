@@ -8,10 +8,12 @@
 
 import Foundation
 import Contacts
+import CoreLocation
 
 
 var kContactList = [ContactData]()
 var kUserList = [UserList]()
+var kCurrentLocation : CLLocationCoordinate2D?
 let kSelectedAddress = "selectedAddress"
 let kSelectedLat = "selectedLat"
 let kSelectedLong = "selectedLong"

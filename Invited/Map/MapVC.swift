@@ -33,7 +33,7 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
         
         self.mapView.isMyLocationEnabled = true
         
-        let camera = GMSCameraPosition.camera(withLatitude: (self.selectedLocationCoordinate.latitude), longitude: (self.selectedLocationCoordinate.longitude), zoom: 14.0)
+        let camera = GMSCameraPosition.camera(withLatitude: (self.selectedLocationCoordinate.latitude), longitude: (self.selectedLocationCoordinate.longitude), zoom: 15.0)
         
         self.mapView?.animate(to: camera)
     }
@@ -52,6 +52,14 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
         self.navigationController?.popViewController(animated: true)
         
     }
+    @IBAction func moveToCurrentLocation(_ sender: UIButton)
+    {
+        if kCurrentLocation != nil
+        {
+            self.mapView.animate(toLocation: kCurrentLocation!)
+        }
+    }
+    
     
     @IBAction func searchButtonTapped(_ sender: UIButton)
     {

@@ -1351,8 +1351,18 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KyN-9g-EM2">
                                         <rect key="frame" x="0.0" y="418" width="320" height="62"/>
                                         <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8dS-fH-1BQ">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="62"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="50" id="05U-cF-Igz"/>
+                                                </constraints>
+                                                <state key="normal" image="CurrentLocationIcon"/>
+                                                <connections>
+                                                    <action selector="moveToCurrentLocation:" destination="baH-2g-FAm" eventType="touchUpInside" id="Pkk-qh-cmE"/>
+                                                </connections>
+                                            </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7D-me-hzA">
-                                                <rect key="frame" x="20" y="0.0" width="250" height="62"/>
+                                                <rect key="frame" x="50" y="0.0" width="220" height="62"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1370,14 +1380,17 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="a7D-me-hzA" firstAttribute="leading" secondItem="KyN-9g-EM2" secondAttribute="leading" constant="20" id="5If-7t-V41"/>
+                                            <constraint firstItem="8dS-fH-1BQ" firstAttribute="leading" secondItem="KyN-9g-EM2" secondAttribute="leading" id="Iyu-Bq-i1Y"/>
                                             <constraint firstItem="zhp-mn-JCG" firstAttribute="leading" secondItem="a7D-me-hzA" secondAttribute="trailing" id="Omi-2f-7LG"/>
                                             <constraint firstAttribute="bottom" secondItem="a7D-me-hzA" secondAttribute="bottom" id="Q7o-cm-g3H"/>
                                             <constraint firstAttribute="bottom" secondItem="zhp-mn-JCG" secondAttribute="bottom" id="bFm-gc-i1G"/>
                                             <constraint firstAttribute="height" constant="62" id="bpc-T1-rSB"/>
+                                            <constraint firstItem="8dS-fH-1BQ" firstAttribute="top" secondItem="KyN-9g-EM2" secondAttribute="top" id="iVn-CQ-jR7"/>
                                             <constraint firstItem="a7D-me-hzA" firstAttribute="top" secondItem="KyN-9g-EM2" secondAttribute="top" id="jHI-ez-Gln"/>
                                             <constraint firstItem="zhp-mn-JCG" firstAttribute="top" secondItem="KyN-9g-EM2" secondAttribute="top" id="jmU-zH-Hul"/>
+                                            <constraint firstAttribute="bottom" secondItem="8dS-fH-1BQ" secondAttribute="bottom" id="rhA-b7-moC"/>
                                             <constraint firstAttribute="trailing" secondItem="zhp-mn-JCG" secondAttribute="trailing" id="uQ8-BL-a7C"/>
+                                            <constraint firstItem="a7D-me-hzA" firstAttribute="leading" secondItem="8dS-fH-1BQ" secondAttribute="trailing" id="xdw-vS-AZt"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -2095,6 +2108,7 @@
     <resources>
         <image name="AddIcon" width="18" height="16"/>
         <image name="Connect Twitter" width="325" height="54"/>
+        <image name="CurrentLocationIcon" width="24" height="24"/>
         <image name="Email" width="27" height="20"/>
         <image name="Logout" width="24" height="24"/>
         <image name="Password" width="16" height="20"/>
