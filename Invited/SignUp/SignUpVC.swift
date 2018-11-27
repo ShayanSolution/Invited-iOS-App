@@ -20,9 +20,8 @@ class UserProfileData: NSObject
     
 }
 
-class SignUpVC: UIViewController,UITextFieldDelegate {
-    
-    
+class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
+   
     
     @IBOutlet var signUpButton: UIButton!
     @IBOutlet var signInButton: UIButton!
@@ -32,6 +31,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     @IBOutlet var signInView: UIView!
     
     @IBOutlet var mainScrollView: UIScrollView!
+    
+    @IBOutlet var genderTextField: UITextField!
+    
     
     @IBOutlet var phoneTextField: NKVPhonePickerTextField!
     
@@ -54,8 +56,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     
     var lastOffset : CGPoint!
     
+    var dropDownPickerView : UIPickerView!
     
     var isLoginPage : Bool!
+    
+    let genderList = ["Select Gender","Male","Female"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +97,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        self.mainScrollView.contentSize.height = 700.0
+        self.mainScrollView.contentSize.height = 850.0
+        
+        self.showPicker(textField: self.genderTextField)
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -524,6 +531,58 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         }
         self.keyboardHeight = nil
         
+    }
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return 3
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return self.genderList[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if row == 0
+        {
+            self.genderTextField.text = ""
+        }
+        else
+        {
+            self.genderTextField.text = self.genderList[row]
+        }
+    }
+    func showPicker(textField:UITextField!)
+    {
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.blue
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneClick))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancelClick))
+        
+        doneButton.tag = textField.tag
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        self.dropDownPickerView = UIPickerView()
+        self.dropDownPickerView.dataSource = self
+        self.dropDownPickerView.delegate = self
+        self.dropDownPickerView.tag = textField.tag
+        
+        textField.inputView = self.dropDownPickerView
+        textField.inputAccessoryView = toolBar
+        
+    }
+    @objc func cancelClick() {
+        
+        self.view.endEditing(true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
