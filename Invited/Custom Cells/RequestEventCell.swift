@@ -19,7 +19,7 @@ class RequestEventCell: UITableViewCell {
     
     @IBOutlet var rejectButton: UIButton!
     
-    @IBOutlet var eventName: UILabel!
+    @IBOutlet var eventName: UITextView!
     
     @IBOutlet var createdBy: UILabel!
     
