@@ -47,7 +47,7 @@ class CreateEventView: UIView {
     
     @IBOutlet var timeSwitch: UISwitch!
     
-    
+    //test branch version 2.1
     
     override init (frame : CGRect) {
         super.init(frame : frame)
