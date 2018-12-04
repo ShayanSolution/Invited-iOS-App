@@ -55,9 +55,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
 //    var activeField : UITextField!
     
-    var isUpdated : Bool!
-    
-    var isAllContactsSelected : Bool!
+    var isUpdated : Bool?
     
     var listData : UserList!
     
@@ -73,8 +71,6 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        self.isAllContactsSelected = false
         
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
         
@@ -147,13 +143,11 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         BasicFunctions.setLeftPaddingOfTextField(textField: self.setListNameTextField, padding: 10.0)
         BasicFunctions.setLeftPaddingOfTextField(textField: self.searchTextField, padding: 10.0)
     }
-    @IBAction func selectAllButtonTapped(_ sender: UIButton)
-    {
-        self.selectedContactList.removeAll()
-        self.selectedContactList = self.filteredList
-        self.contactListTableView.reloadData()
-        
-    }
+    
+    
+    
+    
+
     
     
 //    func fetchContactsFromDB(){
