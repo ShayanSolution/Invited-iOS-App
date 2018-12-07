@@ -31,7 +31,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     
     @IBOutlet var signInView: UIView!
     
-    @IBOutlet var mainScrollView: UIScrollView!
+    
     
     @IBOutlet var phoneTextField: NKVPhonePickerTextField!
     
@@ -44,9 +44,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     @IBOutlet var loginPasswordTextField: UITextField!
     
     
-    
-    
-    @IBOutlet var contraintContentHeight: NSLayoutConstraint!
+
     
     var keyboardHeight : CGFloat!
     
@@ -82,7 +80,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
             BasicFunctions.setborderOfButton(button: self.signUpButton, color: UIColor.red)
             
             self.signInView.isHidden = false
-            self.mainScrollView.isHidden = true
+            self.signUpView.isHidden = true
         }
     }
     override func viewWillAppear(_ animated: Bool)
@@ -92,7 +90,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        self.mainScrollView.contentSize.height = 700.0
+//        self.mainScrollView.contentSize.height = 700.0
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -108,7 +106,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         
         
         self.signInView.isHidden = true
-        self.mainScrollView.isHidden = false
+        self.signUpView.isHidden = false
         
     }
     
@@ -120,7 +118,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         BasicFunctions.setborderOfButton(button: self.signUpButton, color: UIColor.red)
         
         self.signInView.isHidden = false
-        self.mainScrollView.isHidden = true
+        self.signUpView.isHidden = true
     }
     
     @IBAction func forgetPassword(_ sender: UIButton)
@@ -467,11 +465,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
         self.view.endEditing(true)
     }
 
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        activeField = textField.superview
-        lastOffset = self.mainScrollView.contentOffset
-        return true
-    }
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        activeField = textField.superview
+//        lastOffset = self.mainScrollView.contentOffset
+//        return true
+//    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         activeField = nil
@@ -479,52 +477,52 @@ class SignUpVC: UIViewController,UITextFieldDelegate {
     }
     
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if self.keyboardHeight != nil {
-            return
-        }
-        if self.activeField == nil
-        {
-            return
-        }
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            // so increase contentView's height by keyboard height
-            UIView.animate(withDuration: 0.3, animations: {
-                self.contraintContentHeight.constant += self.keyboardHeight
-            })
-            // move if keyboard hide input field
-            
-            
-            let distanceToBottom = self.mainScrollView.frame.size.height - (activeField?.frame.origin.y)! - (activeField?.frame.size.height)!
-            let collapseSpace = keyboardHeight - distanceToBottom
-            if collapseSpace < 0 {
-                // no collapse
-                return
-            }
-            // set new offset for scroll view
-            UIView.animate(withDuration: 0.3, animations: {
-                // scroll to the position above keyboard 10 points
-                self.mainScrollView.contentOffset = CGPoint(x: self.lastOffset.x, y: collapseSpace)
-            })
-        }
-    }
-    @objc func keyboardWillHide(notification: NSNotification) {
-        UIView.animate(withDuration: 0.3) {
-            if self.keyboardHeight != nil
-            {
-            self.contraintContentHeight.constant -= self.keyboardHeight
-            }
-            
-            if self.lastOffset != nil
-            {
-            self.mainScrollView.contentOffset = self.lastOffset
-            }
-            
-        }
-        self.keyboardHeight = nil
-        
-    }
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        if self.keyboardHeight != nil {
+//            return
+//        }
+//        if self.activeField == nil
+//        {
+//            return
+//        }
+//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            keyboardHeight = keyboardSize.height
+//            // so increase contentView's height by keyboard height
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.contraintContentHeight.constant += self.keyboardHeight
+//            })
+//            // move if keyboard hide input field
+//
+//
+//            let distanceToBottom = self.mainScrollView.frame.size.height - (activeField?.frame.origin.y)! - (activeField?.frame.size.height)!
+//            let collapseSpace = keyboardHeight - distanceToBottom
+//            if collapseSpace < 0 {
+//                // no collapse
+//                return
+//            }
+//            // set new offset for scroll view
+//            UIView.animate(withDuration: 0.3, animations: {
+//                // scroll to the position above keyboard 10 points
+//                self.mainScrollView.contentOffset = CGPoint(x: self.lastOffset.x, y: collapseSpace)
+//            })
+//        }
+//    }
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        UIView.animate(withDuration: 0.3) {
+//            if self.keyboardHeight != nil
+//            {
+//            self.contraintContentHeight.constant -= self.keyboardHeight
+//            }
+//
+//            if self.lastOffset != nil
+//            {
+//            self.mainScrollView.contentOffset = self.lastOffset
+//            }
+//
+//        }
+//        self.keyboardHeight = nil
+//
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         
