@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		24D08F7D98973C443D321E8D /* Pods_Invited.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B0C073928AA016E54FB98D /* Pods_Invited.framework */; };
 		719F458A866D862DDB85027A /* Pods_Invited_Dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7EA2FD84022E08315EEBDFC /* Pods_Invited_Dev.framework */; };
+		AF185C6721BAAFC00003E92B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF185C6621BAAFC00003E92B /* SignUpVC.swift */; };
+		AF185C6821BAAFC00003E92B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF185C6621BAAFC00003E92B /* SignUpVC.swift */; };
 		AF1F353C20C2EB86003F4F19 /* EventStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1F353B20C2EB86003F4F19 /* EventStatusView.swift */; };
 		AF1F353E20C2F5F3003F4F19 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1F353D20C2F5F3003F4F19 /* DetailView.swift */; };
 		AF1F354020C2F60E003F4F19 /* DetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF1F353F20C2F60E003F4F19 /* DetailView.xib */; };
@@ -25,7 +27,6 @@
 		AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */; };
 		AF4F636D20C1BC4100083873 /* ReceivedEventsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */; };
 		AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */; };
-		AF6E4FA42199912D00918723 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028620B2D39C0039E686 /* SignUpVC.swift */; };
 		AF6E4FA52199912D00918723 /* RequestEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F635820C186CC00083873 /* RequestEventCell.swift */; };
 		AF6E4FA62199912D00918723 /* RequestEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F635420C1775B00083873 /* RequestEventView.swift */; };
 		AF6E4FA72199912D00918723 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF88848720B3EDCF002F6D4F /* HomeVC.swift */; };
@@ -94,7 +95,6 @@
 		AFCF818920F33BAF0041FD9D /* AcceptByMeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */; };
 		AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028020B2CE470039E686 /* WelcomeVC.swift */; };
 		AFD9028420B2CFC40039E686 /* BasicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028320B2CFC40039E686 /* BasicFunctions.swift */; };
-		AFD9028720B2D39C0039E686 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028620B2D39C0039E686 /* SignUpVC.swift */; };
 		AFE5DFC4207CD53900652A1B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE5DFC3207CD53900652A1B /* AppDelegate.swift */; };
 		AFE5DFC9207CD53900652A1B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFC7207CD53900652A1B /* Main.storyboard */; };
 		AFE5DFCB207CD53900652A1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFCA207CD53900652A1B /* Assets.xcassets */; };
@@ -122,6 +122,7 @@
 		67A15A72DD88EEA21D9D68E5 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		890B51466B3ED38CC729BA33 /* Pods-Invited.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Invited.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Invited/Pods-Invited.debug.xcconfig"; sourceTree = "<group>"; };
 		93B0C073928AA016E54FB98D /* Pods_Invited.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Invited.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF185C6621BAAFC00003E92B /* SignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		AF1F353A20C27E73003F4F19 /* Invited.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Invited.entitlements; sourceTree = "<group>"; };
 		AF1F353B20C2EB86003F4F19 /* EventStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatusView.swift; sourceTree = "<group>"; };
 		AF1F353D20C2F5F3003F4F19 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
@@ -166,7 +167,6 @@
 		AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AcceptByMeView.xib; sourceTree = "<group>"; };
 		AFD9028020B2CE470039E686 /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		AFD9028320B2CFC40039E686 /* BasicFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicFunctions.swift; sourceTree = "<group>"; };
-		AFD9028620B2D39C0039E686 /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		AFE5DFC0207CD53900652A1B /* Invited.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Invited.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE5DFC3207CD53900652A1B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AFE5DFC8207CD53900652A1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -318,7 +318,7 @@
 		AFD9028520B2D36F0039E686 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				AFD9028620B2D39C0039E686 /* SignUpVC.swift */,
+				AF185C6621BAAFC00003E92B /* SignUpVC.swift */,
 				AFEF939120E639790033801A /* VerifyCodeVC.swift */,
 				AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */,
 			);
@@ -662,7 +662,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF6E4FA42199912D00918723 /* SignUpVC.swift in Sources */,
+				AF185C6821BAAFC00003E92B /* SignUpVC.swift in Sources */,
 				AF6E4FA52199912D00918723 /* RequestEventCell.swift in Sources */,
 				AF6E4FA62199912D00918723 /* RequestEventView.swift in Sources */,
 				AF6E4FA72199912D00918723 /* HomeVC.swift in Sources */,
@@ -697,7 +697,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFD9028720B2D39C0039E686 /* SignUpVC.swift in Sources */,
+				AF185C6721BAAFC00003E92B /* SignUpVC.swift in Sources */,
 				AF4F635A20C186CC00083873 /* RequestEventCell.swift in Sources */,
 				AF4F635520C1775B00083873 /* RequestEventView.swift in Sources */,
 				AF88848820B3EDCF002F6D4F /* HomeVC.swift in Sources */,
