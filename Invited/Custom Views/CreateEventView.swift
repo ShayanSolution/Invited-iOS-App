@@ -41,11 +41,11 @@ class CreateEventView: UIView {
     
     @IBOutlet var setNumberOfPeopleTextfield: UITextField!
     
-    @IBOutlet var locationSwitch: UISwitch!
-    
-    @IBOutlet var dateSwitch: UISwitch!
-    
-    @IBOutlet var timeSwitch: UISwitch!
+//    @IBOutlet var locationSwitch: UISwitch!
+//    
+//    @IBOutlet var dateSwitch: UISwitch!
+//    
+//    @IBOutlet var timeSwitch: UISwitch!
     
     //test branch version 2.1
     

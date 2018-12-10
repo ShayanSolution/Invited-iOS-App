@@ -237,10 +237,16 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     func register()
     {
         
+        
+        
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
-        postParams["email"] = self.userCredentials.email
+        postParams["firstName"] = self.userCredentials.firstName
+        postParams["lastName"] = self.userCredentials.lastName
+        postParams["gender"] = self.userCredentials.gender
         postParams["phone"] = self.userCredentials.phone
+        postParams["dob"] = self.userCredentials.dob
+        postParams["email"] = self.userCredentials.email
         postParams["password"] = self.userCredentials.password
         postParams["password_confirmation"] = self.userCredentials.password
         
@@ -325,7 +331,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             }
             else if json["error"] != nil
             {
-                errorString = json["message"] as! String
+                errorString = json["message"] as? String
             }
 //            else
 //            {

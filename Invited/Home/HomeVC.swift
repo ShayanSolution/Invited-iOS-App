@@ -90,6 +90,8 @@ extension NSMutableAttributedString {
     }
 }
 
+
+
 @available(iOS 9.0, *)
 class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate {
     
@@ -174,7 +176,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
-//        self.locationManager.startUpdatingLocation()
+        self.locationManager.startUpdatingLocation()
         
         self.detailView  = DetailView.instanceFromNib() as? DetailView
         self.eventDetailView  = EventDetailView.instanceFromNib() as? EventDetailView
@@ -226,6 +228,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.detailView.titleTextView.setContentOffset(.zero, animated: false)
         self.eventDetailView.titleTextView.setContentOffset(.zero, animated: true)
         self.acceptByMeView.titleTextView.setContentOffset(.zero, animated: true)
+        
     }
     
     
@@ -654,9 +657,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.createEventView.locationTextField.delegate = self
         self.createEventView.setListTextField.delegate = self
         
-        self.createEventView.timeTextField.isUserInteractionEnabled = false
-        self.createEventView.dateTextField.isUserInteractionEnabled = false
-        self.createEventView.locationTextField.isUserInteractionEnabled = false
+//        self.createEventView.timeTextField.isUserInteractionEnabled = false
+//        self.createEventView.dateTextField.isUserInteractionEnabled = false
+//        self.createEventView.locationTextField.isUserInteractionEnabled = false
         
         self.showPicker(textField: self.createEventView.setListTextField)
         
@@ -680,9 +683,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.createEventView.createButton.addTarget(self, action: #selector(self.createButtonTapped), for: UIControlEvents.touchUpInside)
         
-        self.createEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-        self.createEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-        self.createEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+//        self.createEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+//        self.createEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+//        self.createEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
 //        self.createEventView.updateButton.addTarget(self, action: #selector(self.updateButtonTapped), for: UIControlEvents.touchUpInside)
         
         self.mainScrollView.addSubview(self.createEventView)
@@ -749,48 +752,48 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    @objc func switchStateChanged(sender : UISwitch)
-    {
-        if sender.tag == 1
-        {
-            if sender.isOn
-            {
-                self.createEventView.locationTextField.isUserInteractionEnabled = true
-                self.locationManager.startUpdatingLocation()
-            }
-            else
-            {
-                self.createEventView.locationTextField.isUserInteractionEnabled = false
-                self.createEventView.locationTextField.text = ""
-            }
-        }
-        else if sender.tag == 2
-        {
-            self.createEventView.dateTextField.text = ""
-            
-            if sender.isOn
-            {
-                self.createEventView.dateTextField.isUserInteractionEnabled = true
-            }
-            else
-            {
-                self.createEventView.dateTextField.isUserInteractionEnabled = false
-            }
-        }
-        else if sender.tag == 3
-        {
-            self.createEventView.timeTextField.text = ""
-            
-            if sender.isOn
-            {
-                self.createEventView.timeTextField.isUserInteractionEnabled = true
-            }
-            else
-            {
-                self.createEventView.timeTextField.isUserInteractionEnabled = false
-            }
-        }
-    }
+//    @objc func switchStateChanged(sender : UISwitch)
+//    {
+//        if sender.tag == 1
+//        {
+//            if sender.isOn
+//            {
+//                self.createEventView.locationTextField.isUserInteractionEnabled = true
+//                self.locationManager.startUpdatingLocation()
+//            }
+//            else
+//            {
+//                self.createEventView.locationTextField.isUserInteractionEnabled = false
+//                self.createEventView.locationTextField.text = ""
+//            }
+//        }
+//        else if sender.tag == 2
+//        {
+//            self.createEventView.dateTextField.text = ""
+//
+//            if sender.isOn
+//            {
+//                self.createEventView.dateTextField.isUserInteractionEnabled = true
+//            }
+//            else
+//            {
+//                self.createEventView.dateTextField.isUserInteractionEnabled = false
+//            }
+//        }
+//        else if sender.tag == 3
+//        {
+//            self.createEventView.timeTextField.text = ""
+//
+//            if sender.isOn
+//            {
+//                self.createEventView.timeTextField.isUserInteractionEnabled = true
+//            }
+//            else
+//            {
+//                self.createEventView.timeTextField.isUserInteractionEnabled = false
+//            }
+//        }
+//    }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -1061,7 +1064,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 requestEventCell?.startNavigationButton.isHidden = true
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
-                requestEventCell?.acceptORRejectLabel.text = "No"
+                requestEventCell?.acceptORRejectLabel.text = "Rejected"
                 requestEventCell?.acceptORRejectLabel.textColor = UIColor.init(red: 255/255, green: 97/255, blue: 71/255, alpha: 1.0)
                 
             }
@@ -1070,7 +1073,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 requestEventCell?.startNavigationButton.isHidden = false
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
-                requestEventCell?.acceptORRejectLabel.text = "Yes"
+                requestEventCell?.acceptORRejectLabel.text = "Accepted"
                 requestEventCell?.acceptORRejectLabel.textColor = UIColor.init(red: 134/255, green: 224/255, blue: 139/255, alpha: 1.0)
                 
             }
@@ -1131,7 +1134,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             yourEventsCell?.title.text = eventData.title
             yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(dateformatter.string(from: date2!))
+            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent: ").normal(dateformatter.string(from: date2!))
             yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(dateformatter.string(from: date!))
@@ -1198,7 +1201,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             receivedEventsCell?.acceptedORSentByMe.text = eventData.eventType
-            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
+            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Event name: ").normal(eventData.title)
 //            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             
@@ -1498,7 +1501,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
             
-            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
+            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Event name: ").normal(eventData.title)
             self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))

@@ -62,6 +62,10 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     var listData : UserList!
     
     
+    @IBOutlet var unselectAllButton: UIButton!
+    
+    @IBOutlet var selectAllButton: UIButton!
+    
     
     @IBOutlet var createButton: UIButton!
     
@@ -149,11 +153,24 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     }
     @IBAction func selectAllButtonTapped(_ sender: UIButton)
     {
+        self.selectAllButton.isHidden = true
+        self.unselectAllButton.isHidden = false
+        
         self.selectedContactList.removeAll()
         self.selectedContactList = self.filteredList
         self.contactListTableView.reloadData()
         
     }
+    
+    @IBAction func unselectAllButtonTapped(_ sender: UIButton)
+    {
+        self.selectAllButton.isHidden = false
+        self.unselectAllButton.isHidden = true
+        
+        self.selectedContactList.removeAll()
+        self.contactListTableView.reloadData()
+    }
+    
     
     
 //    func fetchContactsFromDB(){

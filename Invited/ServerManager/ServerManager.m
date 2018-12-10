@@ -8,7 +8,9 @@
 
 #import "ServerManager.h"
 
-#define kBaseURL @"http://invited.shayansolutions.com/"
+//#define kBaseURL @"http://invited.shayansolutions.com/"
+#define kBaseURL @"http://dev.invited.shayansolutions.com/"
+
 
 @implementation ServerManager
 
@@ -45,7 +47,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -73,7 +75,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
 
                                        
@@ -101,7 +103,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -129,7 +131,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -157,7 +159,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -185,7 +187,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -213,7 +215,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -241,7 +243,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -271,7 +273,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -301,7 +303,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                    }];
@@ -326,7 +328,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": error.localizedDescription});
+                                                        @"message": @"Something went wrong"});
                                       }
                                       
                                       
@@ -353,7 +355,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -380,7 +382,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": error.localizedDescription});
+                                                        @"message": @"Something went wrong"});
                                       }
                                       
                                       
@@ -406,7 +408,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": error.localizedDescription});
+                                                        @"message": @"Something went wrong"});
                                       }
                                       
                                       
@@ -433,7 +435,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -460,7 +462,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -487,7 +489,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -514,7 +516,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -541,7 +543,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": error.localizedDescription});
+                                                        @"message": @"Something went wrong"});
                                       }
                                       
                                       
@@ -568,7 +570,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": error.localizedDescription});
+                                                        @"message": @"Something went wrong"});
                                       }
                                       
                                       
@@ -595,7 +597,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        
@@ -622,7 +624,7 @@
                                       {
                                           resultBlock(@{
                                                         @"error": @"1",
-                                                        @"message": error.localizedDescription});
+                                                        @"message": @"Something went wrong"});
                                       }
                                       
                                       
@@ -647,7 +649,7 @@
                                        {
                                            resultBlock(@{
                                                          @"error": @"1",
-                                                         @"message": error.localizedDescription});
+                                                         @"message": @"Something went wrong"});
                                        }
                                        
                                        

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -75,24 +75,26 @@
                                                 <constraint firstAttribute="height" constant="0.5" id="V9r-pF-jDv"/>
                                             </constraints>
                                         </view>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgu-I4-tEV">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uKC-9U-YYj">
                                             <rect key="frame" x="47" y="5" width="268" height="41.5"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" white="0.0" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                         </textView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstItem="Bgu-I4-tEV" firstAttribute="leading" secondItem="waq-jc-rvW" secondAttribute="trailing" constant="20" id="37U-CV-EPy"/>
-                                        <constraint firstItem="Bgu-I4-tEV" firstAttribute="top" secondItem="P2h-bR-Aix" secondAttribute="top" constant="5" id="6uV-QU-n7d"/>
+                                        <constraint firstAttribute="trailing" secondItem="uKC-9U-YYj" secondAttribute="trailing" id="2iD-Xb-V8n"/>
+                                        <constraint firstItem="uKC-9U-YYj" firstAttribute="top" secondItem="P2h-bR-Aix" secondAttribute="top" constant="5" id="6OW-CU-Nro"/>
+                                        <constraint firstItem="uKC-9U-YYj" firstAttribute="leading" secondItem="waq-jc-rvW" secondAttribute="trailing" constant="20" id="8GR-Vd-aQg"/>
                                         <constraint firstItem="waq-jc-rvW" firstAttribute="centerY" secondItem="P2h-bR-Aix" secondAttribute="centerY" id="HMl-df-D1L"/>
                                         <constraint firstItem="waq-jc-rvW" firstAttribute="leading" secondItem="P2h-bR-Aix" secondAttribute="leading" id="LDk-H7-4Z7"/>
-                                        <constraint firstItem="Kcb-nq-3eQ" firstAttribute="top" secondItem="Bgu-I4-tEV" secondAttribute="bottom" constant="5" id="Ltj-TM-YA0"/>
                                         <constraint firstAttribute="trailing" secondItem="Kcb-nq-3eQ" secondAttribute="trailing" id="Mz2-c3-KOJ"/>
                                         <constraint firstAttribute="bottom" secondItem="Kcb-nq-3eQ" secondAttribute="bottom" id="YUi-Eb-1PE"/>
                                         <constraint firstItem="Kcb-nq-3eQ" firstAttribute="leading" secondItem="P2h-bR-Aix" secondAttribute="leading" id="fP3-0n-XCS"/>
-                                        <constraint firstAttribute="trailing" secondItem="Bgu-I4-tEV" secondAttribute="trailing" id="orf-Lh-WJU"/>
+                                        <constraint firstItem="Kcb-nq-3eQ" firstAttribute="top" secondItem="uKC-9U-YYj" secondAttribute="bottom" constant="5" id="xXB-Pi-D5D"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Aj-ql-VCi">
@@ -302,7 +304,7 @@
                 <outlet property="invitedBy" destination="uUd-UO-jlR" id="lZb-eq-R0S"/>
                 <outlet property="location" destination="mgQ-XT-CtR" id="FWJ-hK-hSL"/>
                 <outlet property="startNavigationButton" destination="sDP-NJ-Fat" id="ueM-mL-bWv"/>
-                <outlet property="titleTextView" destination="Bgu-I4-tEV" id="bUs-X2-Z2n"/>
+                <outlet property="titleTextView" destination="uKC-9U-YYj" id="hpt-CP-cPg"/>
             </connections>
             <point key="canvasLocation" x="24.5" y="195.5"/>
         </view>

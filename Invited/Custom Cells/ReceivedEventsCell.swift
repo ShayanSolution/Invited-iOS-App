@@ -15,7 +15,7 @@ class ReceivedEventsCell: UITableViewCell {
     @IBOutlet var acceptedORSentByMe: UILabel!
     
     
-    @IBOutlet var title: UILabel!
+    @IBOutlet var title: UITextView!
     
     @IBOutlet var date: UILabel!
     
