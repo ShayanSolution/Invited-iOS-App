@@ -61,6 +61,8 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
     var listData : UserList!
     
+    var json : [String : Any]?
+    
     
     @IBOutlet var unselectAllButton: UIButton!
     
@@ -464,6 +466,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     
     @IBAction func createButtonTapped(_ sender: UIButton)
     {
+        
         if (self.setListNameTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Plese put name of the list.")
@@ -477,18 +480,25 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         
+        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.createList), userInfo: nil, repeats: false)
+        
+
+    }
+    @objc func createList()
+    {
         var postParams = [String : Any]()
         postParams["contact_list"] = self.convertSelectedDataintoJson()
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
         postParams["list_name"] = self.setListNameTextField.text
         
-        ServerManager.createList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as! String) { (result) in
-            
+        
+        ServerManager.createList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
             let json = result as? [String : Any]
-//            let msg = json!["message"] as? String
+            //            let msg = json!["message"] as? String
+            
             let status = json!["status"] as? String
             
             let message = json!["message"] as? String
@@ -511,7 +521,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 if msg != nil
                 {
-                BasicFunctions.showAlert(vc: self, msg: msg)
+                    BasicFunctions.showAlert(vc: self, msg: msg)
                 }
             }
             else
@@ -519,6 +529,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 BasicFunctions.showAlert(vc: self, msg: message)
             }
+            
             
         }
         
@@ -539,6 +550,12 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         
+        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateList), userInfo: nil, repeats: false)
+        
+        
+    }
+    @objc func updateList()
+    {
         var postParams = [String : Any]()
         postParams["contact_list"] = self.convertSelectedDataintoJson()
         postParams["list_id"] = self.listData.id
@@ -570,7 +587,6 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             }
             
         }
-        
     }
     func dismissVC()
     {

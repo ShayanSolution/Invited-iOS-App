@@ -1212,7 +1212,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if eventData.eventType == "Sent by me."
             {
-                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+                if eventData.totalInvited == 0
+                {
+                    receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+                }
+                else
+                {
+                    receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+                }
                 
                 receivedEventsCell?.totalInvitedHeightConstraint.constant = 40
                 receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
@@ -3036,9 +3043,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     let eventData = EventData()
                     eventData.eventID = event["id"] as! Int
                     eventData.title = event["title"] as! String
-//                    eventData.listName = event["list_name"] as! String
+                    eventData.listID = event["list_id"] as! Int
                     eventData.eventAddress = event["event_address"] as! String
-                    eventData.totalInvited = event["requests_count"] as! Int
+//                    eventData.totalInvited = event["requests_count"] as! Int
                     eventData.numberOfInvitationAccepted = event["accepted_requests_count"] as! Int
                     eventData.eventTime = event["event_time"] as! String
                     eventData.eventCreatedTime = event["updated_at"] as! String
@@ -3052,10 +3059,29 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     eventData.lat = event["latitude"] as! String
                     eventData.long = event["longitude"] as! String
                     
-                    if event["contact_list"] as? [String : Any] != nil
+//                    if event["contact_list"] as? [String : Any] != nil
+//                    {
+//                    let contactDictionary = event["contact_list"] as! [String : Any]
+//                    eventData.listName = contactDictionary["list_name"] as! String
+//                    }
+                    
+                    if event["list_name"] as! String == ""
                     {
-                    let contactDictionary = event["contact_list"] as! [String : Any]
-                    eventData.listName = contactDictionary["list_name"] as! String
+                        eventData.listName = "Deleted"
+                    }
+                    else
+                    {
+                        eventData.listName = event["list_name"] as! String
+                    }
+                    
+                    for list in kUserList
+                    {
+                        if list.id == eventData.listID
+                        {
+                            eventData.totalInvited = list.contactList.count
+                            break
+                        }
+                        
                     }
                     
                     let owner = event["owner"] as! [String : Any]
