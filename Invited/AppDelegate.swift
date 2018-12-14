@@ -11,6 +11,8 @@ import GoogleMaps
 import GooglePlaces
 import UserNotifications
 import Contacts
+import FacebookCore
+import TwitterKit
 
 
 @UIApplicationMain
@@ -30,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         {
             BasicFunctions.setHomeVC()
         }
+        
+        TWTRTwitter.sharedInstance().start(withConsumerKey:"UcrOJ4SLYyXKN9ezxzLqFk94r", consumerSecret:"5Itq6OavKsFsEW77agOSxuDJTKfVrcDZTaIO7bQL29BAZu5Xid")
         
         self.registerForPushNotifications(application: application)
         
@@ -128,6 +132,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         print("Notification data: \(response.notification.request.content.userInfo)")
         NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [AnyHashable : Any] )
+    }
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+//        return SDKApplicationDelegate.shared.application(app, open: url, options: options)
+//        return Twitter.sharedInstance().application(app, open: url, options: options)
+        
+        if TWTRTwitter.sharedInstance().application(app, open:url, options: options) {
+            return TWTRTwitter.sharedInstance().application(app, open: url, options: options)
+        }
+        
+        
+        let appId = SDKSettings.appId
+        if url.scheme != nil && url.scheme!.hasPrefix("fb\(appId)") && url.host ==  "authorize" { // facebook
+            return SDKApplicationDelegate.shared.application(app, open: url, options: options)
+        }
+        return false
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

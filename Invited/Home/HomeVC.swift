@@ -10,6 +10,8 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import Contacts
+import TwitterKit
+import FBSDKLoginKit
 
 class UserList: NSObject
 {
@@ -2222,6 +2224,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             
             BasicFunctions.showActivityIndicator(vu: self.view)
+            
+            let store = TWTRTwitter.sharedInstance().sessionStore
+            if let userID = store.session()?.userID {
+                store.logOutUserID(userID)
+                BasicFunctions.showSigInVC()
+                return
+            }
+            else if (FBSDKAccessToken.current() != nil)
+            {
+                FBSDKLoginManager().logOut()
+                BasicFunctions.showSigInVC()
+                return
+            }
             
             
             

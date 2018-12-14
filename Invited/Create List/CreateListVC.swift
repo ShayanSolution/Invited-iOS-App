@@ -6,7 +6,6 @@
 //  Copyright © 2018 ShayanSolutions. All rights reserved.
 
 //  version2.2
-//  test version2.2
 
 import UIKit
 import Contacts
