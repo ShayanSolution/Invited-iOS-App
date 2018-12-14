@@ -93,8 +93,10 @@
 		AFC9DD3220B580BB00042708 /* CreateEventView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFC9DD3120B580BB00042708 /* CreateEventView.xib */; };
 		AFCF818720F33B7B0041FD9D /* AcceptByMeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCF818620F33B7B0041FD9D /* AcceptByMeView.swift */; };
 		AFCF818920F33BAF0041FD9D /* AcceptByMeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */; };
+		AFD3375821C2A44E00699E04 /* PhoneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD3375721C2A44E00699E04 /* PhoneVC.swift */; };
 		AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028020B2CE470039E686 /* WelcomeVC.swift */; };
 		AFD9028420B2CFC40039E686 /* BasicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028320B2CFC40039E686 /* BasicFunctions.swift */; };
+		AFDC1ECC21C2AF50005B13DF /* PhoneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD3375721C2A44E00699E04 /* PhoneVC.swift */; };
 		AFE5DFC4207CD53900652A1B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE5DFC3207CD53900652A1B /* AppDelegate.swift */; };
 		AFE5DFC9207CD53900652A1B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFC7207CD53900652A1B /* Main.storyboard */; };
 		AFE5DFCB207CD53900652A1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFCA207CD53900652A1B /* Assets.xcassets */; };
@@ -165,6 +167,7 @@
 		AFC9DD3120B580BB00042708 /* CreateEventView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateEventView.xib; sourceTree = "<group>"; };
 		AFCF818620F33B7B0041FD9D /* AcceptByMeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptByMeView.swift; sourceTree = "<group>"; };
 		AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AcceptByMeView.xib; sourceTree = "<group>"; };
+		AFD3375721C2A44E00699E04 /* PhoneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVC.swift; sourceTree = "<group>"; };
 		AFD9028020B2CE470039E686 /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		AFD9028320B2CFC40039E686 /* BasicFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicFunctions.swift; sourceTree = "<group>"; };
 		AFE5DFC0207CD53900652A1B /* Invited.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Invited.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -319,6 +322,7 @@
 			isa = PBXGroup;
 			children = (
 				AF185C6621BAAFC00003E92B /* SignUpVC.swift */,
+				AFD3375721C2A44E00699E04 /* PhoneVC.swift */,
 				AFEF939120E639790033801A /* VerifyCodeVC.swift */,
 				AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */,
 			);
@@ -553,16 +557,34 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Invited/Pods-Invited-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookShare/FacebookShare.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/NKVPhonePicker/NKVPhonePicker.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookShare.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NKVPhonePicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -595,16 +617,34 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Invited Dev/Pods-Invited Dev-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookShare/FacebookShare.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/NKVPhonePicker/NKVPhonePicker.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookShare.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NKVPhonePicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -621,12 +661,14 @@
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
 				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -643,12 +685,14 @@
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
 				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -662,6 +706,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFDC1ECC21C2AF50005B13DF /* PhoneVC.swift in Sources */,
 				AF185C6821BAAFC00003E92B /* SignUpVC.swift in Sources */,
 				AF6E4FA52199912D00918723 /* RequestEventCell.swift in Sources */,
 				AF6E4FA62199912D00918723 /* RequestEventView.swift in Sources */,
@@ -722,6 +767,7 @@
 				AFC9DD2C20B54F6500042708 /* ContactsView.swift in Sources */,
 				AF4F635D20C1AFAC00083873 /* YourEventsView.swift in Sources */,
 				AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */,
+				AFD3375821C2A44E00699E04 /* PhoneVC.swift in Sources */,
 				AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */,
 				AFC9DD2420B5336200042708 /* UserProfile.swift in Sources */,
 				AF946FB820C7F3730073A91D /* EventDetailView.swift in Sources */,

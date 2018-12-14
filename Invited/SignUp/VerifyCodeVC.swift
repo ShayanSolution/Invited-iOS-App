@@ -33,7 +33,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     
     @IBOutlet var secondsRemainingLabel: UILabel!
     
-    var isForgetPassword : Bool!
+    var isForgotPassword : Bool!
     
     var userCredentials : UserProfileData!
     
@@ -173,7 +173,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             postParams["code"] = Int(self.textField1.text! + self.textField2.text! + self.textField3.text! + self.textField4.text!)
             
     
-            if self.isForgetPassword == true
+            if self.isForgotPassword == true
             {
                 ServerManager.verifyForgetPasswordCode(postParams) { (result) in
                     
@@ -203,7 +203,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     
             if  json["error"] == nil && status == "success"
             {
-                if self.isForgetPassword == true
+                if self.isForgotPassword == true
                 {
                     let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
                     let updatePasswordVC : UpdatePasswordVC = storyBoard.instantiateViewController(withIdentifier: "UpdatePasswordVC") as! UpdatePasswordVC
@@ -359,7 +359,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         var postParams = [String: Any]()
         postParams["phone"] = self.userCredentials.phone
         
-        if self.isForgetPassword == true
+        if self.isForgotPassword == true
         {
             ServerManager.sendSMS(withForgetPassword: postParams) { (result) in
                 
