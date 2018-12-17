@@ -988,7 +988,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             requestEventCell?.eventName.text = eventData.title
 //            requestEventCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
-            requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            if date != nil
+            {
+                requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            }
+            else
+            {
+                requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal("Dec 12, 2018 at 6:32 PM")
+            }
             requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
             requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
@@ -1083,7 +1090,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
             yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
             yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
-            yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
+            if date != nil
+            {
+                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            }
+            else
+            {
+                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal("Dec 12, 2018 at 6:32 PM")
+            }
             
             
             yourEventsCell?.expandButton.tag = indexPath.row
@@ -1153,7 +1168,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
 //            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
-            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
+            if date != nil
+            {
+                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            }
+            else
+            {
+                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal("Dec 12, 2018 at 6:32 PM")
+            }
             
             
             if eventData.eventType == "Sent by me."
