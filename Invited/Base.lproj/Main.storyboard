@@ -1808,14 +1808,17 @@
                                                                 </constraints>
                                                                 <state key="normal" image="fb"/>
                                                                 <connections>
-                                                                    <action selector="loginWithFacebook:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="lEk-QJ-b28"/>
+                                                                    <action selector="loginFacebook:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="JMo-5M-Qz9"/>
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hmT-DK-8fV">
                                                                 <rect key="frame" x="0.0" y="50" width="280" height="40"/>
-                                                                <state key="normal" title="Button" image="Twitter"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="qM7-Wb-hug"/>
+                                                                </constraints>
+                                                                <state key="normal" image="Twitter"/>
                                                                 <connections>
-                                                                    <action selector="loginWithTwitter:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="5u6-VP-UsI"/>
+                                                                    <action selector="loginTwitter:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="Mle-Fo-Zep"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -1826,7 +1829,7 @@
                                                             <constraint firstAttribute="trailing" secondItem="4UW-kV-Atw" secondAttribute="trailing" id="8da-di-150"/>
                                                             <constraint firstItem="hmT-DK-8fV" firstAttribute="top" secondItem="4UW-kV-Atw" secondAttribute="bottom" constant="10" id="DSC-Jp-YUk"/>
                                                             <constraint firstAttribute="height" constant="90" id="LuN-5N-NZ6"/>
-                                                            <constraint firstItem="hmT-DK-8fV" firstAttribute="trailing" secondItem="4UW-kV-Atw" secondAttribute="trailing" id="TTB-GP-j98"/>
+                                                            <constraint firstAttribute="trailing" secondItem="hmT-DK-8fV" secondAttribute="trailing" id="hNU-hP-m95"/>
                                                             <constraint firstItem="4UW-kV-Atw" firstAttribute="leading" secondItem="rOY-E2-3YL" secondAttribute="leading" id="hfL-oz-YPC"/>
                                                             <constraint firstItem="hmT-DK-8fV" firstAttribute="leading" secondItem="rOY-E2-3YL" secondAttribute="leading" id="xUc-34-Pag"/>
                                                         </constraints>
@@ -2255,14 +2258,14 @@
                                                         </constraints>
                                                         <state key="normal" image="fb"/>
                                                         <connections>
-                                                            <action selector="loginWithFacebook:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="zih-ls-bu3"/>
+                                                            <action selector="loginFacebook:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="Qm4-0j-Mxb"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XiJ-r4-8Tj">
                                                         <rect key="frame" x="0.0" y="50" width="280" height="40"/>
-                                                        <state key="normal" title="Button" image="Twitter"/>
+                                                        <state key="normal" image="Twitter"/>
                                                         <connections>
-                                                            <action selector="loginWithTwitter:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="htG-in-N7f"/>
+                                                            <action selector="loginTwitter:" destination="PUo-Pj-7lT" eventType="touchUpInside" id="fu0-o6-Jm6"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -2322,18 +2325,20 @@
                     <size key="freeformSize" width="320" height="800"/>
                     <connections>
                         <outlet property="confirmPasswordTextField" destination="sBB-ZZ-hVV" id="dm3-Sc-zse"/>
+
                         <outlet property="dobTextField" destination="UZ9-Ve-Kyy" id="Aeh-PD-xHY"/>
+
                         <outlet property="emailTextField" destination="hRq-CV-vmv" id="xkj-yG-Dvf"/>
-                        <outlet property="firstNameTextField" destination="lha-Fj-bu2" id="E3z-uQ-82a"/>
-                        <outlet property="genderTextField" destination="CvU-VF-Usj" id="eaO-EX-lqY"/>
-                        <outlet property="lastNameTextField" destination="IbM-tt-fRK" id="fEr-TD-ULS"/>
+                        <outlet property="firstNameTextField" destination="lha-Fj-bu2" id="lVG-mW-Zdx"/>
+                        <outlet property="genderTextField" destination="CvU-VF-Usj" id="lZa-vZ-Qfd"/>
+                        <outlet property="lastNameTextField" destination="IbM-tt-fRK" id="V0u-b0-jrg"/>
                         <outlet property="loginPasswordTextField" destination="XQs-ZW-lqU" id="d0W-yS-coN"/>
                         <outlet property="loginPhoneTextField" destination="bKV-Xx-u4g" id="KbR-8n-S8q"/>
                         <outlet property="mainScrollView" destination="mQd-tW-RVh" id="IHQ-FW-gjR"/>
                         <outlet property="passwordTextField" destination="oEV-tz-dOs" id="Lpi-Ny-2HE"/>
                         <outlet property="phoneTextField" destination="QWd-ew-8eE" id="utw-9K-k7z"/>
                         <outlet property="signInButton" destination="tRy-2W-GNF" id="OlU-f7-KfN"/>
-                        <outlet property="signInScrollView" destination="Gqw-oX-xgS" id="LfN-rt-CtN"/>
+                        <outlet property="signInScrollView" destination="Gqw-oX-xgS" id="GCh-3R-BW0"/>
                         <outlet property="signUpButton" destination="5kG-oC-hNT" id="IIy-U8-D1D"/>
                     </connections>
                 </viewController>

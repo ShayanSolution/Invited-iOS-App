@@ -8,13 +8,21 @@
 
 import UIKit
 import NKVPhonePicker
+import FacebookCore
+import FacebookLogin
+import FBSDKLoginKit
+import TwitterKit
 
 
 class UserProfileData: NSObject
 {
     var authID = Int()
     var authToken = String()
+    var firstName = String()
+    var lastName = String()
+    var gender = Int()
     var phone = String()
+    var dob = String()
     var email = String()
     var password = String()
     
@@ -27,22 +35,19 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     @IBOutlet var signUpButton: UIButton!
     @IBOutlet var signInButton: UIButton!
     
-    @IBOutlet var signUpView: UIView!
     
-    @IBOutlet var signInView: UIView!
+    
+    
+    @IBOutlet var signInScrollView: UIScrollView!
     
     @IBOutlet var mainScrollView: UIScrollView!
     
-    @IBOutlet var genderTextField: UITextField!
-    
-    @IBOutlet var dobTextField: UITextField!
-    
     @IBOutlet var firstNameTextField: UITextField!
-    
     @IBOutlet var lastNameTextField: UITextField!
-    
+    @IBOutlet var genderTextField: UITextField!
     @IBOutlet var phoneTextField: NKVPhonePickerTextField!
     
+    @IBOutlet var dobTextField: UITextField!
     @IBOutlet var emailTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var confirmPasswordTextField: UITextField!
@@ -70,6 +75,12 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     let genderList = ["Select Gender","Male","Female"]
     
+    let datePicker = UIDatePicker()
+    
+    let dropDownPickerView = UIPickerView()
+    
+    let userProfileData = UserProfileData()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -95,7 +106,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             self.signInButton.backgroundColor = UIColor.init(red: 255/255, green: 92/255, blue: 76/255, alpha: 1.0)
             BasicFunctions.setborderOfButton(button: self.signUpButton, color: UIColor.red)
             
-            self.signInView.isHidden = false
+            self.signInScrollView.isHidden = false
             self.mainScrollView.isHidden = true
         }
     }
@@ -106,7 +117,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        self.mainScrollView.contentSize.height = 700.0
+
+        self.mainScrollView.contentSize.height = 600.0
+        self.signInScrollView.contentSize.height = 250.0
         
 //        self.showPicker(textField: self.genderTextField)
         
@@ -123,7 +136,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         BasicFunctions.setborderOfButton(button: self.signInButton, color: UIColor.red)
         
         
-        self.signInView.isHidden = true
+        self.signInScrollView.isHidden = true
         self.mainScrollView.isHidden = false
         
     }
@@ -135,7 +148,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         self.signUpButton.setTitleColor(UIColor.black, for: UIControlState.normal)
         BasicFunctions.setborderOfButton(button: self.signUpButton, color: UIColor.red)
         
-        self.signInView.isHidden = false
+        self.signInScrollView.isHidden = false
         self.mainScrollView.isHidden = true
     }
     
@@ -170,11 +183,93 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     }
     
     
+    @IBAction func loginFacebook(_ sender: UIButton)
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        let loginManager = LoginManager()
+        loginManager.logIn(readPermissions: [.publicProfile], viewController: self) { (loginResult) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            switch loginResult {
+            case .failed(let error):
+                print(error)
+            case .cancelled:
+                print("User cancelled login.")
+            case .success(let grantedPermissions, let declinedPermissions, let accessToken):
+                print("Logged in!")
+                self.getFBUserData()
+            }
+        }
+    }
+    func getFBUserData()
+    {
+        if((FBSDKAccessToken.current()) != nil)
+        {
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, email"]).start(completionHandler: { (connection, result, error) -> Void in
+                if (error == nil){
+                    
+                    let userInfo = result as? [String:Any]
+                    self.userProfileData.firstName = userInfo?["first_name"] as? String ?? "H"
+                    self.userProfileData.lastName = userInfo?["last_name"] as? String ?? "K"
+                    self.userProfileData.gender = 1
+                    self.userProfileData.dob = "11/08/2018"
+                    self.userProfileData.email = ""
+                    self.userProfileData.password = "123456"
+                    
+                    self.goToPhoneVC()
+                }
+            })
+        }
+    }
+    
+    @IBAction func loginTwitter(_ sender: UIButton)
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
+            if (session != nil) {
+                //                print("username \(session?.userName)")
+                //                print("token \(session?.authToken)")
+                //                print("tokensecret \(session?.authTokenSecret)")
+                //                print("userid \(session?.userID)")
+                
+                BasicFunctions.stopActivityIndicator(vu: self.view)
+                
+                self.userProfileData.firstName = "H"
+                self.userProfileData.lastName = "K"
+                self.userProfileData.gender = 1
+                self.userProfileData.dob = "11/08/2018"
+                self.userProfileData.email = ""
+                self.userProfileData.password = "123456"
+                
+                self.goToPhoneVC()
+                
+                
+            } else {
+                BasicFunctions.stopActivityIndicator(vu: self.view)
+                BasicFunctions.showAlert(vc: self, msg: error?.localizedDescription)
+            }
+        })
+    }
+    
+    
+    func goToPhoneVC()
+    {
+        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+        
+        let phoneVC : PhoneVC = storyBoard.instantiateViewController(withIdentifier: "PhoneVC") as! PhoneVC
+        phoneVC.userCredentials = self.userProfileData
+        
+        
+        BasicFunctions.pushVCinNCwithObject(vc: phoneVC, popTop: false)
+    }
+    
+    
     
     
     @IBAction func register(_ sender: UIButton)
     {
-        
+
         if (self.firstNameTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put first name.")
@@ -199,15 +294,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
             return
+
         }
         else if (self.dobTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put bithday date.")
-            return
-        }
-        else if (self.emailTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please put email.")
             return
         }
         else if (self.passwordTextField.text?.isEmpty)!
@@ -233,11 +324,26 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
-        postParams["email"] = self.emailTextField.text
+        postParams["firstName"] = self.firstNameTextField.text
+        postParams["lastName"] = self.lastNameTextField.text
         postParams["phone"] = self.phoneTextField.text
+        postParams["dob"] = self.dobTextField.text
+        postParams["email"] = self.emailTextField.text
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
         
+        var gender : Int!
+        
+        if self.genderTextField.text == "Male"
+        {
+            gender = 1
+        }
+        else
+        {
+            gender = 2
+        }
+        
+        postParams["gender"] = gender
 
 
         ServerManager.validation(postParams) { (result) in
@@ -447,23 +553,38 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
             let verifyCodeVC : VerifyCodeVC = storyBoard.instantiateViewController(withIdentifier: "VerifyCodeVC") as! VerifyCodeVC
             
-            let userProfileData = UserProfileData()
             
             if isForget == true
             {
-                userProfileData.phone = self.loginPhoneTextField.text!
+                self.userProfileData.phone = self.loginPhoneTextField.text!
             
             }
             else
             {
-                userProfileData.phone = self.phoneTextField.text!
-                userProfileData.email = self.emailTextField.text!
-                userProfileData.password = self.passwordTextField.text!
+                self.userProfileData.firstName = self.firstNameTextField.text!
+                self.userProfileData.lastName = self.lastNameTextField.text!
+                self.userProfileData.phone = self.phoneTextField.text!
+                self.userProfileData.dob = self.dobTextField.text!
+                self.userProfileData.email = self.emailTextField.text!
+                self.userProfileData.password = self.passwordTextField.text!
+                
+                var gender : Int!
+                
+                if self.genderTextField.text == "Male"
+                {
+                    gender = 1
+                }
+                else
+                {
+                    gender = 2
+                }
+                
+                self.userProfileData.gender = gender
                 
             }
             
             verifyCodeVC.userCredentials = userProfileData
-            verifyCodeVC.isForgetPassword = isForget
+            verifyCodeVC.isForgotPassword = isForget
             
             
             
@@ -595,13 +716,14 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancelClick))
 
-        doneButton.tag = textField.tag
         toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
 
         self.dropDownPickerView.dataSource = self
         self.dropDownPickerView.delegate = self
+
         self.dropDownPickerView.tag = textField.tag
+
 
         textField.inputView = self.dropDownPickerView
         textField.inputAccessoryView = toolBar
