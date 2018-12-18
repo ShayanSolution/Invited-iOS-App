@@ -27,6 +27,7 @@
 		AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */; };
 		AF4F636D20C1BC4100083873 /* ReceivedEventsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */; };
 		AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5518D62107340300060CC0 /* UpdatePasswordVC.swift */; };
+		AF66686C21C8D60E00D74342 /* LeftMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD22FAF21C8D0C200BE6540 /* LeftMenuVC.swift */; };
 		AF6E4FA52199912D00918723 /* RequestEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F635820C186CC00083873 /* RequestEventCell.swift */; };
 		AF6E4FA62199912D00918723 /* RequestEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F635420C1775B00083873 /* RequestEventView.swift */; };
 		AF6E4FA72199912D00918723 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF88848720B3EDCF002F6D4F /* HomeVC.swift */; };
@@ -93,6 +94,7 @@
 		AFC9DD3220B580BB00042708 /* CreateEventView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFC9DD3120B580BB00042708 /* CreateEventView.xib */; };
 		AFCF818720F33B7B0041FD9D /* AcceptByMeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCF818620F33B7B0041FD9D /* AcceptByMeView.swift */; };
 		AFCF818920F33BAF0041FD9D /* AcceptByMeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */; };
+		AFD22FB021C8D0C200BE6540 /* LeftMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD22FAF21C8D0C200BE6540 /* LeftMenuVC.swift */; };
 		AFD3375821C2A44E00699E04 /* PhoneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD3375721C2A44E00699E04 /* PhoneVC.swift */; };
 		AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028020B2CE470039E686 /* WelcomeVC.swift */; };
 		AFD9028420B2CFC40039E686 /* BasicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028320B2CFC40039E686 /* BasicFunctions.swift */; };
@@ -167,6 +169,7 @@
 		AFC9DD3120B580BB00042708 /* CreateEventView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateEventView.xib; sourceTree = "<group>"; };
 		AFCF818620F33B7B0041FD9D /* AcceptByMeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptByMeView.swift; sourceTree = "<group>"; };
 		AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AcceptByMeView.xib; sourceTree = "<group>"; };
+		AFD22FAF21C8D0C200BE6540 /* LeftMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMenuVC.swift; sourceTree = "<group>"; };
 		AFD3375721C2A44E00699E04 /* PhoneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVC.swift; sourceTree = "<group>"; };
 		AFD9028020B2CE470039E686 /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		AFD9028320B2CFC40039E686 /* BasicFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicFunctions.swift; sourceTree = "<group>"; };
@@ -310,6 +313,14 @@
 			path = "Custom Views";
 			sourceTree = "<group>";
 		};
+		AFD22FAE21C8D06A00BE6540 /* Left Menu */ = {
+			isa = PBXGroup;
+			children = (
+				AFD22FAF21C8D0C200BE6540 /* LeftMenuVC.swift */,
+			);
+			path = "Left Menu";
+			sourceTree = "<group>";
+		};
 		AFD9028220B2CF830039E686 /* BasicFunctions */ = {
 			isa = PBXGroup;
 			children = (
@@ -361,6 +372,7 @@
 				AFC9DD1D20B52BAE00042708 /* ServerManager */,
 				AFC9DD2220B5331F00042708 /* Models */,
 				AFD9028520B2D36F0039E686 /* SignUp */,
+				AFD22FAE21C8D06A00BE6540 /* Left Menu */,
 				AF88848620B3ED30002F6D4F /* Home */,
 				AFBCABD920DA4E9C007ABE74 /* Map */,
 				AF88848920B42C9D002F6D4F /* Create List */,
@@ -566,6 +578,7 @@
 				"${BUILT_PRODUCTS_DIR}/FacebookShare/FacebookShare.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/NKVPhonePicker/NKVPhonePicker.framework",
+				"${BUILT_PRODUCTS_DIR}/PGSideMenu/PGSideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
@@ -582,6 +595,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookShare.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NKVPhonePicker.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PGSideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
@@ -626,6 +640,7 @@
 				"${BUILT_PRODUCTS_DIR}/FacebookShare/FacebookShare.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/NKVPhonePicker/NKVPhonePicker.framework",
+				"${BUILT_PRODUCTS_DIR}/PGSideMenu/PGSideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
@@ -642,6 +657,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookShare.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NKVPhonePicker.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PGSideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
@@ -706,6 +722,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF66686C21C8D60E00D74342 /* LeftMenuVC.swift in Sources */,
 				AFDC1ECC21C2AF50005B13DF /* PhoneVC.swift in Sources */,
 				AF185C6821BAAFC00003E92B /* SignUpVC.swift in Sources */,
 				AF6E4FA52199912D00918723 /* RequestEventCell.swift in Sources */,
@@ -768,6 +785,7 @@
 				AF4F635D20C1AFAC00083873 /* YourEventsView.swift in Sources */,
 				AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */,
 				AFD3375821C2A44E00699E04 /* PhoneVC.swift in Sources */,
+				AFD22FB021C8D0C200BE6540 /* LeftMenuVC.swift in Sources */,
 				AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */,
 				AFC9DD2420B5336200042708 /* UserProfile.swift in Sources */,
 				AF946FB820C7F3730073A91D /* EventDetailView.swift in Sources */,
