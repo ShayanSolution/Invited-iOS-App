@@ -33,6 +33,7 @@ class EventData: NSObject
     var whoWillPay = String()
     var userID = Int()
     var totalInvited = Int()
+    var isDeleted = Bool()
     var numberOfInvitationAccepted = Int()
     var eventAcceptedBy = Int()
     var createdBy = String()
@@ -1360,6 +1361,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         self.createEventView.locationTextField.isUserInteractionEnabled = true
@@ -1780,6 +1782,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.updateButton.tag = eventData.eventID
         self.listID = eventData.listID
         
+        for list in kUserList
+        {
+            if list.id == eventData.listID
+            {
+                self.updateSelectedList = list
+            }
+        }
+        
         
         self.showDatePicker(textField: self.editEventView.dateTextField)
         self.showTimePicker(textField: self.editEventView.timeTextField)
@@ -1825,8 +1835,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.timeTextField.text = formatter2.string(from: time!)
         self.editEventView.dateTextField.text = formatter1.string(from: date!)
         self.editEventView.locationTextField.text = eventData.eventAddress
-        self.editEventView.setNumberOfPeopleTextfield.text = String(eventData.maximumNumberOfPeople)
-        self.editEventView.setListTextField.text = eventData.listName
+        
+        if eventData.isDeleted
+        {
+            self.editEventView.setListTextField.text = ""
+            self.editEventView.setNumberOfPeopleTextfield.text = ""
+        }
+        else
+        {
+            self.editEventView.setListTextField.text = eventData.listName
+            self.editEventView.setNumberOfPeopleTextfield.text = String(eventData.maximumNumberOfPeople)
+        }
         
         self.selectedLat = eventData.lat
         self.selectedLong = eventData.long
@@ -2477,6 +2496,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func createButtonTapped()
     {
+        let x = self.createEventView.setNumberOfPeopleTextfield.text
+        
         if (self.createEventView.titleTextView.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
@@ -2507,7 +2528,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select number of people.")
             return
-            
+        }
+        else if x == "0" || (x! as NSString).integerValue  >  (self.selectedList?.contactList.count)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid number of people.")
+            return
         }
         
         
@@ -2612,6 +2637,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func updateButtonTapped(sender : UIButton)
     {
+        let x = self.editEventView.setNumberOfPeopleTextfield.text
+        
         if (self.editEventView.titleTextView.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
@@ -2632,7 +2659,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please select location.")
             return
         }
-        else if self.updateSelectedList == nil && self.listID == nil
+        else if self.updateSelectedList == nil || self.listID == nil
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select List.")
             return
@@ -2643,6 +2670,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please select number of people.")
             return
             
+        }
+        else if x == "0" || (x! as NSString).integerValue  >  (self.updateSelectedList?.contactList.count)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid number of people.")
+            return
         }
         
         
@@ -2809,6 +2841,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             eventData.long = event["longitude"] as! String
             eventData.paymentMethod = event["payment_method"] as! Int
             eventData.maximumNumberOfPeople = event["max_invited"] as! Int
+            
+            if event["deleted_at"] as? String != nil
+            {
+                eventData.isDeleted = true
+            }
+            else
+            {
+                eventData.isDeleted = false
+            }
             
             
 //            let userList = event["list_users"] as? [[String : Any]]
@@ -3196,7 +3237,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if textField.tag == 2
         {
             let row = kUserList.index(where: {$0.id == self.listID})
-            self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+            
+            if row != nil
+            {
+                self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+            }
         }
         
         
