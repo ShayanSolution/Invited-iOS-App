@@ -20,6 +20,31 @@ PODS:
   - AFNetworking/UIKit (2.5.4):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
+  - FacebookCore (0.5.0):
+    - Bolts (~> 1.9)
+    - FBSDKCoreKit (~> 4.37)
+  - FacebookLogin (0.5.0):
+    - Bolts (~> 1.9)
+    - FacebookCore (~> 0.5)
+    - FBSDKCoreKit (~> 4.37)
+    - FBSDKLoginKit (~> 4.37)
+  - FacebookShare (0.5.0):
+    - Bolts (~> 1.9)
+    - FacebookCore (~> 0.5)
+    - FBSDKCoreKit (~> 4.37)
+    - FBSDKShareKit (~> 4.37)
+  - FBSDKCoreKit (4.38.1):
+    - Bolts (~> 1.9)
+  - FBSDKLoginKit (4.38.1):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.38.1):
+    - FBSDKCoreKit
   - GoogleMaps (2.6.0):
     - GoogleMaps/Maps (= 2.6.0)
   - GoogleMaps/Base (2.6.0)
@@ -32,26 +57,45 @@ PODS:
     - GoogleMaps/Base (= 2.6.0)
   - MBProgressHUD (1.1.0)
   - NKVPhonePicker (2.0.1)
+  - PGSideMenu (1.2.0)
   - SwiftyJSON (4.0.0)
+  - TwitterCore (3.2.0)
+  - TwitterKit (3.4.2):
+    - TwitterCore (>= 3.2.0)
 
 DEPENDENCIES:
   - AFNetworking (= 2.5.4)
+  - FacebookCore
+  - FacebookLogin
+  - FacebookShare
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
   - MBProgressHUD (~> 1.1.0)
   - NKVPhonePicker
+  - PGSideMenu
   - SwiftyJSON
+  - TwitterKit
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
+  FacebookCore: 74288d0add931d361b1596beae787ab72c438249
+  FacebookLogin: ebcf34714a1cb9f0759d9f071cfb01ed500996cf
+  FacebookShare: 963b4bb1124a64a395b1e428163d70b5774116e8
+  FBSDKCoreKit: 8d47857400e2f5bdea697a80daff882e91c84ef6
+  FBSDKLoginKit: 4621c690d9dd8628031a4791497062183ea34b0d
+  FBSDKShareKit: 6ffe22f0a0618eb7424d4104ab0ef3ce9643d42a
   GoogleMaps: 42f91c68b7fa2f84d5c86597b18ceb99f5414c7f
   GooglePlacePicker: e4488625effb006f59de49e14b7a603e463e4261
   GooglePlaces: f6ddf33b75cef69e888907d9947c57198ed845f3
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   NKVPhonePicker: 736e64165a7d873380608178d7ccd988b88268ed
+  PGSideMenu: 7e034935823aeb6940adb5c2774894bc18e57850
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
+  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: ac93962ecba4165928f8bc54769e0421fc870159
+PODFILE CHECKSUM: 82d4f2267e1366675d7b4f9ddafa8f5c0e71c86b
 
 COCOAPODS: 1.4.0
