@@ -19,6 +19,7 @@ pod 'TwitterKit’
 pod 'FacebookCore'
 pod 'FacebookLogin'
 pod 'FacebookShare'
+pod 'PGSideMenu'
 
 end
 

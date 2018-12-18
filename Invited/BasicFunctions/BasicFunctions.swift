@@ -11,6 +11,7 @@ import MBProgressHUD
 import GoogleMaps
 import Contacts
 import SQLite3
+import PGSideMenu
 
 extension NSObject {
 var className: String {
@@ -124,13 +125,37 @@ class BasicFunctions: NSObject {
         let userDefault:UserDefaults = UserDefaults.standard
         return userDefault.bool(forKey: key)
     }
+    class func openLeftMenu(vc : UIViewController!)
+    {
+        if let sideMenuController = vc.navigationController!.parent as? PGSideMenu {
+            sideMenuController.toggleLeftMenu()
+        }
+    }
+    class func hideLeftMenu(vc : UIViewController!)
+    {
+        if let sideMenuController = vc.parent as? PGSideMenu {
+            sideMenuController.toggleLeftMenu()
+        }
+    }
     
     class func setHomeVC()
     {
+//        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//        let homeNC = (storyBoard.instantiateViewController(withIdentifier: "HomeNC") as? UINavigationController)
+//
+//        (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = homeNC
+        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let homeNC = (storyBoard.instantiateViewController(withIdentifier: "HomeNC") as? UINavigationController)
+        let leftMenuVC = storyBoard.instantiateViewController(withIdentifier: "LeftMenuVC") as? LeftMenuVC
+        let sideMenuController = PGSideMenu(animationType: .slideIn)
+        let contentController = homeNC
+        let leftMenuController = leftMenuVC
+        sideMenuController.addContentController(contentController!)
+        sideMenuController.addLeftMenuController(leftMenuController!)
+        sideMenuController.enableMenuPanGesture = false
+        (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = sideMenuController
         
-        (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = homeNC
     }
     class func showSettingsAlert(vc:UIViewController!, msg:String!)
     {
@@ -160,7 +185,7 @@ class BasicFunctions: NSObject {
         var navController = appDelegate?.window?.rootViewController as? UINavigationController
         if navController == nil
         {
-            navController = appDelegate?.window?.rootViewController as? UINavigationController
+            navController = (appDelegate?.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController
         }
         let topVC : UIViewController?  = navController?.visibleViewController
         if (topVC?.className == vcName) {
@@ -193,7 +218,7 @@ class BasicFunctions: NSObject {
         var navController = appDelegate?.window?.rootViewController as? UINavigationController
         if navController == nil
         {
-            navController = appDelegate?.window?.rootViewController as? UINavigationController
+            navController = (appDelegate?.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController
         }
         let topVC : UIViewController?  = navController?.visibleViewController
         if (topVC?.className == vc?.className) {
