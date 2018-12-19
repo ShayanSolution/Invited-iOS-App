@@ -1,4 +1,3 @@
-//
 //  ContactCell.swift
 //  Invited
 //

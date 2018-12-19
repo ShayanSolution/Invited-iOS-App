@@ -3047,10 +3047,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     eventData.eventID = event["id"] as! Int
                     eventData.title = event["title"] as! String
 //                    eventData.listName = event["list_name"] as! String
-                    eventData.eventAddress = event["event_address"] as! String
-                    eventData.totalInvited = event["requests_count"] as! Int
-                    eventData.numberOfInvitationAccepted = event["accepted_requests_count"] as! Int
-                    eventData.eventTime = event["event_time"] as! String
+                    eventData.eventAddress = event["event_address"] as? String ?? ""
+                    eventData.totalInvited = event["list_count"] as? Int ?? 0
+                    eventData.numberOfInvitationAccepted = event["accepted_requests_count"] as? Int ?? 0
+                    eventData.eventTime = event["event_time"] as? String ?? ""
                     eventData.eventCreatedTime = event["updated_at"] as! String
                     eventData.eventType = event["event_type"] as! String
 //                    eventData.eventAddress = event["address"] as! String

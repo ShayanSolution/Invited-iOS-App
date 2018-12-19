@@ -22,8 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        GMSPlacesClient.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
-        GMSServices.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
+        GMSPlacesClient.provideAPIKey("")
+        GMSServices.provideAPIKey("")
+        
+//        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
+//        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
         
         
         if BasicFunctions.getIfUserLoggedIn()
