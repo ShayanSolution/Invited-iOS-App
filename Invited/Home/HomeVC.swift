@@ -403,7 +403,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         let status = notification.userInfo!["status"] as! String
-        if status == "request" ||  status == "cancelled" || status == "closed"
+        if status == "request" || status == "closed"
         {
 
 
@@ -438,6 +438,25 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
             self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
             self.fetchReceivedRequestsFromServer()
+            
+            
+        }
+        else if status == "cancelled"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
             
             
         }
