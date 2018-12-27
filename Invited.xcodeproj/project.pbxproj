@@ -94,6 +94,8 @@
 		AFC9DD3220B580BB00042708 /* CreateEventView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFC9DD3120B580BB00042708 /* CreateEventView.xib */; };
 		AFCF818720F33B7B0041FD9D /* AcceptByMeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCF818620F33B7B0041FD9D /* AcceptByMeView.swift */; };
 		AFCF818920F33BAF0041FD9D /* AcceptByMeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */; };
+		AFCF897821D391FC00082881 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCF897721D391FC00082881 /* ProfileVC.swift */; };
+		AFCF897921D391FC00082881 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCF897721D391FC00082881 /* ProfileVC.swift */; };
 		AFD22FB021C8D0C200BE6540 /* LeftMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD22FAF21C8D0C200BE6540 /* LeftMenuVC.swift */; };
 		AFD3375821C2A44E00699E04 /* PhoneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD3375721C2A44E00699E04 /* PhoneVC.swift */; };
 		AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD9028020B2CE470039E686 /* WelcomeVC.swift */; };
@@ -169,6 +171,7 @@
 		AFC9DD3120B580BB00042708 /* CreateEventView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateEventView.xib; sourceTree = "<group>"; };
 		AFCF818620F33B7B0041FD9D /* AcceptByMeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptByMeView.swift; sourceTree = "<group>"; };
 		AFCF818820F33BAF0041FD9D /* AcceptByMeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AcceptByMeView.xib; sourceTree = "<group>"; };
+		AFCF897721D391FC00082881 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		AFD22FAF21C8D0C200BE6540 /* LeftMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMenuVC.swift; sourceTree = "<group>"; };
 		AFD3375721C2A44E00699E04 /* PhoneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVC.swift; sourceTree = "<group>"; };
 		AFD9028020B2CE470039E686 /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
@@ -313,6 +316,14 @@
 			path = "Custom Views";
 			sourceTree = "<group>";
 		};
+		AFCF897621D391B200082881 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				AFCF897721D391FC00082881 /* ProfileVC.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		AFD22FAE21C8D06A00BE6540 /* Left Menu */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +385,7 @@
 				AFD9028520B2D36F0039E686 /* SignUp */,
 				AFD22FAE21C8D06A00BE6540 /* Left Menu */,
 				AF88848620B3ED30002F6D4F /* Home */,
+				AFCF897621D391B200082881 /* Profile */,
 				AFBCABD920DA4E9C007ABE74 /* Map */,
 				AF88848920B42C9D002F6D4F /* Create List */,
 				AFE5DFC7207CD53900652A1B /* Main.storyboard */,
@@ -747,6 +759,7 @@
 				AF6E4FB82199912D00918723 /* CreateEventView.swift in Sources */,
 				AF6E4FB92199912D00918723 /* AcceptByMeView.swift in Sources */,
 				AF6E4FBA2199912D00918723 /* ContactsView.swift in Sources */,
+				AFCF897921D391FC00082881 /* ProfileVC.swift in Sources */,
 				AF6E4FBB2199912D00918723 /* YourEventsView.swift in Sources */,
 				AF6E4FBC2199912D00918723 /* UpdatePasswordVC.swift in Sources */,
 				AF6E4FBD2199912D00918723 /* ReceivedEventsCell.swift in Sources */,
@@ -784,6 +797,7 @@
 				AFC9DD2C20B54F6500042708 /* ContactsView.swift in Sources */,
 				AF4F635D20C1AFAC00083873 /* YourEventsView.swift in Sources */,
 				AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */,
+				AFCF897821D391FC00082881 /* ProfileVC.swift in Sources */,
 				AFD3375821C2A44E00699E04 /* PhoneVC.swift in Sources */,
 				AFD22FB021C8D0C200BE6540 /* LeftMenuVC.swift in Sources */,
 				AF4F636C20C1BC4100083873 /* ReceivedEventsCell.swift in Sources */,

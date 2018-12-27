@@ -659,5 +659,61 @@
     
     
 }
++ (void) getUserProfile:(NSDictionary *) inputData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService] POST:@"get-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": @"Something went wrong"});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
++ (void) updateUserProfile:(NSDictionary *) inputData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService] POST:@"update-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": @"Something went wrong"});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
 
 @end
