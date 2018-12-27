@@ -12,6 +12,7 @@ import CoreLocation
 import Contacts
 import TwitterKit
 import FBSDKLoginKit
+import MessageUI
 
 class UserList: NSObject
 {
@@ -95,8 +96,9 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate {
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate{
     
+
     
     var locationManager = CLLocationManager()
     
@@ -236,7 +238,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     override func viewWillAppear(_ animated: Bool)
     {
-        
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
@@ -657,7 +659,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.createEventView.setNumberOfPeopleTextfield.tag = 1
         self.createEventView.setListTextField.tag = 1
         
-        self.createEventView.titleTextView.delegate = self
+//        self.createEventView.titleTextView.delegate = self
         self.createEventView.setNumberOfPeopleTextfield.delegate = self
         self.createEventView.timeTextField.delegate = self
         self.createEventView.dateTextField.delegate = self
@@ -1138,6 +1140,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            let time = formatter2.date(from: eventData.eventTime)
             
 //            formatter2.dateFormat = "hh:mm a"
+            
+//            yourEventsCell?.title.delegate = self
 
             yourEventsCell?.title.text = eventData.title
             yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
@@ -1809,7 +1813,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.selectedList = nil
         
         
-        self.editEventView.titleTextView.delegate = self
+//        self.editEventView.titleTextView.delegate = self
         self.editEventView.setNumberOfPeopleTextfield.delegate = self
         self.editEventView.timeTextField.delegate = self
         self.editEventView.dateTextField.delegate = self
@@ -2553,8 +2557,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
-            let json = result as! [String : Any]
-            let message = json["message"] as? String
+            let json = result as? [String : Any]
+            let message = json?["message"] as? String
             
             
             if message != nil && message == "Unauthorized"
@@ -2566,7 +2570,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             
-            if json["error"] == nil
+            if json?["error"] == nil
             {
                 
                 self.createEventView.titleTextView.text = "Invite Title"
@@ -2595,6 +2599,29 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 BasicFunctions.showAlert(vc: self, msg: message)
                 }
                 
+                
+//                let alert = UIAlertController.init(title: "Invited", message: "Event Created successfully.Are you sure you want to send invitation to those members in the selected list whose don't install the app?", preferredStyle: UIAlertControllerStyle.alert)
+//                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
+//                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+//
+//
+//                if (MFMessageComposeViewController.canSendText())
+//                {
+//                    let controller = MFMessageComposeViewController()
+//                    controller.body = "Testing SMS Feature with shayan solutions."
+//                    let phoneNumberString = "03338717137,03366006260"
+//                    let recipientsArray = phoneNumberString.components(separatedBy: ",")
+//                    controller.recipients = recipientsArray
+//                    controller.messageComposeDelegate = self
+//                    self.present(controller, animated: true, completion: nil)
+//                }
+//                else
+//                {
+//                    print("Error")
+//                }
+//                }))
+//
+//                self.present(alert, animated: true, completion: nil)
             }
             else
             {
@@ -2608,6 +2635,30 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
     }
+//    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+//        self.dismiss(animated: true, completion: nil)
+//    }
+//    func addPhoneNumber(phNo : String) {
+//        if #available(iOS 9.0, *) {
+//            let store = CNContactStore()
+//            let contact = CNMutableContact()
+//            let homePhone = CNLabeledValue(label: CNLabelHome, value: CNPhoneNumber(stringValue :phNo ))
+//            contact.phoneNumbers = [homePhone]
+//            let controller = CNContactViewController(forUnknownContact : contact)
+//            controller.contactStore = store
+//            controller.delegate = self
+//            self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            self.navigationController!.pushViewController(controller, animated: true)
+//        }
+//    }
+//    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?) {
+//        print("dismiss contact")
+//
+//        self.navigationController?.popViewController(animated: true)
+//    }
+//    func contactViewController(_ viewController: CNContactViewController, shouldPerformDefaultActionFor property: CNContactProperty) -> Bool {
+//        return true
+//    }
     @objc func updateButtonTapped(sender : UIButton)
     {
         if (self.editEventView.titleTextView.text?.isEmpty)! || self.editEventView.titleTextView.text == "Invite Title"
@@ -2897,17 +2948,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             for event in eventsArray!
             {
                 let eventData = EventData()
-                eventData.eventID = event["event_id"] as! Int
-                eventData.title = event["event_title"] as! String
-                eventData.totalInvited = event["total_invited"] as! Int
+
+                eventData.eventID = event["event_id"] as? Int ?? 0
+                eventData.title = event["event_title"] as? String ?? ""
+                eventData.totalInvited = event["total_invited"] as? Int ?? 0
                 eventData.createdBy = event["create_by"] as? String ?? ""
-                eventData.eventAddress = event["address"] as! String
-                eventData.confirmed = event["confirmed"] as! Int
-                eventData.eventTime = event["event_time"] as! String
-                eventData.phone = event["phone"] as! String
-                eventData.paymentMethod = event["payment_method"] as! Int
-                eventData.listName = event["list_name"] as! String
-                eventData.eventCreatedTime = event["updated_at"] as! String
+                eventData.eventAddress = event["address"] as? String ?? ""
+                eventData.confirmed = event["confirmed"] as? Int ?? 0
+                eventData.eventTime = event["event_time"] as? String ?? ""
+                eventData.phone = event["phone"] as? String ?? ""
+                eventData.paymentMethod = event["payment_method"] as? Int ?? 0
+                eventData.listName = event["list_name"] as? String ?? ""
+                eventData.eventCreatedTime = event["updated_at"] as? String ?? ""
                 
                 
                 if event["latitude"] as? String != nil
@@ -3191,6 +3243,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
     }
+    
+//    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+//
+//        print("Link Selected!")
+//
+//        return true
+//    }
     
     
     

@@ -18,6 +18,8 @@ class LeftMenuVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    
+    
     @IBAction func homeButtonTapped(_ sender: UIButton)
     {
         BasicFunctions.hideLeftMenu(vc: self)
@@ -25,7 +27,8 @@ class LeftMenuVC: UIViewController {
     }
     @IBAction func profileButtonTapped(_ sender: UIButton)
     {
-//        BasicFunctions.hideLeftMenu(vc: self)
+        BasicFunctions.hideLeftMenu(vc: self)
+        BasicFunctions.pushVCinNCwithName("ProfileVC", popTop: false)
         
     }
     @IBAction func logoutButtonTapped(_ sender: UIButton)
