@@ -2935,7 +2935,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.eventID = event["event_id"] as! Int
                 eventData.title = event["event_title"] as! String
                 eventData.totalInvited = event["total_invited"] as! Int
-                eventData.createdBy = event["create_by"] as! String
+                eventData.createdBy = event["create_by"] as? String ?? ""
                 eventData.eventAddress = event["address"] as! String
                 eventData.confirmed = event["confirmed"] as! Int
                 eventData.eventTime = event["event_time"] as! String

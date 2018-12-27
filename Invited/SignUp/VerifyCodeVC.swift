@@ -241,11 +241,11 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
-        postParams["firstName"] = self.userCredentials.firstName
-        postParams["lastName"] = self.userCredentials.lastName
-        postParams["gender"] = self.userCredentials.gender
+//        postParams["firstName"] = self.userCredentials.firstName
+//        postParams["lastName"] = self.userCredentials.lastName
+//        postParams["gender"] = self.userCredentials.gender
         postParams["phone"] = self.userCredentials.phone
-        postParams["dob"] = self.userCredentials.dob
+//        postParams["dob"] = self.userCredentials.dob
         postParams["email"] = self.userCredentials.email
         postParams["password"] = self.userCredentials.password
         postParams["password_confirmation"] = self.userCredentials.password
