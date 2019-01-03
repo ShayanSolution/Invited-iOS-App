@@ -13,6 +13,9 @@ class ContactsView: UIView {
     
     @IBOutlet var contactsTableView: UITableView!
     
+    @IBOutlet var dobView: UIView!
+    
+    
     
     override init (frame : CGRect) {
         super.init(frame : frame)
