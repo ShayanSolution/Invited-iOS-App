@@ -24,7 +24,12 @@ class YourEventsCell: UITableViewCell {
     
     @IBOutlet var editButton: UIButton!
     
-    @IBOutlet var deleteButton: UIButton!
+    @IBOutlet var editView: UIView!
+    
+    
+    @IBOutlet var cancelView: UIView!
+    
+    
     
     @IBOutlet var expandButton: UIButton!
     
@@ -32,6 +37,16 @@ class YourEventsCell: UITableViewCell {
     
     @IBOutlet var startNavigationButton: UIButton!
     
+    @IBOutlet var dateHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationHeightConstraint:
+    NSLayoutConstraint!
+    
+    @IBOutlet var startNavigationHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var editHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var cancelHeightConstraint: NSLayoutConstraint!
     
     
     
@@ -43,7 +58,6 @@ class YourEventsCell: UITableViewCell {
         
         BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.editButton, radius: 5.0)
-        BasicFunctions.setRoundCornerOfButton(button: self.deleteButton, radius: 5.0)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

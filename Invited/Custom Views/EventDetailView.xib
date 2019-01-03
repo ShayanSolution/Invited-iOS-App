@@ -237,17 +237,17 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
+                                <constraint firstAttribute="bottom" secondItem="fUZ-DQ-Wi6" secondAttribute="bottom" id="0PA-O5-Z6T"/>
                                 <constraint firstItem="fUZ-DQ-Wi6" firstAttribute="top" secondItem="RmZ-dz-50P" secondAttribute="bottom" id="5ds-hD-gu3"/>
                                 <constraint firstItem="OR7-cP-Jh9" firstAttribute="leading" secondItem="gf6-hF-p1H" secondAttribute="leading" id="C99-Mp-3aS"/>
-                                <constraint firstItem="RmZ-dz-50P" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="FUQ-S2-mIp"/>
-                                <constraint firstAttribute="bottom" secondItem="fUZ-DQ-Wi6" secondAttribute="bottom" id="Gow-NA-iHi"/>
+                                <constraint firstItem="OR7-cP-Jh9" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="ETx-BM-fu8"/>
                                 <constraint firstItem="cFI-Qf-rCI" firstAttribute="leading" secondItem="gf6-hF-p1H" secondAttribute="leading" id="Gtx-wZ-ulE"/>
-                                <constraint firstItem="VAu-2L-iOO" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="L9O-0L-H2Q"/>
-                                <constraint firstItem="OR7-cP-Jh9" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="LCt-O0-HBC"/>
                                 <constraint firstAttribute="trailing" secondItem="RmZ-dz-50P" secondAttribute="trailing" id="Lej-hZ-I2w"/>
                                 <constraint firstAttribute="trailing" secondItem="OR7-cP-Jh9" secondAttribute="trailing" id="NjY-Vt-6hq"/>
                                 <constraint firstItem="OR7-cP-Jh9" firstAttribute="top" secondItem="VAu-2L-iOO" secondAttribute="bottom" id="SxN-BU-zYU"/>
                                 <constraint firstAttribute="trailing" secondItem="VAu-2L-iOO" secondAttribute="trailing" id="Uyz-xX-GND"/>
+                                <constraint firstItem="uz0-ef-eZt" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="VvG-xy-WAf"/>
+                                <constraint firstItem="VAu-2L-iOO" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="Xvm-Sk-LLt"/>
                                 <constraint firstAttribute="trailing" secondItem="uz0-ef-eZt" secondAttribute="trailing" id="ZKU-E8-Bed"/>
                                 <constraint firstAttribute="trailing" secondItem="cFI-Qf-rCI" secondAttribute="trailing" id="a6L-lC-DVH"/>
                                 <constraint firstItem="fUZ-DQ-Wi6" firstAttribute="leading" secondItem="gf6-hF-p1H" secondAttribute="leading" id="cOa-xc-ExV"/>
@@ -256,10 +256,10 @@
                                 <constraint firstItem="VAu-2L-iOO" firstAttribute="top" secondItem="cFI-Qf-rCI" secondAttribute="bottom" id="i3z-qg-0eM"/>
                                 <constraint firstItem="RmZ-dz-50P" firstAttribute="leading" secondItem="gf6-hF-p1H" secondAttribute="leading" id="k6f-LT-cMk"/>
                                 <constraint firstItem="VAu-2L-iOO" firstAttribute="leading" secondItem="gf6-hF-p1H" secondAttribute="leading" id="l8a-iy-ApF"/>
+                                <constraint firstItem="fUZ-DQ-Wi6" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="mHi-WR-3oa"/>
                                 <constraint firstAttribute="trailing" secondItem="fUZ-DQ-Wi6" secondAttribute="trailing" id="nKC-CF-TAE"/>
-                                <constraint firstItem="uz0-ef-eZt" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="u1H-9i-fD2"/>
                                 <constraint firstItem="cFI-Qf-rCI" firstAttribute="top" secondItem="gf6-hF-p1H" secondAttribute="top" id="vds-Ci-51r"/>
-                                <constraint firstItem="fUZ-DQ-Wi6" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="w73-uf-5Ps"/>
+                                <constraint firstItem="RmZ-dz-50P" firstAttribute="height" secondItem="cFI-Qf-rCI" secondAttribute="height" id="x30-4c-aH7"/>
                                 <constraint firstItem="uz0-ef-eZt" firstAttribute="leading" secondItem="gf6-hF-p1H" secondAttribute="leading" id="zQB-sj-QAz"/>
                             </constraints>
                         </view>
@@ -281,11 +281,11 @@
                         <constraint firstItem="wE0-Dz-IKY" firstAttribute="leading" secondItem="6fG-ja-7p8" secondAttribute="leading" constant="65" id="OaO-iw-T65"/>
                         <constraint firstAttribute="trailing" secondItem="wE0-Dz-IKY" secondAttribute="trailing" constant="65" id="WcO-8m-Quh"/>
                         <constraint firstItem="gf6-hF-p1H" firstAttribute="top" secondItem="6fG-ja-7p8" secondAttribute="top" constant="30" id="cJT-je-LgM"/>
+                        <constraint firstAttribute="bottom" secondItem="wE0-Dz-IKY" secondAttribute="bottom" constant="10" id="e8f-xk-03A"/>
                         <constraint firstAttribute="trailing" secondItem="gf6-hF-p1H" secondAttribute="trailing" constant="65" id="hD0-wH-f8q"/>
                         <constraint firstItem="gf6-hF-p1H" firstAttribute="leading" secondItem="6fG-ja-7p8" secondAttribute="leading" constant="65" id="qsl-nq-B0E"/>
                         <constraint firstItem="wE0-Dz-IKY" firstAttribute="top" secondItem="gf6-hF-p1H" secondAttribute="bottom" constant="10" id="u14-ZU-OfL"/>
                         <constraint firstItem="5ol-83-7cu" firstAttribute="top" secondItem="6fG-ja-7p8" secondAttribute="top" id="uDx-95-RFY"/>
-                        <constraint firstAttribute="bottom" secondItem="wE0-Dz-IKY" secondAttribute="bottom" constant="10" id="yMv-as-bhp"/>
                     </constraints>
                 </view>
             </subviews>
@@ -301,8 +301,11 @@
                 <outlet property="backButton" destination="5ol-83-7cu" id="mfT-jv-E4Y"/>
                 <outlet property="createdDate" destination="0fU-jL-Ibd" id="rKQ-bm-a8A"/>
                 <outlet property="date" destination="wZS-1c-h7a" id="0iW-px-l5E"/>
+                <outlet property="dateView" destination="RmZ-dz-50P" id="wBF-U8-BKE"/>
+                <outlet property="dateViewHeightConstraint" destination="x30-4c-aH7" id="VfQ-ub-DQG"/>
                 <outlet property="listName" destination="8fv-aV-81U" id="Rfh-OT-pYc"/>
                 <outlet property="location" destination="fVn-Kk-B3y" id="1Q0-3a-cPQ"/>
+                <outlet property="locationViewHeightConstraint" destination="mHi-WR-3oa" id="3bI-qH-kB0"/>
                 <outlet property="startNavigationButton" destination="wE0-Dz-IKY" id="JmI-aN-Cng"/>
                 <outlet property="titleTextView" destination="GCu-nR-Gwf" id="iuD-h9-9uD"/>
                 <outlet property="totalInvited" destination="mtv-6Z-QhU" id="gWN-nG-qi9"/>

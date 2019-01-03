@@ -27,6 +27,11 @@ class EventDetailView: UIView {
     
     @IBOutlet var startNavigationButton: UIButton!
     
+    @IBOutlet var dateViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var dateView: UIView!
     
     
     override init (frame : CGRect) {

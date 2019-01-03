@@ -37,8 +37,10 @@ class EventData: NSObject
     var userID = Int()
     var totalInvited = Int()
     var numberOfInvitationAccepted = Int()
+    var numberOfInvitationRejected = Int()
     var eventAcceptedBy = Int()
     var createdBy = String()
+    var isCreatedByAdmin = String()
     var confirmed = Int()
     var phone = String()
     var eventType = String()
@@ -180,11 +182,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.startUpdatingLocation()
+//        self.locationManager.startUpdatingLocation()
         
         self.detailView  = DetailView.instanceFromNib() as? DetailView
         self.eventDetailView  = EventDetailView.instanceFromNib() as? EventDetailView
         self.acceptByMeView  = AcceptByMeView.instanceFromNib() as? AcceptByMeView
+        self.sentByMeView  = SentByMeView.instanceFromNib() as? SentByMeView
         
         
         
@@ -230,8 +233,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         super.viewDidLayoutSubviews()
         
         self.detailView.titleTextView.setContentOffset(.zero, animated: false)
-        self.eventDetailView.titleTextView.setContentOffset(.zero, animated: true)
-        self.acceptByMeView.titleTextView.setContentOffset(.zero, animated: true)
+        self.eventDetailView.titleTextView.setContentOffset(.zero, animated: false)
+        self.acceptByMeView.titleTextView.setContentOffset(.zero, animated: false)
+        self.sentByMeView.eventName.setContentOffset(.zero, animated: false)
+        
         
     }
     
@@ -495,7 +500,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             // 3
             self.currentLocationAddress = lines.joined(separator: "\n")
-            self.createEventView.locationTextField.text = self.currentLocationAddress
+            if self.editEventView != nil && self.isUpdated
+            {
+                self.editEventView.locationTextField.text = self.currentLocationAddress
+            }
+            else
+            {
+                self.createEventView.locationTextField.text = self.currentLocationAddress
+            }
             
             
         }
@@ -692,10 +704,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.createEventView.createButton.addTarget(self, action: #selector(self.createButtonTapped), for: UIControlEvents.touchUpInside)
         
-//        self.createEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-//        self.createEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-//        self.createEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-//        self.createEventView.updateButton.addTarget(self, action: #selector(self.updateButtonTapped), for: UIControlEvents.touchUpInside)
+        self.createEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.createEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.createEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.createEventView.updateButton.addTarget(self, action: #selector(self.updateButtonTapped), for: UIControlEvents.touchUpInside)
         
         self.mainScrollView.addSubview(self.createEventView)
         
@@ -761,48 +773,90 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-//    @objc func switchStateChanged(sender : UISwitch)
-//    {
-//        if sender.tag == 1
-//        {
-//            if sender.isOn
-//            {
-//                self.createEventView.locationTextField.isUserInteractionEnabled = true
-//                self.locationManager.startUpdatingLocation()
-//            }
-//            else
-//            {
-//                self.createEventView.locationTextField.isUserInteractionEnabled = false
-//                self.createEventView.locationTextField.text = ""
-//            }
-//        }
-//        else if sender.tag == 2
-//        {
-//            self.createEventView.dateTextField.text = ""
-//
-//            if sender.isOn
-//            {
-//                self.createEventView.dateTextField.isUserInteractionEnabled = true
-//            }
-//            else
-//            {
-//                self.createEventView.dateTextField.isUserInteractionEnabled = false
-//            }
-//        }
-//        else if sender.tag == 3
-//        {
-//            self.createEventView.timeTextField.text = ""
-//
-//            if sender.isOn
-//            {
-//                self.createEventView.timeTextField.isUserInteractionEnabled = true
-//            }
-//            else
-//            {
-//                self.createEventView.timeTextField.isUserInteractionEnabled = false
-//            }
-//        }
-//    }
+    @objc func switchStateChanged(sender : UISwitch)
+    {
+        if sender.tag == 1
+        {
+            if sender.isOn
+            {
+                self.createEventView.locationTextField.isUserInteractionEnabled = true
+                self.locationManager.startUpdatingLocation()
+            }
+            else
+            {
+                self.createEventView.locationTextField.isUserInteractionEnabled = false
+                self.createEventView.locationTextField.text = ""
+                self.currentLocationCoordinate = nil
+                self.selectedLat = nil
+                self.selectedLong = nil
+            }
+        }
+        else if sender.tag == 2
+        {
+            self.createEventView.dateTextField.text = ""
+
+            if sender.isOn
+            {
+                self.createEventView.dateTextField.isUserInteractionEnabled = true
+            }
+            else
+            {
+                self.createEventView.dateTextField.isUserInteractionEnabled = false
+            }
+        }
+        else if sender.tag == 3
+        {
+            self.createEventView.timeTextField.text = ""
+
+            if sender.isOn
+            {
+                self.createEventView.timeTextField.isUserInteractionEnabled = true
+            }
+            else
+            {
+                self.createEventView.timeTextField.isUserInteractionEnabled = false
+            }
+        }
+        else if sender.tag == 4
+        {
+            if sender.isOn
+            {
+                self.editEventView.locationTextField.isUserInteractionEnabled = true
+                self.locationManager.startUpdatingLocation()
+            }
+            else
+            {
+                self.editEventView.locationTextField.isUserInteractionEnabled = false
+                self.editEventView.locationTextField.text = ""
+            }
+        }
+        else if sender.tag == 5
+        {
+            self.editEventView.dateTextField.text = ""
+            
+            if sender.isOn
+            {
+                self.editEventView.dateTextField.isUserInteractionEnabled = true
+            }
+            else
+            {
+                self.editEventView.dateTextField.isUserInteractionEnabled = false
+            }
+        }
+        else if sender.tag == 6
+        {
+            self.editEventView.timeTextField.text = ""
+            
+            if sender.isOn
+            {
+                self.editEventView.timeTextField.isUserInteractionEnabled = true
+            }
+            else
+            {
+                self.editEventView.timeTextField.isUserInteractionEnabled = false
+            }
+        }
+    }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -1012,16 +1066,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let eventData = self.requestEventList[indexPath.row]
             
-            let dateformatter = DateFormatter()
-            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            
-            
-            let date = dateformatter.date(from: eventData.eventTime)
-            
-//            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
-            
-            dateformatter.dateStyle = .medium
-            dateformatter.timeStyle = .short
+//            let dateformatter = DateFormatter()
+//            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//
+//            let date = dateformatter.date(from: eventData.eventTime)
+//
+////            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+//
+//            dateformatter.dateStyle = .medium
+//            dateformatter.timeStyle = .short
             
 //            dateformatter.dateStyle = .long
 //            dateformatter.dateFormat = "dd/MM/yyyy"
@@ -1051,11 +1105,35 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             requestEventCell?.eventName.text = eventData.title
 //            requestEventCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
-            requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
+            
             requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
             requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 //            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+            
+            if eventData.eventTime.isEmpty
+            {
+                requestEventCell?.eventDateHeightConstraint.constant = 0
+            }
+            else
+            {
+                requestEventCell?.eventDateHeightConstraint.constant = 40
+                requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
+            }
+            
+            if eventData.eventAddress.isEmpty
+            {
+                requestEventCell?.locationHeightConstraint.constant = 0
+                requestEventCell?.startNavigationViewHeightConstraint.constant = 0
+            
+            }
+            else
+            {
+                requestEventCell?.locationHeightConstraint.constant = 62
+                requestEventCell?.startNavigationViewHeightConstraint.constant = 30.5
+                requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            }
             
             requestEventCell?.expandButton.tag = indexPath.row
             requestEventCell?.startNavigationButton.tag = indexPath.row
@@ -1070,6 +1148,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if eventData.confirmed == 0
             {
+                
                 requestEventCell?.startNavigationButton.isHidden = true
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
@@ -1079,7 +1158,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else if eventData.confirmed == 1
             {
-                requestEventCell?.startNavigationButton.isHidden = false
+                if !eventData.eventAddress.isEmpty
+                {
+                    requestEventCell?.startNavigationButton.isHidden = false
+                }
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
                 requestEventCell?.acceptORRejectLabel.text = "Accepted"
@@ -1088,7 +1170,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else if eventData.confirmed == 2
             {
-                requestEventCell?.startNavigationButton.isHidden = false
+                if !eventData.eventAddress.isEmpty
+                {
+                    requestEventCell?.startNavigationButton.isHidden = false
+                }
                 requestEventCell?.acceptORRejectView.isHidden = false
                 requestEventCell?.acceptORRejectLabel.isHidden = true
 //                requestEventCell?.acceptORRejectLabel.text = "Accepted"
@@ -1121,15 +1206,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let eventData = self.userEventList[indexPath.row]
             
-            let dateformatter = DateFormatter()
-            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//            let dateformatter = DateFormatter()
+//            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//            let date = dateformatter.date(from: eventData.eventTime)
+//
+//            let date2 = dateformatter.date(from: eventData.eventCreatedTime)
+//
+//            dateformatter.dateStyle = .medium
+//            dateformatter.timeStyle = .short
             
-            let date = dateformatter.date(from: eventData.eventTime)
             
-            let date2 = dateformatter.date(from: eventData.eventCreatedTime)
-            
-            dateformatter.dateStyle = .medium
-            dateformatter.timeStyle = .short
             
 //            dateformatter.dateFormat = "dd/MM/yyyy"
 //
@@ -1145,20 +1232,59 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             yourEventsCell?.title.text = eventData.title
             yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent: ").normal(dateformatter.string(from: date2!))
-            yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent: ").normal(eventData.eventCreatedTime)
             yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
-            yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(dateformatter.string(from: date!))
+            
+            
+            if eventData.eventTime.isEmpty
+            {
+                yourEventsCell?.dateHeightConstraint.constant = 0
+            }
+            else
+            {
+                yourEventsCell?.dateHeightConstraint.constant = 20
+                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+            }
+            
+            if eventData.eventAddress.isEmpty
+            {
+                yourEventsCell?.locationHeightConstraint.constant = 0
+                yourEventsCell?.startNavigationButton.isHidden = true
+            }
+            else
+            {
+                yourEventsCell?.locationHeightConstraint.constant = 20
+                yourEventsCell?.startNavigationButton.isHidden = false
+                yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            }
+            
+            if eventData.eventType == "canceled"
+            {
+                yourEventsCell?.startNavigationButton.isHidden = true
+                yourEventsCell?.editView.isHidden = true
+                yourEventsCell?.cancelView.isHidden = false
+            }
+            else
+            {
+//                yourEventsCell?.startNavigationButton.isHidden = false
+                yourEventsCell?.editView.isHidden = false
+                yourEventsCell?.cancelView.isHidden = true
+            }
+            
+            if eventData.isCreatedByAdmin == "1"
+            {
+                yourEventsCell?.editView.isHidden = true
+            }
+            
+            self.updateViewConstraints()
             
             
             yourEventsCell?.expandButton.tag = indexPath.row
             yourEventsCell?.editButton.tag = indexPath.row
-            yourEventsCell?.deleteButton.tag = indexPath.row
             yourEventsCell?.startNavigationButton.tag = indexPath.row
             
             yourEventsCell?.expandButton.addTarget(self, action: #selector(self.showEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
             yourEventsCell?.editButton.addTarget(self, action: #selector(self.showEditView(sender:)), for: UIControlEvents.touchUpInside)
-            yourEventsCell?.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             
             
             yourEventsCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromUserEvents(sender:)), for: UIControlEvents.touchUpInside)
@@ -1178,15 +1304,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let eventData = self.receivedRequestEventList[indexPath.row]
             
-            let dateformatter = DateFormatter()
-            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            
-            let date = dateformatter.date(from: eventData.eventTime)
-            
-//            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
-            
-            dateformatter.dateStyle = .medium
-            dateformatter.timeStyle = .short
+//            let dateformatter = DateFormatter()
+//            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//            let date = dateformatter.date(from: eventData.eventTime)
+//
+////            let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+//
+//            dateformatter.dateStyle = .medium
+//            dateformatter.timeStyle = .short
             
 //            dateformatter.dateFormat = "dd/MM/yyyy"
 //
@@ -1218,7 +1344,31 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
 //            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
-            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
+//            receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            
+            if eventData.eventTime.isEmpty
+            {
+                receivedEventsCell?.dateHeightConstraint.constant = 0
+//                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal("Not Specified")
+            }
+            else
+            {
+                receivedEventsCell?.dateHeightConstraint.constant = 60
+                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+            }
+            
+            if eventData.eventAddress.isEmpty
+            {
+                receivedEventsCell?.locationHeightConstraint.constant = 0
+                receivedEventsCell?.startNavigationButton.isHidden = true
+            }
+            else
+            {
+                receivedEventsCell?.locationHeightConstraint.constant = 62.5
+                receivedEventsCell?.startNavigationButton.isHidden = false
+                receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            }
             
             
             if eventData.eventType == "Sent by me."
@@ -1474,19 +1624,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
         let eventData = self.receivedRequestEventList[sender.tag]
         
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        let date = dateformatter.date(from: eventData.eventTime)
-        
-        let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
-        
-        dateformatter.dateStyle = .medium
-        dateformatter.timeStyle = .short
+//        let dateformatter = DateFormatter()
+//        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//        let date = dateformatter.date(from: eventData.eventTime)
+//
+//        let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+//
+//        dateformatter.dateStyle = .medium
+//        dateformatter.timeStyle = .short
         
         if eventData.eventType == "Sent by me."
         {
-            self.sentByMeView  = SentByMeView.instanceFromNib() as? SentByMeView
+            
             
             self.sentByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
             
@@ -1496,8 +1646,35 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.acceptedUserTableView.delegate = self
             self.sentByMeView.acceptedUserTableView.dataSource = self
             
-            self.sentByMeView.createEventDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
-            self.sentByMeView.numberOfInvitationAccepted.attributedText = NSMutableAttributedString().bold("Number of invitation Accepted : ").normal(String(eventData.numberOfInvitationAccepted))
+            self.sentByMeView.eventName.text = eventData.title
+            self.sentByMeView.listName.attributedText = NSMutableAttributedString().bold("List Name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+            self.sentByMeView.yesCount.attributedText = NSMutableAttributedString().bold("YES Count: ").normal(String(eventData.numberOfInvitationAccepted))
+            self.sentByMeView.noCount.attributedText = NSMutableAttributedString().bold("NO Count: ").normal(String(eventData.numberOfInvitationRejected))
+            self.sentByMeView.createEventDate.attributedText = NSMutableAttributedString().bold("Message Sent On: ").normal(eventData.eventCreatedTime)
+            
+            var date : String!
+            if eventData.eventTime.isEmpty
+            {
+                date = "Not Specified"
+            }
+            else
+            {
+                date = eventData.eventTime
+            }
+            
+            self.sentByMeView.date.attributedText = NSMutableAttributedString().bold("Message Date and Time: ").normal(date)
+            
+            var address : String!
+            if eventData.eventAddress == ""
+            {
+                address = "Not Specified"
+            }
+            else
+            {
+                address = eventData.eventAddress
+            }
+            self.sentByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(address)
+            
             
             self.sentByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
             
@@ -1520,10 +1697,28 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
             self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Event name: ").normal(eventData.title)
-            self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
-            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
-            self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
+            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(eventData.eventCreatedTime)
+            
+            if eventData.eventTime.isEmpty
+            {
+                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal("Not Specified")
+            }
+            else
+            {
+                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
+            }
+            
+            if eventData.eventAddress.isEmpty
+            {
+                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal("Not Specified")
+                self.acceptByMeView.startNavigationButton.isHidden = true
+            }
+            else
+            {
+                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+                self.acceptByMeView.startNavigationButton.isHidden = false
+            }
 
             var invitedBy : String!
 
@@ -1639,15 +1834,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let eventData = self.requestEventList[sender.tag]
         
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        let date = dateformatter.date(from: eventData.eventTime)
-        
-        let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
-        
-        dateformatter.dateStyle = .medium
-        dateformatter.timeStyle = .short
+//        let dateformatter = DateFormatter()
+//        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//        let date = dateformatter.date(from: eventData.eventTime)
+//
+//        let createdDate = dateformatter.date(from: eventData.eventCreatedTime)
+//
+//        dateformatter.dateStyle = .medium
+//        dateformatter.timeStyle = .short
         
 //        dateformatter.dateFormat = "dd/MM/yyyy"
 //
@@ -1675,10 +1870,33 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
-        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(dateformatter.string(from: date!))
-        self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(dateformatter.string(from: createdDate!))
-        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+//        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
+        self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(eventData.eventCreatedTime)
+//        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 //        self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+        
+        if eventData.eventTime.isEmpty
+        {
+            //            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
+            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal("Not Specified")
+            
+        }
+        else
+        {
+            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+        }
+        
+        if eventData.eventAddress.isEmpty
+        {
+            //            self.eventDetailView.locationViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
+            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal("Not Specified")
+            self.detailView.startNavigationButton.isHidden = true
+        }
+        else
+        {
+            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            self.detailView.startNavigationButton.isHidden = false
+        }
         
         self.detailView.acceptButton.tag = sender.tag
         self.detailView.rejectButton.tag = sender.tag
@@ -1754,17 +1972,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         BasicFunctions.setRoundCornerOfButton(button: self.eventDetailView.startNavigationButton, radius: 5.0)
         
+        
         let eventData = self.userEventList[sender.tag]
         
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        let dateformatter = DateFormatter()
+//        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+//        let date = dateformatter.date(from: eventData.eventTime)
+//
+//        let date2 = dateformatter.date(from: eventData.eventCreatedTime)
+//
+//        dateformatter.dateStyle = .medium
+//        dateformatter.timeStyle = .short
         
-        let date = dateformatter.date(from: eventData.eventTime)
-        
-        let date2 = dateformatter.date(from: eventData.eventCreatedTime)
-        
-        dateformatter.dateStyle = .medium
-        dateformatter.timeStyle = .short
         
 //        dateformatter.dateFormat = "dd/MM/yyyy"
 //
@@ -1779,10 +1999,39 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.eventDetailView.titleTextView.text = eventData.title
         self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: date2!))
-        self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(eventData.eventCreatedTime)
         self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
-        self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(dateformatter.string(from: date!))
+        
+        
+        if eventData.eventTime.isEmpty
+        {
+//            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
+            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal("Not Specified")
+            
+        }
+        else
+        {
+            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+        }
+        
+        if eventData.eventAddress.isEmpty
+        {
+//            self.eventDetailView.locationViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
+            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal("Not Specified")
+            self.eventDetailView.startNavigationButton.isHidden = true
+        }
+        else
+        {
+            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            self.eventDetailView.startNavigationButton.isHidden = false
+        }
+        
+        if eventData.eventType == "canceled"
+        {
+            self.eventDetailView.startNavigationButton.isHidden = true
+        }
+        
+        
         
 
         self.eventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -1821,12 +2070,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.setListTextField.delegate = self
         
         self.editEventView.titleTextView.textColor = UIColor.black
+        self.editEventView.locationTextField.text = ""
         
         self.isUpdated = true
         
         let eventData = self.userEventList[sender.tag]
         
+        self.editEventView.locationSwitch.tag = 4
+        self.editEventView.dateSwitch.tag = 5
+        self.editEventView.timeSwitch.tag = 6
+        
+//        self.editEventView.locationSwitch.isOn = true
+//        self.editEventView.dateSwitch.isOn = true
+//        self.editEventView.timeSwitch.isOn = true
+        
         self.editEventView.updateButton.tag = eventData.eventID
+        self.editEventView.cancelButton.tag = eventData.eventID
+        self.editEventView.deleteButton.tag = eventData.eventID
         self.listID = eventData.listID
         
         
@@ -1839,41 +2099,55 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.addDoneButtonOnTextViewKeyboard(textView: self.editEventView.titleTextView)
         
-//        self.editEventView.iWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-//        self.editEventView.youWillPayButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-//        self.editEventView.allButton.addTarget(self, action: #selector(self.radioButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        self.editEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.editEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.editEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
         
         self.editEventView.backButton.isHidden = false
         self.editEventView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
         
         self.editEventView.updateButton.addTarget(self, action: #selector(self.updateButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         
+        self.editEventView.cancelButton.addTarget(self, action: #selector(self.cancelButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        
+        self.editEventView.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        
         self.editEventView.updateButtonView.isHidden = false
         self.editEventView.createButtonView.isHidden = true
         
         
-        let formatter1 = DateFormatter()
-        formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        let dateString = eventData.eventTime
-        let date = formatter1.date(from: eventData.eventTime)
         
-        formatter1.dateStyle = .medium
-        formatter1.timeStyle = .short
-        
-        formatter1.dateFormat = "dd/MM/yyyy"
-
-        let formatter2 = DateFormatter()
-        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-
-//        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-        let time = formatter2.date(from: eventData.eventTime)
-
-        formatter2.dateFormat = "hh:mm a"
-        
+//        let formatter1 = DateFormatter()
+//        formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
+////        let dateString = eventData.eventTime
+//        let date = formatter1.date(from: eventData.eventTime)
+//
+//        formatter1.dateStyle = .medium
+//        formatter1.timeStyle = .short
+//
+//        formatter1.dateFormat = "dd/MM/yyyy"
+//
+//        let formatter2 = DateFormatter()
+//        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//
+////        let timeString = eventData.eventTime.components(separatedBy: " ")[1
+//        let time = formatter2.date(from: eventData.eventTime)
+//
+//        formatter2.dateFormat = "hh:mm a"
+//
         self.editEventView.titleTextView.text = eventData.title
-        self.editEventView.timeTextField.text = formatter2.string(from: time!)
-        self.editEventView.dateTextField.text = formatter1.string(from: date!)
-        self.editEventView.locationTextField.text = eventData.eventAddress
+//        if time != nil
+//        {
+//            self.editEventView.timeTextField.text = formatter2.string(from: time!)
+//        }
+//
+//        if date != nil
+//        {
+//            self.editEventView.dateTextField.text = formatter1.string(from: date!)
+//        }
+        
+        
+//        self.editEventView.locationTextField.text = eventData.eventAddress
         self.editEventView.setNumberOfPeopleTextfield.text = String(eventData.maximumNumberOfPeople)
         self.editEventView.setListTextField.text = eventData.listName
         
@@ -1994,14 +2268,63 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
     }
+    @objc func cancelButtonTapped(sender:UIButton)
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        //        let eventdata = self.userEventList[sender.tag]
+        
+        var postParams = [String : Any]()
+        postParams["event_id"] = sender.tag
+        
+        ServerManager.cancelEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as! [String : Any]
+            let status = json["status"] as? String
+            let message = json["message"] as? String
+            
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            
+            if json["error"] == nil && status == "success"
+            {
+                
+                
+                BasicFunctions.showAlert(vc: self, msg: message)
+                
+                self.backButtonTapped()
+                
+                self.fetchUserEventsFromServer()
+            }
+            else
+            {
+                
+                BasicFunctions.showAlert(vc: self, msg: message)
+                
+                
+            }
+            
+            
+            
+        }
+    }
     @objc func deleteButtonTapped(sender:UIButton)
     {
         BasicFunctions.showActivityIndicator(vu: self.view)
         
-        let eventdata = self.userEventList[sender.tag]
+//        let eventdata = self.userEventList[sender.tag]
         
         var postParams = [String : Any]()
-        postParams["event_id"] = eventdata.eventID
+        postParams["event_id"] = sender.tag
         
         ServerManager.deleteEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
@@ -2027,7 +2350,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 BasicFunctions.showAlert(vc: self, msg: message)
                     
-                    
+                self.backButtonTapped()
                 
                 self.fetchUserEventsFromServer()
             }
@@ -2468,17 +2791,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
         }
-        else if (self.createEventView.timeTextField.text?.isEmpty)!
+        else if (self.createEventView.timeTextField.text?.isEmpty)! && self.createEventView.timeSwitch.isOn
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select time.")
             return
         }
-        else if (self.createEventView.dateTextField.text?.isEmpty)!
+        else if (self.createEventView.dateTextField.text?.isEmpty)! && self.createEventView.dateSwitch.isOn
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select date.")
             return
         }
-        else if (self.createEventView.locationTextField.text?.isEmpty)!
+        else if (self.createEventView.locationTextField.text?.isEmpty)! && self.createEventView.locationSwitch.isOn
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select location.")
             return
@@ -2507,32 +2830,81 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let date = timeFormatter.date(from: self.createEventView.timeTextField.text!)
         
         timeFormatter.dateFormat = "HH:mm"
-        let date24 = timeFormatter.string(from: date!)
+        
+        
+        var time24 : String!
+        if date != nil
+        {
+            time24 = timeFormatter.string(from: date!)
+        }
         
         var postParams = [String:Any]()
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
         postParams["title"] = self.createEventView.titleTextView.text
-        postParams["event_time"] = dateFormatter.string(from: self.datePicker.date) + " " + date24 + ":00"
         postParams["payment_method"] = 1
         postParams["event_address"] = self.createEventView.locationTextField.text
         postParams["list_id"] = self.selectedList?.id
         postParams["max_invited"] = self.createEventView.setNumberOfPeopleTextfield.text
         
-        let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
-        let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
-        
-        if selectedLat == nil && selectedLong == nil
+        var dateString : String!
+        var timeString : String!
+        if self.createEventView.dateSwitch.isOn && self.createEventView.timeSwitch.isOn
         {
-            postParams["latitude"] = self.currentLocationCoordinate?.latitude
-            postParams["longitude"] = self.currentLocationCoordinate?.longitude
+            dateString = dateFormatter.string(from: self.datePicker.date)
+            timeString = time24 + ":00"
+        }
+        else if self.createEventView.dateSwitch.isOn && !self.createEventView.timeSwitch.isOn
+        {
+            dateString = dateFormatter.string(from: self.datePicker.date)
+            timeString = ""
+        }
+        else if !self.createEventView.dateSwitch.isOn && self.createEventView.timeSwitch.isOn
+        {
+            dateString = ""
+            timeString = time24 + ":00"
         }
         else
         {
-            postParams["latitude"] = selectedLat
-            postParams["longitude"] = selectedLong
-            
-            
+            dateString = ""
+            timeString = ""
         }
+        
+        postParams["event_date"] = dateString
+        postParams["event_only_time"] = timeString
+        
+        
+        
+        let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
+        let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
+        
+        var lat: Any!
+        var long: Any!
+        
+        if self.createEventView.locationSwitch.isOn
+        {
+            if self.selectedLat == nil && self.selectedLong == nil
+            {
+                
+            if self.currentLocationCoordinate != nil
+            {
+                lat = self.currentLocationCoordinate?.latitude
+                long = self.currentLocationCoordinate?.longitude
+            }
+            }
+            else
+            {
+                lat = selectedLat
+                long = selectedLong
+            }
+        }
+        else
+        {
+            lat = ""
+            long = ""
+        }
+        
+        postParams["latitude"] = lat
+        postParams["longitude"] = long
         
         
         
@@ -2650,32 +3022,32 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
         }
-        else if (self.editEventView.timeTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select time.")
-            return
-        }
-        else if (self.editEventView.dateTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select date.")
-            return
-        }
-        else if (self.editEventView.locationTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select location.")
-            return
-        }
         else if self.updateSelectedList == nil && self.listID == nil
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select List.")
             return
-
+            
         }
         else if (self.editEventView.setNumberOfPeopleTextfield.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select number of people.")
             return
             
+        }
+        else if (self.editEventView.locationTextField.text?.isEmpty)! && self.editEventView.locationSwitch.isOn
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select location.")
+            return
+        }
+        else if (self.editEventView.dateTextField.text?.isEmpty)! && self.editEventView.dateSwitch.isOn
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select date.")
+            return
+        }
+        else if (self.editEventView.timeTextField.text?.isEmpty)! && self.editEventView.timeSwitch.isOn
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select time.")
+            return
         }
         
         
@@ -2689,16 +3061,46 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let date = timeFormatter.date(from: self.editEventView.timeTextField.text!)
         
         timeFormatter.dateFormat = "HH:mm"
-        let date24 = timeFormatter.string(from: date!)
+        
+        var time24 : String!
+        if date != nil
+        {
+            time24 = timeFormatter.string(from: date!)
+        }
         
         var postParams = [String:Any]()
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
         postParams["title"] = self.editEventView.titleTextView.text
-        postParams["event_time"] = dateFormatter.string(from: self.datePicker.date) + " " + date24 + ":00"
         postParams["payment_method"] = 1
         postParams["event_address"] = self.editEventView.locationTextField.text
         postParams["event_id"] = sender.tag
         postParams["max_invited"] = self.editEventView.setNumberOfPeopleTextfield.text
+        
+        var dateString : String!
+        var timeString : String!
+        if self.editEventView.dateSwitch.isOn && self.editEventView.timeSwitch.isOn
+        {
+            dateString = dateFormatter.string(from: self.datePicker.date)
+            timeString = time24 + ":00"
+        }
+        else if self.editEventView.dateSwitch.isOn && !self.editEventView.timeSwitch.isOn
+        {
+            dateString = dateFormatter.string(from: self.datePicker.date)
+            timeString = ""
+        }
+        else if !self.editEventView.dateSwitch.isOn && self.editEventView.timeSwitch.isOn
+        {
+            dateString = ""
+            timeString = time24 + ":00"
+        }
+        else
+        {
+            dateString = ""
+            timeString = ""
+        }
+        
+        postParams["event_date"] = dateString
+        postParams["event_only_time"] = timeString
         
         if self.updateSelectedList != nil
         {
@@ -2713,17 +3115,34 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
         let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
         
-        if selectedLat == nil && selectedLong == nil
+        var lat: Any!
+        var long: Any!
+        
+        if self.editEventView.locationSwitch.isOn
         {
-            postParams["latitude"] = self.selectedLat
-            postParams["longitude"] = self.selectedLong
+            if selectedLat == nil && selectedLong == nil
+            {
+                
+                if self.currentLocationCoordinate != nil
+                {
+                    lat = self.currentLocationCoordinate?.latitude
+                    long = self.currentLocationCoordinate?.longitude
+                }
+            }
+            else
+            {
+                lat = selectedLat
+                long = selectedLong
+            }
         }
         else
         {
-            postParams["latitude"] = selectedLat
-            postParams["longitude"] = selectedLong
-            
+            lat = ""
+            long = ""
         }
+        
+        postParams["latitude"] = lat
+        postParams["longitude"] = long
         
         ServerManager.updateEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
@@ -2833,15 +3252,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             eventData.userID = event["user_id"] as! Int
             eventData.title = event["title"] as! String
             eventData.eventAddress = event["event_address"] as! String
-            eventData.eventTime = event["event_time"] as! String
-            eventData.eventCreatedTime = event["event_update_time"] as! String
+            eventData.eventTime = BasicFunctions.checkFormat(dateTimeString: event["event_time"] as? String ?? "")
+            eventData.eventCreatedTime = BasicFunctions.checkFormat(dateTimeString: event["event_update_time"] as? String ?? "")
             eventData.listName = event["list_name"] as! String
             eventData.listID = event["list_id"] as! Int
             eventData.totalInvited = event["list_count"] as! Int
             eventData.lat = event["latitude"] as! String
             eventData.long = event["longitude"] as! String
-            eventData.paymentMethod = event["payment_method"] as! Int
-            eventData.maximumNumberOfPeople = event["max_invited"] as! Int
+            eventData.paymentMethod = event["payment_method"] as? Int ?? 0
+            eventData.maximumNumberOfPeople = event["max_invited"] as? Int ?? 0
+            eventData.isCreatedByAdmin = event["is_created_by_admin"] as? String ?? "0"
+                
+            if event["canceled_at"] as? String != nil
+            {
+                eventData.eventType = "canceled"
+            }
+                
             
             
 //            let userList = event["list_users"] as? [[String : Any]]
@@ -2933,11 +3359,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.createdBy = event["create_by"] as? String ?? ""
                 eventData.eventAddress = event["address"] as? String ?? ""
                 eventData.confirmed = event["confirmed"] as? Int ?? 0
-                eventData.eventTime = event["event_time"] as? String ?? ""
+                eventData.eventTime = BasicFunctions.checkFormat(dateTimeString: event["event_time"] as? String ?? "")
                 eventData.phone = event["phone"] as? String ?? ""
                 eventData.paymentMethod = event["payment_method"] as? Int ?? 0
                 eventData.listName = event["list_name"] as? String ?? ""
-                eventData.eventCreatedTime = event["updated_at"] as? String ?? ""
+                eventData.eventCreatedTime = BasicFunctions.checkFormat(dateTimeString: event["updated_at"] as? String ?? "")
                 
                 
                 if event["latitude"] as? String != nil
@@ -3041,9 +3467,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     eventData.listID = event["list_id"] as! Int
                     eventData.eventAddress = event["event_address"] as! String
 //                    eventData.totalInvited = event["requests_count"] as! Int
-                    eventData.numberOfInvitationAccepted = event["accepted_requests_count"] as! Int
-                    eventData.eventTime = event["event_time"] as! String
-                    eventData.eventCreatedTime = event["updated_at"] as! String
+                    eventData.numberOfInvitationAccepted = event["accepted_requests_count"] as? Int ?? 0
+                    eventData.numberOfInvitationRejected = event["reject_requests_count"] as? Int ?? 0
+                    eventData.eventTime = BasicFunctions.checkFormat(dateTimeString: event["event_time"] as? String ?? "")
+                    eventData.eventCreatedTime = BasicFunctions.checkFormat(dateTimeString: event["updated_at"] as? String ?? "")
                     eventData.eventType = event["event_type"] as! String
 //                    eventData.eventAddress = event["address"] as! String
 //                    eventData.confirmed = event["confirmed"] as! Int
@@ -3083,8 +3510,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     let userData = UserData()
                     userData.id = owner["id"] as! Int
-                    userData.email = owner["email"] as! String
-                    userData.phone = owner["phone"] as! String
+                    userData.email = owner["email"] as? String ?? ""
+                    userData.phone = owner["phone"] as? String ?? ""
                     
                     eventData.invitedBy = userData
                     
@@ -3104,8 +3531,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                         
                         let userData = UserData()
                         userData.id = invitee["id"] as! Int
-                        userData.email = invitee["email"] as! String
-                        userData.phone = invitee["phone"] as! String
+                        userData.email = invitee["email"] as? String ?? ""
+                        userData.phone = invitee["phone"] as? String ?? ""
                         
                         eventAcceptedData.invitee = userData
                         }

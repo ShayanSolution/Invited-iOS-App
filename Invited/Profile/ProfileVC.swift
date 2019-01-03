@@ -23,7 +23,10 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     @IBOutlet var dorTextField: UITextField!
     
     
-    let datePicker = UIDatePicker()
+    let dobPicker = UIDatePicker()
+    let dorPicker = UIDatePicker()
+    
+    let dateFormatter = DateFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,8 +77,28 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
             self.firstNameTextField.text = userData?["firstName"] as? String ?? ""
             self.lastNameTextField.text = userData?["lastName"] as? String ?? ""
             self.emailTextField.text = userData?["email"] as? String ?? ""
-            self.dobTextField.text = userData?["dob"] as? String ?? ""
-            self.dorTextField.text = userData?["dateofrelation"] as? String ?? ""
+            let dobString = userData?["dob"] as? String ?? ""
+            let dorString = userData?["dateofrelation"] as? String ?? ""
+            
+            self.dateFormatter.dateFormat = "yyyy-MM-dd"
+            let dobDate = self.dateFormatter.date(from: dobString)
+            let dorDate = self.dateFormatter.date(from: dorString)
+            
+            self.dateFormatter.dateFormat = "dd/MM/yyyy"
+            
+            if dobDate != nil
+            {
+                self.dobTextField.text = self.dateFormatter.string(from: dobDate!)
+            }
+            
+            if dorDate != nil
+            {
+                self.dorTextField.text = self.dateFormatter.string(from: dorDate!)
+            }
+            
+            
+            
+            
             
         }
         else if message != nil
@@ -109,13 +132,15 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         
+        self.dateFormatter.dateFormat = "yyyy-MM-dd"
+        
         var postParams = [String : Any]()
         postParams["user_id"] = BasicFunctions.getPreferencesForInt(kUserID)
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["email"] = self.emailTextField.text
-        postParams["dob"] = self.dobTextField.text
-        postParams["dateofrelation"] = self.dorTextField.text
+        postParams["dob"] = self.dateFormatter.string(from: self.dobPicker.date)
+        postParams["dateofrelation"] = self.dateFormatter.string(from: self.dorPicker.date)
         
         ServerManager.updateUserProfile(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
@@ -163,8 +188,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     
     func showDatePicker(textField:UITextField!){
         
-        //Formate Date
-        self.datePicker.datePickerMode = .date
+        
         
         //ToolBar
         let toolbar = UIToolbar();
@@ -181,23 +205,38 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         
         // add toolbar to textField
         textField.inputAccessoryView = toolbar
-        // add datepicker to textField
-        textField.inputView = self.datePicker
+        
+        
+        if textField.tag == 1
+        {
+            //Formate Date
+            self.dobPicker.datePickerMode = .date
+            
+            // add datepicker to textField
+            textField.inputView = self.dobPicker
+        }
+        else
+        {
+            //Formate Date
+            self.dorPicker.datePickerMode = .date
+            
+            // add datepicker to textField
+            textField.inputView = self.dorPicker
+        }
         
     }
     
     @objc func donedatePicker(sender : UIBarButtonItem){
-        //For date formate
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
+        
+        self.dateFormatter.dateFormat = "dd/MM/yyyy"
         
         if sender.tag == 1
         {
-            self.dobTextField.text = formatter.string(from: self.datePicker.date)
+            self.dobTextField.text = self.dateFormatter.string(from: self.dobPicker.date)
         }
         else
         {
-            self.dorTextField.text = formatter.string(from: self.datePicker.date)
+            self.dorTextField.text = self.dateFormatter.string(from: self.dorPicker.date)
         }
         
         
