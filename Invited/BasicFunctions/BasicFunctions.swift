@@ -137,6 +137,23 @@ class BasicFunctions: NSObject {
             sideMenuController.toggleLeftMenu()
         }
     }
+    class func getTitleAccordingToDateAndTimeFormat (dateTimeString : String!) -> String
+    {
+        var titleString = ""
+        if dateTimeString.range(of: "-") != nil && dateTimeString.range(of: ":") != nil
+        {
+            titleString = "Date and time of message: "
+        }
+        else if dateTimeString.range(of: "-") != nil
+        {
+            titleString = "Date of message: "
+        }
+        else if dateTimeString.range(of: ":") != nil
+        {
+            titleString = "Time of message: "
+        }
+        return titleString
+    }
     class func checkFormat(dateTimeString : String!) -> String
     {
         let dateformatter = DateFormatter()

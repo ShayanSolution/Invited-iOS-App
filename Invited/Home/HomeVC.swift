@@ -1109,9 +1109,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            requestEventCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             
             
-            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
+            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
-            requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
 //            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
             
             if eventData.eventTime.isEmpty
@@ -1121,7 +1121,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 requestEventCell?.eventDateHeightConstraint.constant = 40
-                requestEventCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
+                requestEventCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
             }
             
             if eventData.eventAddress.isEmpty
@@ -1134,7 +1134,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 requestEventCell?.locationHeightConstraint.constant = 62
                 requestEventCell?.startNavigationViewHeightConstraint.constant = 30.5
-                requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+                requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
             
             requestEventCell?.expandButton.tag = indexPath.row
@@ -1154,7 +1154,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 requestEventCell?.startNavigationButton.isHidden = true
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
-                requestEventCell?.acceptORRejectLabel.text = "Rejected"
+                requestEventCell?.acceptORRejectLabel.text = "NO"
                 requestEventCell?.acceptORRejectLabel.textColor = UIColor.init(red: 255/255, green: 97/255, blue: 71/255, alpha: 1.0)
                 
             }
@@ -1166,7 +1166,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 }
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
-                requestEventCell?.acceptORRejectLabel.text = "Accepted"
+                requestEventCell?.acceptORRejectLabel.text = "YES"
                 requestEventCell?.acceptORRejectLabel.textColor = UIColor.init(red: 134/255, green: 224/255, blue: 139/255, alpha: 1.0)
                 
             }
@@ -1233,9 +1233,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            yourEventsCell?.title.delegate = self
 
             yourEventsCell?.title.text = eventData.title
-            yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent: ").normal(eventData.eventCreatedTime)
-            yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+            yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(eventData.eventCreatedTime)
+            yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited: ").normal(String(eventData.totalInvited))
             
             
             if eventData.eventTime.isEmpty
@@ -1245,7 +1245,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 yourEventsCell?.dateHeightConstraint.constant = 20
-                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
             }
             
             if eventData.eventAddress.isEmpty
@@ -1257,7 +1257,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 yourEventsCell?.locationHeightConstraint.constant = 20
                 yourEventsCell?.startNavigationButton.isHidden = false
-                yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+                yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
             
             if eventData.eventType == "canceled"
@@ -1340,9 +1340,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             receivedEventsCell?.acceptedORSentByMe.text = eventData.eventType
-            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Event name: ").normal(eventData.title)
+            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
 //            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
-            receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             
             
 //            receivedEventsCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
@@ -1357,7 +1357,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 receivedEventsCell?.dateHeightConstraint.constant = 60
-                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
             }
             
             if eventData.eventAddress.isEmpty
@@ -1369,7 +1369,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 receivedEventsCell?.locationHeightConstraint.constant = 62.5
                 receivedEventsCell?.startNavigationButton.isHidden = false
-                receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+                receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
             
             
@@ -1377,21 +1377,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 if eventData.totalInvited == 0
                 {
-                    receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
+                    receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(eventData.listName)
                 }
                 else
                 {
-                    receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+                    receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
                 }
                 
                 receivedEventsCell?.totalInvitedHeightConstraint.constant = 40
-                receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
+                receivedEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited: ").normal(String(eventData.totalInvited))
                 
                 
             }
             else
             {
-                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
                 receivedEventsCell?.totalInvitedHeightConstraint.constant = 0
                 
                 
@@ -1649,9 +1649,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.acceptedUserTableView.dataSource = self
             
             self.sentByMeView.eventName.text = eventData.title
-            self.sentByMeView.listName.attributedText = NSMutableAttributedString().bold("List Name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-            self.sentByMeView.yesCount.attributedText = NSMutableAttributedString().bold("YES Count: ").normal(String(eventData.numberOfInvitationAccepted))
-            self.sentByMeView.noCount.attributedText = NSMutableAttributedString().bold("NO Count: ").normal(String(eventData.numberOfInvitationRejected))
+            self.sentByMeView.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+            self.sentByMeView.yesCount.attributedText = NSMutableAttributedString().bold("YES count: ").normal(String(eventData.numberOfInvitationAccepted))
+            self.sentByMeView.noCount.attributedText = NSMutableAttributedString().bold("NO count: ").normal(String(eventData.numberOfInvitationRejected))
             self.sentByMeView.createEventDate.attributedText = NSMutableAttributedString().bold("Message Sent On: ").normal(eventData.eventCreatedTime)
             
             var date : String!
@@ -1664,7 +1664,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 date = eventData.eventTime
             }
             
-            self.sentByMeView.date.attributedText = NSMutableAttributedString().bold("Message Date and Time: ").normal(date)
+            self.sentByMeView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: date)).normal(date)
             
             var address : String!
             if eventData.eventAddress == ""
@@ -1698,27 +1698,27 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
             
-            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Event name: ").normal(eventData.title)
+            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
-            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(eventData.eventCreatedTime)
+            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(eventData.eventCreatedTime)
             
             if eventData.eventTime.isEmpty
             {
-                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal("Not Specified")
+                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("Not Specified")
             }
             else
             {
-                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
+                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
             }
             
             if eventData.eventAddress.isEmpty
             {
-                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal("Not Specified")
+                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal("Not Specified")
                 self.acceptByMeView.startNavigationButton.isHidden = true
             }
             else
             {
-                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
                 self.acceptByMeView.startNavigationButton.isHidden = false
             }
 
@@ -1735,7 +1735,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 invitedBy = fullName + " " + "(" + eventData.invitedBy.phone + ")"
             }
 
-            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
+            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
 
 
             self.acceptByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -1871,32 +1871,32 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.detailView.titleTextView.text = eventData.title
         
         
-        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by : ").normal(invitedBy)
+        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
 //        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
-        self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite received : ").normal(eventData.eventCreatedTime)
+        self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(eventData.eventCreatedTime)
 //        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 //        self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
         
         if eventData.eventTime.isEmpty
         {
             //            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal("Not Specified")
+            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of Message: ").normal("Not Specified")
             
         }
         else
         {
-            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+            self.detailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
         }
         
         if eventData.eventAddress.isEmpty
         {
             //            self.eventDetailView.locationViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal("Not Specified")
+            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal("Not Specified")
             self.detailView.startNavigationButton.isHidden = true
         }
         else
         {
-            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             self.detailView.startNavigationButton.isHidden = false
         }
         
@@ -2000,31 +2000,31 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.eventDetailView.titleTextView.text = eventData.title
-        self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(eventData.eventCreatedTime)
-        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+        self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
+        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(eventData.eventCreatedTime)
+        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited: ").normal(String(eventData.totalInvited))
         
         
         if eventData.eventTime.isEmpty
         {
 //            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal("Not Specified")
+            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("Not Specified")
             
         }
         else
         {
-            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of event : ").normal(eventData.eventTime)
+            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
         }
         
         if eventData.eventAddress.isEmpty
         {
 //            self.eventDetailView.locationViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal("Not Specified")
+            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal("Not Specified")
             self.eventDetailView.startNavigationButton.isHidden = true
         }
         else
         {
-            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
+            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             self.eventDetailView.startNavigationButton.isHidden = false
         }
         
