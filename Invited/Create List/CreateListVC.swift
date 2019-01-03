@@ -8,6 +8,7 @@
 import UIKit
 import Contacts
 import SQLite3
+import PGSideMenu
 
 class ContactData: NSObject
 {
@@ -592,7 +593,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         if self.listData != nil
         {
             let appDelegate = UIApplication.shared.delegate as? AppDelegate
-            let navController = appDelegate?.window?.rootViewController as? UINavigationController
+            let navController = (appDelegate?.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController
             
             //                var navigationArray = navController?.viewControllers
             

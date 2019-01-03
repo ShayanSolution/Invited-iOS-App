@@ -23,6 +23,7 @@ class UserProfileData: NSObject
     var gender = Int()
     var phone = String()
     var dob = String()
+    var dor = String()
     var email = String()
     var password = String()
     var isFBSignUp = Bool()
@@ -457,7 +458,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.setPreferences(authToken, key: kAccessToken)
             BasicFunctions.setPreferences(userID, key: kUserID)
             
-            kUserList.removeAll()
             
             
             
@@ -466,10 +466,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
             
+            self.updateDeviceToken()
             
-            BasicFunctions.setUserLoggedIn()
-            BasicFunctions.setHomeVC()
-            BasicFunctions.fetchAllContactsFromDevice()
             
         }
         else
@@ -494,7 +492,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             }
             else if json["error"] != nil
             {
-                errorString = json["message"] as! String
+                errorString = json["message"] as? String
             }
 //            else
 //            {
@@ -502,6 +500,54 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //            }
             
             BasicFunctions.showAlert(vc: self, msg: errorString)
+        }
+        
+    }
+    func updateDeviceToken()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        var postParams = [String:Any]()
+        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
+        postParams["device_token"] = BasicFunctions.getPreferences(kDeviceToken)
+        postParams["platform"] = "ios"
+        
+        var environmentString : String!
+        #if DEVELOPMENT
+        environmentString = "development"
+        #else
+        environmentString = "production"
+        #endif
+        
+        postParams["environment"] = environmentString
+        
+        ServerManager.updateDeviceToken(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as? [String : Any]
+            
+            let status = json?["status"] as? String
+//            let message = json?["message"] as? String
+            
+//            if message != nil && message == "Unauthorized"
+//            {
+//                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+//                BasicFunctions.showSigInVC()
+//                return
+//
+//            }
+            
+            if status != nil
+            {
+                kUserList.removeAll()
+                BasicFunctions.setUserLoggedIn()
+                BasicFunctions.setHomeVC()
+                BasicFunctions.fetchAllContactsFromDevice()
+            }
+            
+            
         }
         
     }

@@ -191,11 +191,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        self.updateDeviceToken()
+        
         
         self.placeSelectedORCancelled = false
         
+        
         self.setUpScrollView()
+        self.getProfileFromServer()
 //        self.fetchUserEventsFromServer()
         
 //        self.fetchRequestsFromServer()
@@ -2568,7 +2570,80 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    
+    func getProfileFromServer()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        ServerManager.getUserProfile(nil, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            self.handleServerResponseOfGetProfile(json: result as? [String : Any])
+            
+        }
+    }
+    func handleServerResponseOfGetProfile(json : [String : Any]?)
+    {
+        let message = json?["message"] as? String
+        let userData = json?["user"] as? [String : Any]
+        
+        if message != nil && message == "Unauthorized"
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+            BasicFunctions.showSigInVC()
+            return
+            
+        }
+        
+        if json?["error"] == nil && userData != nil
+        {
+
+            let dobString = userData?["dob"] as? String ?? ""
+            let dorString = userData?["dateofrelation"] as? String ?? ""
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let dobDate = dateFormatter.date(from: dobString)
+            let dorDate = dateFormatter.date(from: dorString)
+
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            
+            let userProfileData = UserProfileData()
+            userProfileData.authID = userData?["id"] as? Int ?? 0
+            userProfileData.authToken = BasicFunctions.getPreferences(kAccessToken) as? String ?? ""
+            userProfileData.firstName = userData?["firstName"] as? String ?? ""
+            userProfileData.lastName = userData?["lastName"] as? String ?? ""
+            userProfileData.email = userData?["email"] as? String ?? ""
+            if dobDate != nil
+            {
+                userProfileData.dob = dateFormatter.string(from: dobDate!)
+            }
+            
+            if dorDate != nil
+            {
+                userProfileData.dor = dateFormatter.string(from: dorDate!)
+            }
+            
+            
+            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, email: userProfileData.email, dob: userProfileData.dob, dor: userProfileData.dor)
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
+            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
+            
+            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+            
+            if kLoggedInUserProfile.dob == ""
+            {
+                self.contactsView.dobView.isHidden = false
+            }
+            
+            
+        }
+        else if message != nil
+        {
+            BasicFunctions.showAlert(vc: self, msg: message!)
+        }
+    }
     
     func getContactListFromServer()
     {
@@ -3590,45 +3665,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
         
         
-    func updateDeviceToken()
-    {
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        
-        var postParams = [String:Any]()
-        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
-        postParams["device_token"] = BasicFunctions.getPreferences(kDeviceToken)
-        postParams["platform"] = "ios"
-        
-        var environmentString : String!
-        #if DEVELOPMENT
-        environmentString = "development"
-        #else
-        environmentString = "production"
-        #endif
-
-        postParams["environment"] = environmentString
-        
-        ServerManager.updateDeviceToken(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
-            
-            
-            BasicFunctions.stopActivityIndicator(vu: self.view)
-            
-            let json = result as? [String : Any]
-            
-            let message = json!["message"] as? String
-            
-            if message != nil && message == "Unauthorized"
-            {
-                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
-                BasicFunctions.showSigInVC()
-                return
-                
-            }
-            
-            
-        }
-        
-    }
+    
     func deleteList(index : Int!)
     {
         BasicFunctions.showActivityIndicator(vu: self.view)

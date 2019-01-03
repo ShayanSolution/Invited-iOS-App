@@ -38,7 +38,14 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         self.showDatePicker(textField: self.dobTextField)
         self.showDatePicker(textField: self.dorTextField)
         
-        self.getProfileFromServer()
+        self.firstNameTextField.text = kLoggedInUserProfile.firstName
+        self.lastNameTextField.text = kLoggedInUserProfile.lastName
+        self.emailTextField.text = kLoggedInUserProfile.email
+        self.dobTextField.text = kLoggedInUserProfile.dob
+        self.dorTextField.text = kLoggedInUserProfile.dor
+        
+        
+        
     }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
@@ -46,66 +53,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         BasicFunctions.openLeftMenu(vc: self)
     }
     
-    func getProfileFromServer()
-    {
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        
-        ServerManager.getUserProfile(nil, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
-            
-            
-            BasicFunctions.stopActivityIndicator(vu: self.view)
-            
-            self.handleServerResponseOfGetProfile(json: result as? [String : Any])
-            
-        }
-    }
-    func handleServerResponseOfGetProfile(json : [String : Any]?)
-    {
-        let message = json?["message"] as? String
-        let userData = json?["user"] as? [String : Any]
-        
-        if message != nil && message == "Unauthorized"
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
-            BasicFunctions.showSigInVC()
-            return
-            
-        }
-        
-        if json?["error"] == nil && userData != nil
-        {
-            self.firstNameTextField.text = userData?["firstName"] as? String ?? ""
-            self.lastNameTextField.text = userData?["lastName"] as? String ?? ""
-            self.emailTextField.text = userData?["email"] as? String ?? ""
-            let dobString = userData?["dob"] as? String ?? ""
-            let dorString = userData?["dateofrelation"] as? String ?? ""
-            
-            self.dateFormatter.dateFormat = "yyyy-MM-dd"
-            let dobDate = self.dateFormatter.date(from: dobString)
-            let dorDate = self.dateFormatter.date(from: dorString)
-            
-            self.dateFormatter.dateFormat = "dd/MM/yyyy"
-            
-            if dobDate != nil
-            {
-                self.dobTextField.text = self.dateFormatter.string(from: dobDate!)
-            }
-            
-            if dorDate != nil
-            {
-                self.dorTextField.text = self.dateFormatter.string(from: dorDate!)
-            }
-            
-            
-            
-            
-            
-        }
-        else if message != nil
-        {
-            BasicFunctions.showAlert(vc: self, msg: message!)
-        }
-    }
+    
     
     @IBAction func updateButtonTapped(_ sender: UIButton)
     {
