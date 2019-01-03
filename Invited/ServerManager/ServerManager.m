@@ -8,8 +8,8 @@
 
 #import "ServerManager.h"
 
-//#define kBaseURL @"http://invited.shayansolutions.com/"
-#define kBaseURL @"http://dev.invited.shayansolutions.com/"
+#define kBaseURL @"http://invited.shayansolutions.com/"
+//#define kBaseURL @"http://dev.invited.shayansolutions.com/"
 
 
 @implementation ServerManager

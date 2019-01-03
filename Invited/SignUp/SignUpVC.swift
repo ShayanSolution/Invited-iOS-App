@@ -20,7 +20,7 @@ class UserProfileData: NSObject
     
 }
 
-class SignUpVC: UIViewController,UITextFieldDelegate
+class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource
 {
    
     
@@ -33,8 +33,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate
     
     @IBOutlet var mainScrollView: UIScrollView!
     
-//    @IBOutlet var genderTextField: UITextField!
+    @IBOutlet var genderTextField: UITextField!
     
+    @IBOutlet var dobTextField: UITextField!
+    
+    @IBOutlet var firstNameTextField: UITextField!
+    
+    @IBOutlet var lastNameTextField: UITextField!
     
     @IBOutlet var phoneTextField: NKVPhonePickerTextField!
     
@@ -57,7 +62,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate
     
     var lastOffset : CGPoint!
     
-//    var dropDownPickerView : UIPickerView!
+    let datePicker = UIDatePicker()
+    
+    let dropDownPickerView = UIPickerView()
     
     var isLoginPage : Bool!
     
@@ -68,7 +75,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate
 
         // Do any additional setup after loading the view.
         
-        
+        self.showPicker(textField: self.genderTextField)
+        self.showDatePicker(textField: self.dobTextField)
         
 //        self.contraintContentHeight.constant = 700.0
         
@@ -98,7 +106,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        self.mainScrollView.contentSize.height = 400.0
+        self.mainScrollView.contentSize.height = 700.0
         
 //        self.showPicker(textField: self.genderTextField)
         
@@ -166,8 +174,23 @@ class SignUpVC: UIViewController,UITextFieldDelegate
     
     @IBAction func register(_ sender: UIButton)
     {
-
-        if (self.phoneTextField.code?.isEmpty)!
+        
+        if (self.firstNameTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put first name.")
+            return
+        }
+        else if (self.lastNameTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put last name.")
+            return
+        }
+        else if (self.genderTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put gender.")
+            return
+        }
+        else if (self.phoneTextField.code?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select country.")
             return
@@ -176,7 +199,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
             return
-            
+        }
+        else if (self.dobTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put bithday date.")
+            return
         }
         else if (self.emailTextField.text?.isEmpty)!
         {
@@ -533,58 +560,94 @@ class SignUpVC: UIViewController,UITextFieldDelegate
         self.keyboardHeight = nil
         
     }
-//    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-//        return 1
-//    }
-//    
-//    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-//        
-//        return 3
-//    }
-//    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-//        
-//        return self.genderList[row]
-//    }
-//    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        
-//        if row == 0
-//        {
-//            self.genderTextField.text = ""
-//        }
-//        else
-//        {
-//            self.genderTextField.text = self.genderList[row]
-//        }
-//    }
-//    func showPicker(textField:UITextField!)
-//    {
-//        let toolBar = UIToolbar()
-//        toolBar.barStyle = UIBarStyle.default
-//        toolBar.isTranslucent = true
-//        toolBar.tintColor = UIColor.blue
-//        toolBar.sizeToFit()
-//
-//        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneClick))
-//        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-//        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancelClick))
-//
-//        doneButton.tag = textField.tag
-//        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
-//        toolBar.isUserInteractionEnabled = true
-//
-//        self.dropDownPickerView = UIPickerView()
-//        self.dropDownPickerView.dataSource = self
-//        self.dropDownPickerView.delegate = self
-//        self.dropDownPickerView.tag = textField.tag
-//
-//        textField.inputView = self.dropDownPickerView
-//        textField.inputAccessoryView = toolBar
-//
-//    }
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return 3
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return self.genderList[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if row == 0
+        {
+            self.genderTextField.text = ""
+        }
+        else
+        {
+            self.genderTextField.text = self.genderList[row]
+        }
+    }
+    func showPicker(textField:UITextField!)
+    {
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.blue
+        toolBar.sizeToFit()
+
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneClick))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancelClick))
+
+        doneButton.tag = textField.tag
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+
+        self.dropDownPickerView.dataSource = self
+        self.dropDownPickerView.delegate = self
+        self.dropDownPickerView.tag = textField.tag
+
+        textField.inputView = self.dropDownPickerView
+        textField.inputAccessoryView = toolBar
+
+    }
+    func showDatePicker(textField:UITextField!){
+        
+        //Formate Date
+        self.datePicker.datePickerMode = .date
+        
+        //ToolBar
+        let toolbar = UIToolbar();
+        toolbar.sizeToFit()
+        
+        //done button & cancel button
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.cancelClick))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.donedatePicker(sender:)))
+        doneButton.tag = textField.tag
+        toolbar.setItems([cancelButton,spaceButton,doneButton], animated: false)
+        
+        
+        // add toolbar to textField
+        textField.inputAccessoryView = toolbar
+        // add datepicker to textField
+        textField.inputView = self.datePicker
+        
+    }
+    
+    @objc func donedatePicker(sender : UIBarButtonItem){
+        //For date formate
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        
+        self.dobTextField.text = formatter.string(from: self.datePicker.date)
+        
+        
+        //dismiss date picker dialog
+        self.view.endEditing(true)
+    }
     @objc func cancelClick() {
         
         self.view.endEditing(true)
     }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         

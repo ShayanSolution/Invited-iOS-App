@@ -222,7 +222,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             else if status == "error"
             {
                 
-                BasicFunctions.showAlert(vc: self, msg: json["Error"] as! String)
+                BasicFunctions.showAlert(vc: self, msg: json["Error"] as? String)
             }
             else
             {
