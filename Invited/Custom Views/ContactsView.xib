@@ -22,12 +22,35 @@
                             <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNW-Sj-lIc">
+                            <rect key="frame" x="0.0" y="320" width="320" height="140"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uXO-0D-xgx">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="140"/>
+                                    <string key="text">It is highly recomended that you provide date of birth for getting exclusive special discounts or even completely free dining offers from many of the top restuarant in your city.</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="uXO-0D-xgx" secondAttribute="bottom" id="GOm-92-IDu"/>
+                                <constraint firstAttribute="trailing" secondItem="uXO-0D-xgx" secondAttribute="trailing" id="Hoh-R2-v5w"/>
+                                <constraint firstAttribute="height" constant="140" id="d8K-Lk-6SS"/>
+                                <constraint firstItem="uXO-0D-xgx" firstAttribute="leading" secondItem="eNW-Sj-lIc" secondAttribute="leading" id="vIG-zg-aeQ"/>
+                                <constraint firstItem="uXO-0D-xgx" firstAttribute="top" secondItem="eNW-Sj-lIc" secondAttribute="top" id="yKz-mM-mFI"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="eNW-Sj-lIc" secondAttribute="trailing" id="FFi-j3-l8C"/>
                         <constraint firstAttribute="bottom" secondItem="HgC-8P-BnU" secondAttribute="bottom" id="G9W-xQ-N6o"/>
                         <constraint firstAttribute="trailing" secondItem="HgC-8P-BnU" secondAttribute="trailing" id="TD7-Bb-J4h"/>
                         <constraint firstItem="HgC-8P-BnU" firstAttribute="leading" secondItem="mOf-Gr-Aug" secondAttribute="leading" id="jG8-oY-IQc"/>
+                        <constraint firstAttribute="bottom" secondItem="eNW-Sj-lIc" secondAttribute="bottom" id="t4C-mz-AKT"/>
+                        <constraint firstItem="eNW-Sj-lIc" firstAttribute="leading" secondItem="mOf-Gr-Aug" secondAttribute="leading" id="w8x-vM-W6h"/>
                         <constraint firstItem="HgC-8P-BnU" firstAttribute="top" secondItem="mOf-Gr-Aug" secondAttribute="top" id="xja-Gt-fpH"/>
                     </constraints>
                 </view>
@@ -45,6 +68,7 @@
             <connections>
                 <outlet property="contactsTableView" destination="HgC-8P-BnU" id="XD1-bb-kkf"/>
             </connections>
+            <point key="canvasLocation" x="131.25" y="155"/>
         </view>
     </objects>
 </document>

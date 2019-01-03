@@ -214,7 +214,15 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
                 }
                 else
                 {
-                    self.register()
+                    if self.userCredentials.isFBSignUp
+                    {
+                        self.registerWithSocialAccount()
+                    }
+                    else
+                    {
+                        self.register()
+                    }
+
                 }
                 
     
@@ -252,6 +260,29 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         
         
         ServerManager.signUp(postParams) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            self.handleServerResponse(result as! [String : Any])
+        }
+        
+    }
+    func registerWithSocialAccount()
+    {
+    
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        var postParams = [String: Any]()
+        postParams["firstName"] = self.userCredentials.firstName
+        postParams["lastName"] = self.userCredentials.lastName
+        postParams["gender"] = self.userCredentials.gender
+        postParams["phone"] = self.userCredentials.phone
+        postParams["dob"] = self.userCredentials.dob
+        postParams["email"] = self.userCredentials.email
+        postParams["facebook_id"] = self.userCredentials.password
+        postParams["password"] = self.userCredentials.password
+        postParams["password_confirmation"] = self.userCredentials.password
+        
+        
+        ServerManager.socialSignUp(postParams) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])

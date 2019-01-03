@@ -137,6 +137,54 @@ class BasicFunctions: NSObject {
             sideMenuController.toggleLeftMenu()
         }
     }
+    class func checkFormat(dateTimeString : String!) -> String
+    {
+        let dateformatter = DateFormatter()
+        
+        
+        var formatedString = ""
+        
+        if dateTimeString.range(of: "-") != nil && dateTimeString.range(of: ":") != nil
+        {
+            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            if let date = dateformatter.date(from: dateTimeString)
+            {
+                dateformatter.dateStyle = .medium
+                dateformatter.timeStyle = .short
+                formatedString = dateformatter.string(from: date)
+            }
+            
+        }
+        else if dateTimeString.range(of: "-") != nil
+        {
+            dateformatter.dateFormat = "yyyy-MM-dd"
+            
+            if let date = dateformatter.date(from: dateTimeString)
+            {
+//                let outputFormatter = DateFormatter()
+//                outputFormatter.dateFormat = "dd-MM-yyyy"
+                
+                dateformatter.dateStyle = .medium
+            
+                formatedString = dateformatter.string(from: date)
+            }
+        }
+        else if dateTimeString.range(of: ":") != nil
+        {
+            dateformatter.dateFormat = "HH:mm:ss"
+            if let date = dateformatter.date(from: dateTimeString)
+            {
+                dateformatter.timeStyle = .short
+                formatedString = dateformatter.string(from: date)
+            }
+        }
+        
+        
+        
+        return formatedString
+    }
+    
     
     class func setHomeVC()
     {

@@ -42,6 +42,12 @@ class ReceivedEventsCell: UITableViewCell {
     @IBOutlet var expandButton: UIButton!
     
     
+    @IBOutlet var dateHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationHeightConstraint: NSLayoutConstraint!
+    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

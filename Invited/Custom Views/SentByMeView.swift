@@ -10,9 +10,21 @@ import UIKit
 
 class SentByMeView: UIView {
     
+    @IBOutlet var eventName: UITextView!
+    
+    @IBOutlet var listName: UILabel!
+    
+    @IBOutlet var yesCount: UILabel!
+    
+    @IBOutlet var noCount: UILabel!
+    
     @IBOutlet var createEventDate: UILabel!
     
-    @IBOutlet var numberOfInvitationAccepted: UILabel!
+    @IBOutlet var date: UILabel!
+    
+    @IBOutlet var location: UILabel!
+    
+    
     
     @IBOutlet var acceptedUserTableView: UITableView!
     

@@ -22,10 +22,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="325" height="403"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f3Q-Ja-dgM">
-                                <rect key="frame" x="0.0" y="0.0" width="325" height="162.5"/>
+
+                                <rect key="frame" x="0.0" y="0.0" width="325" height="47"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BD8-No-Ju9">
-                                        <rect key="frame" x="40" y="5" width="245" height="152"/>
+                                        <rect key="frame" x="40" y="5" width="245" height="36.5"/>
+
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="0.0" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
@@ -41,7 +43,9 @@
                                         <state key="normal" image="iconExpandTile"/>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vgf-jx-qxW">
-                                        <rect key="frame" x="15" y="162" width="295" height="0.5"/>
+
+                                        <rect key="frame" x="15" y="46.5" width="295" height="0.5"/>
+
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="HXg-G3-58D"/>
@@ -62,7 +66,9 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5I-J9-JwQ">
-                                <rect key="frame" x="15" y="182.5" width="295" height="90"/>
+
+                                <rect key="frame" x="15" y="67" width="295" height="190"/>
+
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="GEU-yK-Vt3">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -98,9 +104,11 @@
                                     <constraint firstItem="GEU-yK-Vt3" firstAttribute="top" secondItem="b5I-J9-JwQ" secondAttribute="top" id="8IG-1K-I1B"/>
                                     <constraint firstItem="LT7-ri-2Kh" firstAttribute="top" secondItem="U5I-YY-JWn" secondAttribute="bottom" constant="8" id="AHs-vs-m3J"/>
                                     <constraint firstAttribute="trailing" secondItem="LT7-ri-2Kh" secondAttribute="trailing" constant="20" id="BgR-D9-oGb"/>
-                                    <constraint firstItem="LT7-ri-2Kh" firstAttribute="leading" secondItem="GEU-yK-Vt3" secondAttribute="trailing" constant="20" id="ERC-c9-ENM"/>
-                                    <constraint firstAttribute="bottom" secondItem="PAF-63-2cp" secondAttribute="bottom" id="Ggo-Va-tBB"/>
+
                                     <constraint firstItem="PAF-63-2cp" firstAttribute="top" secondItem="LT7-ri-2Kh" secondAttribute="bottom" constant="10" id="HO4-cA-1PC"/>
+                                    <constraint firstItem="PAF-63-2cp" firstAttribute="leading" secondItem="b5I-J9-JwQ" secondAttribute="leading" constant="20" id="KWt-Pp-1P8"/>
+                                    <constraint firstAttribute="bottom" secondItem="PAF-63-2cp" secondAttribute="bottom" constant="10" id="NiE-hd-3tZ"/>
+
                                     <constraint firstAttribute="trailing" secondItem="PAF-63-2cp" secondAttribute="trailing" constant="20" id="S6e-16-98n"/>
                                     <constraint firstItem="PAF-63-2cp" firstAttribute="leading" secondItem="LT7-ri-2Kh" secondAttribute="leading" id="VMv-jI-XPT"/>
                                     <constraint firstItem="U5I-YY-JWn" firstAttribute="leading" secondItem="GEU-yK-Vt3" secondAttribute="trailing" constant="20" id="ebw-i2-dNH"/>
@@ -137,7 +145,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="125" height="30.5"/>
                                         <color key="backgroundColor" red="0.52549019610000003" green="0.87843137250000003" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <state key="normal" title="Accept">
+                                        <state key="normal" title="YES">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                     </button>
@@ -145,7 +153,7 @@
                                         <rect key="frame" x="170" y="0.0" width="125" height="30.5"/>
                                         <color key="backgroundColor" red="1" green="0.36078431370000003" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <state key="normal" title="Reject">
+                                        <state key="normal" title="NO">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                     </button>
@@ -179,13 +187,14 @@
                             <constraint firstItem="AQ4-vX-L4V" firstAttribute="top" secondItem="h41-7N-Gzh" secondAttribute="bottom" constant="39.5" id="7U6-sS-tBw"/>
                             <constraint firstItem="h41-7N-Gzh" firstAttribute="leading" secondItem="Hx6-a0-JzL" secondAttribute="leading" constant="15" id="91b-mX-uXf"/>
                             <constraint firstItem="AQ4-vX-L4V" firstAttribute="leading" secondItem="Hx6-a0-JzL" secondAttribute="leading" constant="15" id="Dcf-dV-rLV"/>
-                            <constraint firstItem="h41-7N-Gzh" firstAttribute="top" secondItem="b5I-J9-JwQ" secondAttribute="bottom" constant="20" id="HJn-qi-h3b"/>
+                            <constraint firstItem="h41-7N-Gzh" firstAttribute="top" secondItem="b5I-J9-JwQ" secondAttribute="bottom" constant="35.5" id="HJn-qi-h3b"/>
+                            <constraint firstAttribute="bottom" secondItem="AQ4-vX-L4V" secondAttribute="bottom" constant="10" id="Hbd-0g-vTl"/>
                             <constraint firstAttribute="trailing" secondItem="AQ4-vX-L4V" secondAttribute="trailing" constant="15" id="NwF-3p-Scj"/>
                             <constraint firstAttribute="trailing" secondItem="h41-7N-Gzh" secondAttribute="trailing" constant="15" id="RjZ-Xo-JtQ"/>
                             <constraint firstAttribute="trailing" secondItem="hft-y2-dpH" secondAttribute="trailing" constant="15" id="ZTl-I9-H7a"/>
-                            <constraint firstAttribute="bottom" secondItem="hft-y2-dpH" secondAttribute="bottom" constant="10" id="b2U-aE-gcF"/>
                             <constraint firstItem="b5I-J9-JwQ" firstAttribute="leading" secondItem="Hx6-a0-JzL" secondAttribute="leading" constant="15" id="fyg-Pu-OvX"/>
                             <constraint firstItem="hft-y2-dpH" firstAttribute="top" secondItem="h41-7N-Gzh" secondAttribute="bottom" constant="20" id="gHy-aV-omm"/>
+                            <constraint firstAttribute="bottom" secondItem="hft-y2-dpH" secondAttribute="bottom" constant="10" id="icL-pE-uHM"/>
                             <constraint firstAttribute="trailing" secondItem="b5I-J9-JwQ" secondAttribute="trailing" constant="15" id="kxQ-fs-ML8"/>
                             <constraint firstAttribute="trailing" secondItem="f3Q-Ja-dgM" secondAttribute="trailing" id="l3p-NB-3Dx"/>
                             <constraint firstItem="hft-y2-dpH" firstAttribute="leading" secondItem="Hx6-a0-JzL" secondAttribute="leading" constant="15" id="mH5-Jf-7bK"/>
@@ -207,13 +216,16 @@
                 <outlet property="acceptORRejectView" destination="AQ4-vX-L4V" id="8JV-jy-6ar"/>
                 <outlet property="createdBy" destination="U5I-YY-JWn" id="svI-Cg-Aag"/>
                 <outlet property="date" destination="LT7-ri-2Kh" id="vHm-v0-PiD"/>
+                <outlet property="eventDateHeightConstraint" destination="1Z5-vV-5fh" id="z2M-fB-vP0"/>
                 <outlet property="eventName" destination="BD8-No-Ju9" id="5pA-XD-20x"/>
                 <outlet property="expandButton" destination="igh-ss-V4j" id="rcj-4q-zsP"/>
                 <outlet property="location" destination="PAF-63-2cp" id="xy6-ch-VVl"/>
+                <outlet property="locationHeightConstraint" destination="37b-Ki-tUn" id="n7L-oc-k2F"/>
                 <outlet property="mainView" destination="Hx6-a0-JzL" id="Tx3-eT-R6c"/>
                 <outlet property="profileImageView" destination="GEU-yK-Vt3" id="uSo-jI-w8b"/>
                 <outlet property="rejectButton" destination="3b5-rP-3VO" id="yp8-76-NhC"/>
                 <outlet property="startNavigationButton" destination="Yzw-BI-EPm" id="z3i-7a-bcU"/>
+                <outlet property="startNavigationViewHeightConstraint" destination="plG-hQ-3vn" id="T04-qg-bYj"/>
             </connections>
             <point key="canvasLocation" x="23.199999999999999" y="88.15592203898052"/>
         </tableViewCell>

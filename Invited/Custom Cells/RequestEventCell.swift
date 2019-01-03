@@ -35,12 +35,17 @@ class RequestEventCell: UITableViewCell {
     
     @IBOutlet var startNavigationButton: UIButton!
     
+    @IBOutlet var startNavigationViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet var expandButton: UIButton!
     
     @IBOutlet var acceptORRejectLabel: UILabel!
     
     @IBOutlet var acceptORRejectView: UIView!
+    
+    @IBOutlet var eventDateHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationHeightConstraint: NSLayoutConstraint!
     
     
 

@@ -25,6 +25,7 @@ class UserProfileData: NSObject
     var dob = String()
     var email = String()
     var password = String()
+    var isFBSignUp = Bool()
     
 }
 
@@ -183,7 +184,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     }
     
     
-    @IBAction func loginFacebook(_ sender: UIButton)
+    @IBAction func signUpFB(_ sender: UIButton)
     {
         BasicFunctions.showActivityIndicator(vu: self.view)
         let loginManager = LoginManager()
@@ -198,11 +199,21 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                 print("User cancelled login.")
             case .success(let grantedPermissions, let declinedPermissions, let accessToken):
                 print("Logged in!")
-                self.getFBUserData()
+                
+                if sender.tag == 1
+                {
+                    self.getFBUserData(isFBLogin: false)
+                }
+                else
+                {
+                    self.getFBUserData(isFBLogin: true)
+                }
+                
             }
         }
     }
-    func getFBUserData()
+    
+    func getFBUserData(isFBLogin : Bool)
     {
         if((FBSDKAccessToken.current()) != nil)
         {
@@ -210,14 +221,25 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                 if (error == nil){
                     
                     let userInfo = result as? [String:Any]
-                    self.userProfileData.firstName = userInfo?["first_name"] as? String ?? "H"
-                    self.userProfileData.lastName = userInfo?["last_name"] as? String ?? "K"
+                    self.userProfileData.firstName = userInfo?["first_name"] as? String ?? ""
+                    self.userProfileData.lastName = userInfo?["last_name"] as? String ?? ""
                     self.userProfileData.gender = 1
-                    self.userProfileData.dob = "11/08/2018"
-                    self.userProfileData.email = ""
-                    self.userProfileData.password = "123456"
+                    self.userProfileData.dob = userInfo?["dob"] as? String ?? ""
+                    self.userProfileData.email = userInfo?["email"] as? String ?? ""
+                    self.userProfileData.password = userInfo?["id"] as? String ?? "123456"
                     
-                    self.goToPhoneVC()
+                    
+                    if isFBLogin
+                    {
+                        self.userProfileData.isFBSignUp = false
+                        self.login(isLoginManually: false)
+                    }
+                    else
+                    {
+                        self.userProfileData.isFBSignUp = true
+                        self.goToPhoneVC()
+                    }
+                    
                 }
             })
         }
@@ -354,8 +376,20 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
     }
     
-    @IBAction func login(_ sender: UIButton)
+    @IBAction func signinButtonTapped(_ sender: UIButton)
     {
+        self.login(isLoginManually: true)
+    }
+    
+    func login(isLoginManually : Bool)
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        var postParams = [String: Any]()
+        
+        if isLoginManually
+        {
+
         if (self.loginPhoneTextField.code?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select country.")
@@ -372,11 +406,18 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put password.")
             return
         }
+            
+            postParams["username"] = self.loginPhoneTextField.text
+            postParams["password"] = self.loginPasswordTextField.text
+            
+        }
+        else
+        {
+            postParams["username"] = self.userProfileData.password
+            postParams["password"] = self.userProfileData.password
+        }
         
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        var postParams = [String: Any]()
-        postParams["username"] = self.loginPhoneTextField.text
-        postParams["password"] = self.loginPasswordTextField.text
+    
         postParams["client_id"] = "1"
         postParams["client_secret"] = "mA696UDP5ibROH9aeqAOSJGGsZIiVHR0KqXYZRzh"
         postParams["grant_type"] = "password"
@@ -387,7 +428,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
         }
-        
     }
     func resetData()
     {

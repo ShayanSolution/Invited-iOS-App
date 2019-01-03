@@ -113,6 +113,34 @@
     
     
 }
++ (void) socialSignUp:(NSDictionary *) signUpData withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    
+    [[ServerManager sharedWebService] POST:@"social-signup-user" parameters:signUpData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       if (operation.responseObject)
+                                       {
+                                           resultBlock((NSDictionary*)operation.responseObject);
+                                       }
+                                       else
+                                       {
+                                           resultBlock(@{
+                                                         @"error": @"1",
+                                                         @"message": @"Something went wrong"});
+                                       }
+                                       
+                                       
+                                       
+                                       
+                                   }];
+    
+    
+}
 + (void) sendSMS:(NSDictionary *) inputData withResulBlock: (TMARServiceResultBlock) resultBlock
 {
     
@@ -616,6 +644,33 @@
      
                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
+                                      if (operation.responseObject)
+                                      {
+                                          resultBlock((NSDictionary*)operation.responseObject);
+                                      }
+                                      else
+                                      {
+                                          resultBlock(@{
+                                                        @"error": @"1",
+                                                        @"message": @"Something went wrong"});
+                                      }
+                                      
+                                      
+                                      
+                                  }];
+}
++ (void) cancelEvent:(NSDictionary *) inputData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [[ServerManager sharedWebService] GET:@"cancel-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                      
                                       if (operation.responseObject)
                                       {
                                           resultBlock((NSDictionary*)operation.responseObject);
