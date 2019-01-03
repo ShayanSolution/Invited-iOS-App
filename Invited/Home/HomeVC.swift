@@ -2520,21 +2520,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
         }
-        else if (self.createEventView.timeTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select time.")
-            return
-        }
-        else if (self.createEventView.dateTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select date.")
-            return
-        }
-        else if (self.createEventView.locationTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select location.")
-            return
-        }
         else if self.selectedList == nil
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select List.")
@@ -2547,6 +2532,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             return
             
         }
+        else if (self.createEventView.locationTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select location.")
+            return
+        }
+        else if (self.createEventView.dateTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select date.")
+            return
+        }
+        else if (self.createEventView.timeTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select time.")
+            return
+        }
+    
+        
         
         
         BasicFunctions.showActivityIndicator(vu: self.view)
@@ -2655,9 +2657,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
         }
-        else if (self.editEventView.timeTextField.text?.isEmpty)!
+        else if self.updateSelectedList == nil && self.listID == nil
         {
-            BasicFunctions.showAlert(vc: self, msg: "Please select time.")
+            BasicFunctions.showAlert(vc: self, msg: "Please select List.")
+            return
+            
+        }
+        else if (self.editEventView.setNumberOfPeopleTextfield.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select number of people.")
+            return
+            
+        }
+        else if (self.editEventView.locationTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please select location.")
             return
         }
         else if (self.editEventView.dateTextField.text?.isEmpty)!
@@ -2665,22 +2679,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please select date.")
             return
         }
-        else if (self.editEventView.locationTextField.text?.isEmpty)!
+        else if (self.editEventView.timeTextField.text?.isEmpty)!
         {
-            BasicFunctions.showAlert(vc: self, msg: "Please select location.")
+            BasicFunctions.showAlert(vc: self, msg: "Please select time.")
             return
-        }
-        else if self.updateSelectedList == nil && self.listID == nil
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select List.")
-            return
-
-        }
-        else if (self.editEventView.setNumberOfPeopleTextfield.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please select number of people.")
-            return
-            
         }
         
         
