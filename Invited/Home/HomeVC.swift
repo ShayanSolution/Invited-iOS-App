@@ -98,7 +98,7 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate{
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate{
     
 
     
@@ -673,7 +673,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.createEventView.setNumberOfPeopleTextfield.tag = 1
         self.createEventView.setListTextField.tag = 1
         
-//        self.createEventView.titleTextView.delegate = self
+        self.createEventView.titleTextView.delegate = self
         self.createEventView.setNumberOfPeopleTextfield.delegate = self
         self.createEventView.timeTextField.delegate = self
         self.createEventView.dateTextField.delegate = self
@@ -1147,11 +1147,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             requestEventCell?.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             
+//            if eventData.eventType == "canceled"
+//            {
+//                requestEventCell?.startNavigationViewHeightConstraint.constant = 0
+//                requestEventCell?.acceptORRejectView.isHidden = true
+//                requestEventCell?.acceptORRejectLabel.isHidden = false
+//                requestEventCell?.acceptORRejectLabel.text = "Canceled"
+//                requestEventCell?.acceptORRejectLabel.textColor = UIColor.init(red: 255/255, green: 97/255, blue: 71/255, alpha: 1.0)
+//            }
             
             if eventData.confirmed == 0
             {
                 
-                requestEventCell?.startNavigationButton.isHidden = true
+                requestEventCell?.startNavigationViewHeightConstraint.constant = 0
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
                 requestEventCell?.acceptORRejectLabel.text = "NO"
@@ -1162,7 +1170,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 if !eventData.eventAddress.isEmpty
                 {
-                    requestEventCell?.startNavigationButton.isHidden = false
+                    requestEventCell?.startNavigationViewHeightConstraint.constant = 30.5
                 }
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
@@ -1174,7 +1182,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 if !eventData.eventAddress.isEmpty
                 {
-                    requestEventCell?.startNavigationButton.isHidden = false
+                    requestEventCell?.startNavigationViewHeightConstraint.constant = 30.5
                 }
                 requestEventCell?.acceptORRejectView.isHidden = false
                 requestEventCell?.acceptORRejectLabel.isHidden = true
@@ -1184,7 +1192,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else if eventData.confirmed == 3
             {
-                requestEventCell?.startNavigationButton.isHidden = true
+                requestEventCell?.startNavigationViewHeightConstraint.constant = 0
                 requestEventCell?.acceptORRejectView.isHidden = true
                 requestEventCell?.acceptORRejectLabel.isHidden = false
                 requestEventCell?.acceptORRejectLabel.text = "Too Late! Offer is no longer valid."
@@ -1576,7 +1584,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
         
-        if textView.text == "Invite Title"
+        if textView.text == "Message"
         {
             textView.text = ""
             textView.textColor = UIColor.black
@@ -1586,7 +1594,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if textView.text == ""
         {
-            textView.text = "Invite Title"
+            textView.text = "Message"
             textView.textColor = UIColor.lightGray
             
         }
@@ -2064,7 +2072,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.selectedList = nil
         
         
-//        self.editEventView.titleTextView.delegate = self
+        self.editEventView.titleTextView.delegate = self
         self.editEventView.setNumberOfPeopleTextfield.delegate = self
         self.editEventView.timeTextField.delegate = self
         self.editEventView.dateTextField.delegate = self
@@ -2870,9 +2878,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func createButtonTapped()
     {
-        if (self.createEventView.titleTextView.text?.isEmpty)! || self.createEventView.titleTextView.text == "Invite Title"
+
+        if (self.createEventView.titleTextView.text?.isEmpty)! || self.createEventView.titleTextView.text == "Message"
         {
-            BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
+            BasicFunctions.showAlert(vc: self, msg: "Please put the title of the message.")
             return
         }
 
@@ -3109,9 +3118,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //    }
     @objc func updateButtonTapped(sender : UIButton)
     {
-        if (self.editEventView.titleTextView.text?.isEmpty)! || self.editEventView.titleTextView.text == "Invite Title"
+        if (self.editEventView.titleTextView.text?.isEmpty)! || self.editEventView.titleTextView.text == "Message"
         {
-            BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
+            BasicFunctions.showAlert(vc: self, msg: "Please put the title of the message.")
             return
         }
         else if self.updateSelectedList == nil && self.listID == nil
@@ -3465,6 +3474,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.listName = event["list_name"] as? String ?? ""
                 eventData.eventCreatedTime = BasicFunctions.checkFormat(dateTimeString: event["updated_at"] as? String ?? "")
                 
+//                if event["canceled_at"] as? String != nil
+//                {
+//                    eventData.eventType = "canceled"
+//                }
                 
                 if event["latitude"] as? String != nil
                 {

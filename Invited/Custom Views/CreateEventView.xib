@@ -32,7 +32,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oue-pC-RE5">
                                     <rect key="frame" x="0.0" y="0.0" width="280" height="70.5"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Invite Title" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cpp-lJ-ELF">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Message" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cpp-lJ-ELF">
                                             <rect key="frame" x="0.0" y="0.0" width="280" height="70"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -63,7 +63,7 @@
                                     <rect key="frame" x="0.0" y="70.5" width="280" height="70"/>
                                     <subviews>
                                         <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Set List" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b6C-uv-uKq">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="69.5"/>
+                                            <rect key="frame" x="30" y="0.0" width="250" height="69.5"/>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -85,7 +85,7 @@
                                     <constraints>
                                         <constraint firstItem="b6C-uv-uKq" firstAttribute="top" secondItem="hvK-UU-RIv" secondAttribute="top" id="IaF-4G-si3"/>
                                         <constraint firstItem="Fhy-PR-XmA" firstAttribute="top" secondItem="b6C-uv-uKq" secondAttribute="bottom" id="LhH-uK-jfh"/>
-                                        <constraint firstItem="b6C-uv-uKq" firstAttribute="leading" secondItem="hvK-UU-RIv" secondAttribute="leading" id="YRU-FD-51q"/>
+                                        <constraint firstItem="b6C-uv-uKq" firstAttribute="leading" secondItem="hvK-UU-RIv" secondAttribute="leading" constant="30" id="YRU-FD-51q"/>
                                         <constraint firstAttribute="trailing" secondItem="Fhy-PR-XmA" secondAttribute="trailing" id="qqw-EM-4UD"/>
                                         <constraint firstItem="Fhy-PR-XmA" firstAttribute="leading" secondItem="hvK-UU-RIv" secondAttribute="leading" id="xKY-XQ-R9A"/>
                                         <constraint firstAttribute="trailing" secondItem="b6C-uv-uKq" secondAttribute="trailing" id="xp2-cI-5DI"/>
