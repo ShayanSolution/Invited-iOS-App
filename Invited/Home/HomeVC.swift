@@ -1818,6 +1818,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.updateButton.tag = eventData.eventID
         self.listID = eventData.listID
         
+        for list in kUserList
+        {
+            if list.id == eventData.listID
+            {
+                self.updateSelectedList = list
+                break
+            }
+        }
+        
         
         self.showDatePicker(textField: self.editEventView.dateTextField)
         self.showTimePicker(textField: self.editEventView.timeTextField)
@@ -2515,7 +2524,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func createButtonTapped()
     {
-        if (self.createEventView.titleTextView.text?.isEmpty)!
+        if (self.createEventView.titleTextView.text?.isEmpty)! || self.createEventView.titleTextView.text == "Invite Title"
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
@@ -2545,6 +2554,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if (self.createEventView.timeTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select time.")
+            return
+        }
+        else if self.createEventView.setNumberOfPeopleTextfield.text == "0" || Int(self.createEventView.setNumberOfPeopleTextfield.text!)! > (self.selectedList?.contactList.count)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid number of people.")
             return
         }
     
@@ -2652,7 +2666,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func updateButtonTapped(sender : UIButton)
     {
-        if (self.editEventView.titleTextView.text?.isEmpty)!
+        if (self.editEventView.titleTextView.text?.isEmpty)! || self.editEventView.titleTextView.text == "Invite Title"
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the event.")
             return
@@ -2682,6 +2696,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if (self.editEventView.timeTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select time.")
+            return
+        }
+        else if self.editEventView.setNumberOfPeopleTextfield.text == "0" || Int(self.editEventView.setNumberOfPeopleTextfield.text!)! > (self.updateSelectedList?.contactList.count)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid number of people.")
             return
         }
         
