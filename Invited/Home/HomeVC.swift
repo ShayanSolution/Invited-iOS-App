@@ -1248,22 +1248,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if eventData.eventTime.isEmpty
             {
-                yourEventsCell?.dateHeightConstraint.constant = 0
+                yourEventsCell?.date.isHidden = true
             }
             else
             {
-                yourEventsCell?.dateHeightConstraint.constant = 20
+                yourEventsCell?.date.isHidden = false
                 yourEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
             }
             
             if eventData.eventAddress.isEmpty
             {
-                yourEventsCell?.locationHeightConstraint.constant = 0
+                yourEventsCell?.location.isHidden = true
                 yourEventsCell?.startNavigationButton.isHidden = true
             }
             else
             {
-                yourEventsCell?.locationHeightConstraint.constant = 20
+                yourEventsCell?.location.isHidden = false
                 yourEventsCell?.startNavigationButton.isHidden = false
                 yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
@@ -3154,6 +3154,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if self.editEventView.setNumberOfPeopleTextfield.text == "0" || Int(self.editEventView.setNumberOfPeopleTextfield.text!)! > (self.updateSelectedList?.contactList.count)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put valid number of people.")
+            return
         }
 
         

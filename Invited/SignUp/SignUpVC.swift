@@ -69,10 +69,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     var lastOffset : CGPoint!
     
-    let datePicker = UIDatePicker()
-    
-    let dropDownPickerView = UIPickerView()
-    
     var isLoginPage : Bool!
     
     let genderList = ["Select Gender","Male","Female"]
@@ -190,7 +186,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         BasicFunctions.showActivityIndicator(vu: self.view)
         let loginManager = LoginManager()
         loginManager.logOut()
-        loginManager.logIn(readPermissions: [.publicProfile,.userBirthday], viewController: self) { (loginResult) in
+        loginManager.logIn(readPermissions: [.publicProfile,.email], viewController: self) { (loginResult) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -219,7 +215,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     {
         if((FBSDKAccessToken.current()) != nil)
         {
-            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,birthday"]).start(completionHandler: { (connection, result, error) -> Void in
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,email"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
                     
                     let userInfo = result as? [String:Any]
