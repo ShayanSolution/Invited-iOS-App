@@ -2638,7 +2638,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="rHI-Td-Ugc"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hRq-CV-vmv">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hRq-CV-vmv">
                                                                 <rect key="frame" x="40" y="-3" width="240" height="26"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>

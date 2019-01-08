@@ -189,7 +189,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     {
         BasicFunctions.showActivityIndicator(vu: self.view)
         let loginManager = LoginManager()
-        loginManager.logIn(readPermissions: [.publicProfile], viewController: self) { (loginResult) in
+        loginManager.logOut()
+        loginManager.logIn(readPermissions: [.publicProfile,.userBirthday], viewController: self) { (loginResult) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -218,14 +219,14 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     {
         if((FBSDKAccessToken.current()) != nil)
         {
-            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, email"]).start(completionHandler: { (connection, result, error) -> Void in
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,birthday"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
                     
                     let userInfo = result as? [String:Any]
                     self.userProfileData.firstName = userInfo?["first_name"] as? String ?? ""
                     self.userProfileData.lastName = userInfo?["last_name"] as? String ?? ""
                     self.userProfileData.gender = 1
-                    self.userProfileData.dob = userInfo?["dob"] as? String ?? ""
+                    self.userProfileData.dob = userInfo?["birthday"] as? String ?? ""
                     self.userProfileData.email = userInfo?["email"] as? String ?? ""
                     self.userProfileData.password = userInfo?["id"] as? String ?? "123456"
                     
@@ -292,6 +293,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     @IBAction func register(_ sender: UIButton)
     {
+        
         if (self.firstNameTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put first name.")
@@ -322,6 +324,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put bithday date.")
             return
         }
+        else if (self.emailTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put email.")
+            return
+        }
         else if (self.passwordTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put password.")
@@ -342,13 +349,16 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Password confirmation does not match.")
             return
         }
+        
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "yyyy-MM-dd"
 
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["phone"] = self.phoneTextField.text
-        postParams["dob"] = self.dobTextField.text
+        postParams["dob"] = dateformatter.string(from: self.datePicker.date)
         postParams["email"] = self.emailTextField.text
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
@@ -370,7 +380,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         ServerManager.validation(postParams) { (result) in
 
             BasicFunctions.stopActivityIndicator(vu: self.view)
-            self.handleServerResponse(result as! [String : Any])
+            self.handleServerResponse(result as! [String : Any], isLoginManually : false)
         }
         
     }
@@ -425,7 +435,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
         ServerManager.sign(in: postParams) { (result) in
             BasicFunctions.stopActivityIndicator(vu: self.view)
-            self.handleServerResponse(result as! [String : Any])
+            self.handleServerResponse(result as! [String : Any], isLoginManually : isLoginManually)
         }
     }
     func resetData()
@@ -436,7 +446,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         self.confirmPasswordTextField.text = ""
     }
     
-    func handleServerResponse(_ json: [String: Any])
+    func handleServerResponse(_ json: [String: Any], isLoginManually : Bool)
     {
         
         if  json["error"] == nil && json["phone"] == nil && json["email"] == nil && json["password"] == nil && json["password_confirmation"] == nil
@@ -491,6 +501,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             else if json["error"] != nil
             {
                 errorString = json["message"] as? String
+                
+                if isLoginManually == false && self.userProfileData.isFBSignUp == false
+                {
+                    self.userProfileData.isFBSignUp = true
+                    self.goToPhoneVC()
+                    return
+                }
             }
 //            else
 //            {
