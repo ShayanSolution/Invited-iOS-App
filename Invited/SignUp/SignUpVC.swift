@@ -38,9 +38,14 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     @IBOutlet var signInButton: UIButton!
     
     
+
     
     
+
     @IBOutlet var signInScrollView: UIScrollView!
+
+
+
     
     @IBOutlet var mainScrollView: UIScrollView!
     
@@ -186,7 +191,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         BasicFunctions.showActivityIndicator(vu: self.view)
         let loginManager = LoginManager()
         loginManager.logOut()
+
         loginManager.logIn(readPermissions: [.publicProfile,.email], viewController: self) { (loginResult) in
+
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -215,7 +222,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     {
         if((FBSDKAccessToken.current()) != nil)
         {
+
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,email"]).start(completionHandler: { (connection, result, error) -> Void in
+
                 if (error == nil){
                     
                     let userInfo = result as? [String:Any]
@@ -289,6 +298,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     @IBAction func register(_ sender: UIButton)
     {
+
         if (self.firstNameTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put first name.")
@@ -819,13 +829,16 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         self.dropDownPickerView.dataSource = self
         self.dropDownPickerView.delegate = self
 
+
         self.dropDownPickerView.tag = textField.tag
+
 
 
         textField.inputView = self.dropDownPickerView
         textField.inputAccessoryView = toolBar
 
     }
+
     func showDatePicker(textField:UITextField!){
         
         //Formate Date

@@ -2879,7 +2879,9 @@
                     <connections>
                         <outlet property="confirmPasswordTextField" destination="sBB-ZZ-hVV" id="dm3-Sc-zse"/>
 
+
                         <outlet property="dobTextField" destination="UZ9-Ve-Kyy" id="Aeh-PD-xHY"/>
+
 
                         <outlet property="emailTextField" destination="hRq-CV-vmv" id="xkj-yG-Dvf"/>
                         <outlet property="firstNameTextField" destination="lha-Fj-bu2" id="lVG-mW-Zdx"/>

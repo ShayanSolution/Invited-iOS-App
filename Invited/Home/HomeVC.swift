@@ -1248,22 +1248,28 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if eventData.eventTime.isEmpty
             {
+
                 yourEventsCell?.date.isHidden = true
             }
             else
             {
                 yourEventsCell?.date.isHidden = false
+
                 yourEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
             }
             
             if eventData.eventAddress.isEmpty
             {
+
                 yourEventsCell?.location.isHidden = true
+
                 yourEventsCell?.startNavigationButton.isHidden = true
             }
             else
             {
+
                 yourEventsCell?.location.isHidden = false
+
                 yourEventsCell?.startNavigationButton.isHidden = false
                 yourEventsCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
@@ -2135,6 +2141,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.createButtonView.isHidden = true
         
         
+
         
 //        let formatter1 = DateFormatter()
 //        formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -2166,6 +2173,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        }
         
         
+
 //        self.editEventView.locationTextField.text = eventData.eventAddress
         self.editEventView.setNumberOfPeopleTextfield.text = String(eventData.maximumNumberOfPeople)
         self.editEventView.setListTextField.text = eventData.listName
@@ -2884,14 +2892,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the message.")
             return
         }
-
         else if self.selectedList == nil
+
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select List.")
             return
             
         }
         else if (self.createEventView.setNumberOfPeopleTextfield.text?.isEmpty)!
+
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select number of people.")
             return
@@ -3148,7 +3157,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if (self.editEventView.timeTextField.text?.isEmpty)! && self.editEventView.timeSwitch.isOn
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select time.")
-            
+
             return
         }
         else if self.editEventView.setNumberOfPeopleTextfield.text == "0" || Int(self.editEventView.setNumberOfPeopleTextfield.text!)! > (self.updateSelectedList?.contactList.count)!

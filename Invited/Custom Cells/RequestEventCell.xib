@@ -22,10 +22,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="325" height="403"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f3Q-Ja-dgM">
+
                                 <rect key="frame" x="0.0" y="0.0" width="325" height="137"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BD8-No-Ju9">
                                         <rect key="frame" x="40" y="5" width="245" height="126.5"/>
+
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="0.0" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
@@ -41,7 +43,9 @@
                                         <state key="normal" image="iconExpandTile"/>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vgf-jx-qxW">
+
                                         <rect key="frame" x="15" y="136.5" width="295" height="0.5"/>
+
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="HXg-G3-58D"/>
@@ -62,7 +66,9 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5I-J9-JwQ">
+
                                 <rect key="frame" x="15" y="157" width="295" height="100"/>
+
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="GEU-yK-Vt3">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -102,7 +108,9 @@
                                     <constraint firstItem="LT7-ri-2Kh" firstAttribute="top" secondItem="U5I-YY-JWn" secondAttribute="bottom" constant="8" id="AHs-vs-m3J"/>
                                     <constraint firstAttribute="trailing" secondItem="LT7-ri-2Kh" secondAttribute="trailing" constant="20" id="BgR-D9-oGb"/>
                                     <constraint firstItem="PAF-63-2cp" firstAttribute="top" secondItem="LT7-ri-2Kh" secondAttribute="bottom" constant="10" id="HO4-cA-1PC"/>
+
                                     <constraint firstItem="PAF-63-2cp" firstAttribute="leading" secondItem="b5I-J9-JwQ" secondAttribute="leading" constant="60" id="KWt-Pp-1P8"/>
+
                                     <constraint firstAttribute="bottom" secondItem="PAF-63-2cp" secondAttribute="bottom" constant="10" id="NiE-hd-3tZ"/>
                                     <constraint firstAttribute="trailing" secondItem="PAF-63-2cp" secondAttribute="trailing" constant="20" id="S6e-16-98n"/>
                                     <constraint firstItem="PAF-63-2cp" firstAttribute="leading" secondItem="LT7-ri-2Kh" secondAttribute="leading" id="VMv-jI-XPT"/>
@@ -215,7 +223,9 @@
                 <outlet property="eventName" destination="BD8-No-Ju9" id="5pA-XD-20x"/>
                 <outlet property="expandButton" destination="igh-ss-V4j" id="rcj-4q-zsP"/>
                 <outlet property="location" destination="PAF-63-2cp" id="xy6-ch-VVl"/>
+
                 <outlet property="locationHeightConstraint" destination="trn-PR-wcM" id="Im6-Lr-t3R"/>
+
                 <outlet property="mainView" destination="Hx6-a0-JzL" id="Tx3-eT-R6c"/>
                 <outlet property="profileImageView" destination="GEU-yK-Vt3" id="uSo-jI-w8b"/>
                 <outlet property="rejectButton" destination="3b5-rP-3VO" id="yp8-76-NhC"/>
