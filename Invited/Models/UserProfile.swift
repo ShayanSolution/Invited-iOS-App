@@ -17,9 +17,11 @@ class UserProfile: NSObject,NSCoding
     var email : String?
     var dob : String?
     var dor : String?
+    var createdAt : String?
+    var updatedAt : String?
     
     
-    init(id: Int, accessToken : String, firstName : String, lastName : String, email : String, dob : String, dor : String) {
+    init(id: Int, accessToken : String, firstName : String, lastName : String, email : String, dob : String, dor : String, createdAt : String, updatedAt : String) {
         self.userID = id
         self.accessToken = accessToken
         self.firstName = firstName
@@ -27,6 +29,8 @@ class UserProfile: NSObject,NSCoding
         self.email = email
         self.dob = dob
         self.dor = dor
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         
     }
     
@@ -38,8 +42,10 @@ class UserProfile: NSObject,NSCoding
         let email = aDecoder.decodeObject(forKey: kEmail) as? String ?? ""
         let dob = aDecoder.decodeObject(forKey: kDOB) as? String ?? ""
         let dor = aDecoder.decodeObject(forKey: kDOR) as? String ?? ""
+        let createdAt = aDecoder.decodeObject(forKey: kCreatedAt) as? String ?? ""
+        let updatedAt = aDecoder.decodeObject(forKey: kUpdatedAt) as? String ?? ""
         
-        self.init(id: userSpecificID, accessToken: token, firstName: firstName, lastName: lastName, email: email, dob: dob, dor: dor)
+        self.init(id: userSpecificID, accessToken: token, firstName: firstName, lastName: lastName, email: email, dob: dob, dor: dor, createdAt: createdAt, updatedAt: updatedAt)
         
     }
     
@@ -51,6 +57,8 @@ class UserProfile: NSObject,NSCoding
         aCoder.encode(self.email, forKey: kEmail)
         aCoder.encode(self.dob, forKey: kDOB)
         aCoder.encode(self.dor, forKey: kDOR)
+        aCoder.encode(self.createdAt, forKey: kCreatedAt)
+        aCoder.encode(self.updatedAt, forKey: kUpdatedAt)
         
         
     }

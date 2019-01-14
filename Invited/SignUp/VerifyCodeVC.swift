@@ -326,9 +326,6 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             BasicFunctions.setPreferences(authToken, key: kAccessToken)
             BasicFunctions.setPreferences(userID, key: kUserID)
             
-            kUserList.removeAll()
-            
-            
             
             //            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken)
             //            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
@@ -336,9 +333,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             
             
             
-            BasicFunctions.setUserLoggedIn()
-            BasicFunctions.setHomeVC()
-            BasicFunctions.fetchAllContactsFromDevice()
+            self.updateDeviceToken()
         }
         else
         {
@@ -370,6 +365,54 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
 //            }
             
             BasicFunctions.showAlert(vc: self, msg: errorString)
+        }
+        
+    }
+    func updateDeviceToken()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        var postParams = [String:Any]()
+        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
+        postParams["device_token"] = BasicFunctions.getPreferences(kDeviceToken)
+        postParams["platform"] = "ios"
+        
+        var environmentString : String!
+        #if DEVELOPMENT
+        environmentString = "development"
+        #else
+        environmentString = "production"
+        #endif
+        
+        postParams["environment"] = environmentString
+        
+        ServerManager.updateDeviceToken(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as? [String : Any]
+            
+            let status = json?["status"] as? String
+            //            let message = json?["message"] as? String
+            
+            //            if message != nil && message == "Unauthorized"
+            //            {
+            //                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+            //                BasicFunctions.showSigInVC()
+            //                return
+            //
+            //            }
+            
+            if status != nil
+            {
+                kUserList.removeAll()
+                BasicFunctions.setUserLoggedIn()
+                BasicFunctions.setHomeVC()
+                BasicFunctions.fetchAllContactsFromDevice()
+            }
+            
+            
         }
         
     }

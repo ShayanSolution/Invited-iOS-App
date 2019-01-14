@@ -139,10 +139,10 @@ class BasicFunctions: NSObject {
     }
     class func getTitleAccordingToDateAndTimeFormat (dateTimeString : String!) -> String
     {
-        var titleString = ""
+        var titleString = "Date and time of message: "
         if dateTimeString.range(of: "-") != nil && dateTimeString.range(of: ":") != nil
         {
-            titleString = "Date and time of message: "
+            
         }
         else if dateTimeString.range(of: "-") != nil
         {
@@ -200,6 +200,12 @@ class BasicFunctions: NSObject {
         
         
         return formatedString
+    }
+    class func compareDates(fromDate : Date!, toDate : Date!) -> Int
+    {
+        let components = Calendar.current.dateComponents([.year], from: fromDate, to: toDate)
+        
+        return components.year!
     }
     
     

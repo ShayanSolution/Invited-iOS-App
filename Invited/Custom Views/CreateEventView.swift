@@ -43,6 +43,16 @@ class CreateEventView: UIView {
     
     @IBOutlet var updateButtonView: UIView!
     
+    @IBOutlet var cancelInfoButton: UIButton!
+    
+    @IBOutlet var deleteInfoButton: UIButton!
+    
+    @IBOutlet var infoView: UIView!
+    
+    @IBOutlet var infoViewBottomConstraint: NSLayoutConstraint!
+    
+    
+    
     @IBOutlet var setNumberOfPeopleTextfield: UITextField!
     
     @IBOutlet var locationSwitch: UISwitch!

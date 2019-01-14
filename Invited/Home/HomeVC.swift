@@ -29,6 +29,7 @@ class EventData: NSObject
     var listID = Int()
     var listName = String()
     var eventTime = String()
+    var eventTimesTamp = String()
     var eventCreatedTime = String()
     var lat = String()
     var long = String()
@@ -120,7 +121,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBOutlet var mainScrollView: UIScrollView!
     
-    
+
 //    var userList = [UserList]()
     
     var contactsView : ContactsView!
@@ -166,7 +167,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var selectedLat : String?
     var selectedLong : String?
     
+    var infoView : UIView!
     
+    var timer : Timer!
     
     
     
@@ -182,7 +185,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
-//        self.locationManager.startUpdatingLocation()
+        self.locationManager.startUpdatingLocation()
         
         self.detailView  = DetailView.instanceFromNib() as? DetailView
         self.eventDetailView  = EventDetailView.instanceFromNib() as? EventDetailView
@@ -502,11 +505,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             // 3
             self.currentLocationAddress = lines.joined(separator: "\n")
-            if self.editEventView != nil && self.isUpdated
+            if self.editEventView != nil && self.isUpdated && self.editEventView.locationTextField.text == "" && self.editEventView.locationSwitch.isOn
             {
                 self.editEventView.locationTextField.text = self.currentLocationAddress
             }
-            else
+            else if self.createEventView.locationTextField.text == "" && self.createEventView.locationSwitch.isOn
             {
                 self.createEventView.locationTextField.text = self.currentLocationAddress
             }
@@ -680,9 +683,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.createEventView.locationTextField.delegate = self
         self.createEventView.setListTextField.delegate = self
         
-//        self.createEventView.timeTextField.isUserInteractionEnabled = false
-//        self.createEventView.dateTextField.isUserInteractionEnabled = false
-//        self.createEventView.locationTextField.isUserInteractionEnabled = false
+        self.createEventView.timeTextField.isUserInteractionEnabled = false
+        self.createEventView.dateTextField.isUserInteractionEnabled = false
+        self.createEventView.locationTextField.isUserInteractionEnabled = false
         
         self.showPicker(textField: self.createEventView.setListTextField)
         
@@ -788,7 +791,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 self.createEventView.locationTextField.isUserInteractionEnabled = false
                 self.createEventView.locationTextField.text = ""
-                self.currentLocationCoordinate = nil
+//                self.currentLocationCoordinate = nil
                 self.selectedLat = nil
                 self.selectedLong = nil
             }
@@ -891,6 +894,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             self.selectedList = kUserList[row - 1]
             
+            self.createEventView.setListTextField.text = self.selectedList?.name
+            
             let count = self.selectedList?.contactList.count
             self.createEventView.setNumberOfPeopleTextfield.text = String(count!)
         
@@ -898,6 +903,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else
         {
             self.selectedList = nil
+            self.listID = nil
             self.createEventView.setListTextField.text = ""
             self.createEventView.setNumberOfPeopleTextfield.text = ""
             
@@ -908,6 +914,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if kUserList.count != 0 && row != 0
             {
                 self.updateSelectedList = kUserList[row - 1]
+                
+                self.editEventView.setListTextField.text = self.updateSelectedList?.name
                 
                 let count = self.updateSelectedList?.contactList.count
                 self.editEventView.setNumberOfPeopleTextfield.text = String(count!)
@@ -1121,7 +1129,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 requestEventCell?.eventDateHeightConstraint.constant = 40
-                requestEventCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
+                requestEventCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
             }
             
             if eventData.eventAddress.isEmpty
@@ -1242,7 +1250,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             yourEventsCell?.title.text = eventData.title
             yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(eventData.eventCreatedTime)
+            yourEventsCell?.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
             yourEventsCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited: ").normal(String(eventData.totalInvited))
             
             
@@ -1255,7 +1263,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 yourEventsCell?.date.isHidden = false
 
-                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
+                yourEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
             }
             
             if eventData.eventAddress.isEmpty
@@ -1371,7 +1379,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 receivedEventsCell?.dateHeightConstraint.constant = 60
-                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
+                receivedEventsCell?.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
             }
             
             if eventData.eventAddress.isEmpty
@@ -1612,11 +1620,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if textField.tag == 1 || textField.tag == 2
         {
 
-            self.createEventView.locationTextField.isUserInteractionEnabled = false
-            if self.editEventView != nil
-            {
-                self.editEventView.locationTextField.isUserInteractionEnabled = false
-            }
+//            self.createEventView.locationTextField.isUserInteractionEnabled = false
+//            if self.editEventView != nil
+//            {
+//                self.editEventView.locationTextField.isUserInteractionEnabled = false
+//            }
             
         }
         else if textField.tag == 3
@@ -1666,7 +1674,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
             self.sentByMeView.yesCount.attributedText = NSMutableAttributedString().bold("YES count: ").normal(String(eventData.numberOfInvitationAccepted))
             self.sentByMeView.noCount.attributedText = NSMutableAttributedString().bold("NO count: ").normal(String(eventData.numberOfInvitationRejected))
-            self.sentByMeView.createEventDate.attributedText = NSMutableAttributedString().bold("Message Sent On: ").normal(eventData.eventCreatedTime)
+            self.sentByMeView.createEventDate.attributedText = NSMutableAttributedString().bold("Message Sent On: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
             
             var date : String!
             if eventData.eventTime.isEmpty
@@ -1678,7 +1686,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 date = eventData.eventTime
             }
             
-            self.sentByMeView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: date)).normal(date)
+            self.sentByMeView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: date)).normal(String(format: "\n%@", date))
             
             var address : String!
             if eventData.eventAddress == ""
@@ -1714,15 +1722,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
-            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(eventData.eventCreatedTime)
+            self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
             
             if eventData.eventTime.isEmpty
             {
-                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("Not Specified")
+                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("\nNot Specified")
             }
             else
             {
-                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
+                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
             }
             
             if eventData.eventAddress.isEmpty
@@ -1887,19 +1895,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
 //        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
-        self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(eventData.eventCreatedTime)
+        self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
 //        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
 //        self.detailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
         
         if eventData.eventTime.isEmpty
         {
             //            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of Message: ").normal("Not Specified")
+            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of Message: ").normal("\nNot Specified")
             
         }
         else
         {
-            self.detailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
+            self.detailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
         }
         
         if eventData.eventAddress.isEmpty
@@ -2015,19 +2023,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.eventDetailView.titleTextView.text = eventData.title
         self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
-        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(eventData.eventCreatedTime)
-        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited: ").normal(String(eventData.totalInvited))
+        self.eventDetailView.createdDate.attributedText = NSMutableAttributedString().bold("Message sent on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
+        self.eventDetailView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited: ").normal(String(eventData.totalInvited))
         
         
         if eventData.eventTime.isEmpty
         {
 //            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("Not Specified")
+            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("\nNot Specified")
             
         }
         else
         {
-            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(eventData.eventTime)
+            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
         }
         
         if eventData.eventAddress.isEmpty
@@ -2137,44 +2145,87 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.editEventView.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         
+        self.editEventView.cancelInfoButton.addTarget(self, action: #selector(self.questionMarkButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        self.editEventView.deleteInfoButton.addTarget(self, action: #selector(self.questionMarkButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+        
         self.editEventView.updateButtonView.isHidden = false
         self.editEventView.createButtonView.isHidden = true
         
         
 
         
-//        let formatter1 = DateFormatter()
-//        formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
-////        let dateString = eventData.eventTime
-//        let date = formatter1.date(from: eventData.eventTime)
-//
+        let formatter1 = DateFormatter()
+        let formatter2 = DateFormatter()
+        
+        if eventData.eventTimesTamp.range(of: "-") != nil && eventData.eventTimesTamp.range(of: ":") != nil
+        {
+            formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        }
+        else if eventData.eventTimesTamp.range(of: "-") != nil
+        {
+            formatter1.dateFormat = "yyyy-MM-dd"
+        }
+        else if eventData.eventTimesTamp.range(of: ":") != nil
+        {
+            formatter2.dateFormat = "HH:mm:ss"
+        }
+//        let dateString = eventData.eventTime
+        let date = formatter1.date(from: eventData.eventTimesTamp)
+
 //        formatter1.dateStyle = .medium
 //        formatter1.timeStyle = .short
-//
-//        formatter1.dateFormat = "dd/MM/yyyy"
-//
-//        let formatter2 = DateFormatter()
-//        formatter2.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//
-////        let timeString = eventData.eventTime.components(separatedBy: " ")[1
-//        let time = formatter2.date(from: eventData.eventTime)
-//
-//        formatter2.dateFormat = "hh:mm a"
-//
-        self.editEventView.titleTextView.text = eventData.title
-//        if time != nil
-//        {
-//            self.editEventView.timeTextField.text = formatter2.string(from: time!)
-//        }
-//
-//        if date != nil
-//        {
-//            self.editEventView.dateTextField.text = formatter1.string(from: date!)
-//        }
-        
-        
 
-//        self.editEventView.locationTextField.text = eventData.eventAddress
+        formatter1.dateFormat = "dd/MM/yyyy"
+
+
+//        let timeString = eventData.eventTime.components(separatedBy: " ")[1]
+        let time = formatter2.date(from: eventData.eventTimesTamp)
+
+        formatter2.dateFormat = "hh:mm a"
+
+        self.editEventView.titleTextView.text = eventData.title
+        if time != nil && eventData.eventTimesTamp != ""
+        {
+            self.editEventView.timeSwitch.isOn = true
+            self.editEventView.timeTextField.isUserInteractionEnabled = true
+            self.editEventView.timeTextField.text = formatter2.string(from: time!)
+        }
+        else
+        {
+            self.editEventView.timeSwitch.isOn = false
+            self.editEventView.timeTextField.isUserInteractionEnabled = false
+            self.editEventView.timeTextField.text = ""
+        }
+
+        if date != nil && eventData.eventTimesTamp != ""
+        {
+            self.editEventView.dateSwitch.isOn = true
+            self.editEventView.dateTextField.isUserInteractionEnabled = true
+            self.editEventView.dateTextField.text = formatter1.string(from: date!)
+        }
+        else
+        {
+            self.editEventView.dateSwitch.isOn = false
+            self.editEventView.dateTextField.isUserInteractionEnabled = false
+            self.editEventView.dateTextField.text = ""
+        }
+        
+        
+        if eventData.eventAddress == ""
+        {
+            self.editEventView.locationSwitch.isOn = false
+            self.editEventView.locationTextField.isUserInteractionEnabled = false
+            self.editEventView.locationTextField.text = ""
+        }
+        else
+        {
+            self.editEventView.locationSwitch.isOn = true
+            self.editEventView.locationTextField.isUserInteractionEnabled = true
+            self.editEventView.locationTextField.text = eventData.eventAddress
+            self.locationManager.startUpdatingLocation()
+            
+        }
         self.editEventView.setNumberOfPeopleTextfield.text = String(eventData.maximumNumberOfPeople)
         self.editEventView.setListTextField.text = eventData.listName
         
@@ -2208,6 +2259,55 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.view.addSubview(self.editEventView)
     }
+    @objc func questionMarkButtonTapped(sender:UIButton)
+    {
+        var infoString : String!
+        
+        if sender.tag == 1
+        {
+            infoString = kCancelInfo
+        }
+        else
+        {
+            infoString = kDeleteInfo
+        }
+        
+        
+        self.infoView = UIView.init(frame: CGRect.init(x: self.editEventView.frame.origin.x, y: self.editEventView.frame.size.height, width: self.editEventView.frame.size.width
+            , height: 100.0))
+        self.infoView.backgroundColor = UIColor.red;
+        
+        let infoLabel = UILabel.init(frame: CGRect.init(x: 10.0, y: 0, width: self.infoView.frame.size.width - 10.0, height: 80.0))
+        infoLabel.backgroundColor = UIColor.clear
+        infoLabel.numberOfLines = 0
+        infoLabel.textColor = UIColor.white
+        infoLabel.text = infoString
+        
+        self.infoView.addSubview(infoLabel)
+        self.editEventView.addSubview(self.infoView)
+        
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveLinear, animations: {
+            
+            self.infoView.frame = CGRect.init(x: self.editEventView.frame.origin.x, y: self.editEventView.frame.size.height - 100, width: self.editEventView.frame.size.width, height: 100.0)
+            
+        }) { (isFinished : Bool) in
+            
+            self.timer = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(self.hideInfoView), userInfo: nil, repeats: false)
+            
+        }
+    }
+    @objc func hideInfoView()
+    {
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveLinear, animations: {
+            
+            self.infoView.frame = CGRect.init(x: self.editEventView.frame.origin.x, y: self.editEventView.frame.size.height, width: self.editEventView.frame.size.width, height: 100.0)
+            
+        }) { (isFinished : Bool) in
+            
+            self.timer.invalidate()
+        }
+    }
+    
     @objc func backButtonTapped()
     {
         if self.detailView != nil
@@ -2445,6 +2545,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 return
                 
             }
+            else if status == "cancelled"
+            {
+                if message != nil
+                {
+                    BasicFunctions.showAlert(vc: self, msg: message!)
+                }
+//                self.fetchRequestsFromServer()
+                
+                return
+                
+            }
             
             if self.detailView != nil
             {
@@ -2631,6 +2742,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             userProfileData.firstName = userData?["firstName"] as? String ?? ""
             userProfileData.lastName = userData?["lastName"] as? String ?? ""
             userProfileData.email = userData?["email"] as? String ?? ""
+            userProfileData.createdAt = userData?["created_at"] as? String ?? ""
+            userProfileData.updatedAt = userData?["updated_at"] as? String ?? ""
+            
             if dobDate != nil
             {
                 userProfileData.dob = dateFormatter.string(from: dobDate!)
@@ -2642,7 +2756,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             
-            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, email: userProfileData.email, dob: userProfileData.dob, dor: userProfileData.dor)
+            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, email: userProfileData.email, dob: userProfileData.dob, dor: userProfileData.dor, createdAt: userProfileData.createdAt, updatedAt: userProfileData.updatedAt)
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
             BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
@@ -3039,17 +3153,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if json?["error"] == nil
             {
                 
-                self.createEventView.titleTextView.text = "Invite Title"
+                self.createEventView.titleTextView.text = "Message"
                 self.createEventView.titleTextView.textColor = UIColor.lightGray
-                self.createEventView.timeTextField.text = ""
-                self.createEventView.dateTextField.text = ""
-                self.createEventView.locationTextField.text = self.currentLocationAddress
                 self.createEventView.setListTextField.text = ""
                 self.createEventView.setNumberOfPeopleTextfield.text = ""
-//                self.createEventView.iWillPayButton.isSelected = true
-//                self.createEventView.youWillPayButton.isSelected = false
-//                self.createEventView.allButton.isSelected = false
+                self.createEventView.timeTextField.text = ""
+                self.createEventView.dateTextField.text = ""
+                self.createEventView.locationTextField.text = ""
+                
+                self.createEventView.locationTextField.isUserInteractionEnabled = false
+                self.createEventView.dateTextField.isUserInteractionEnabled = false
+                self.createEventView.timeTextField.isUserInteractionEnabled = false
+                
+                self.createEventView.locationSwitch.isOn = false
+                self.createEventView.dateSwitch.isOn = false
+                self.createEventView.timeSwitch.isOn = false
+                
                 self.selectedList = nil
+                self.listID = nil
+                
+//                self.currentLocationCoordinate = nil
                 
                 UserDefaults.standard.removeObject(forKey: kSelectedLat)
                 UserDefaults.standard.removeObject(forKey: kSelectedLong)
@@ -3062,7 +3185,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 if message != nil
                 {
-                BasicFunctions.showAlert(vc: self, msg: message)
+                    BasicFunctions.showAlert(vc: self, msg: message)
                 }
                 
                 
@@ -3281,16 +3404,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if json["error"] == nil
             {
                 
-                self.editEventView.titleTextView.text = "Invite Title"
+                self.editEventView.titleTextView.text = "Message"
                 self.editEventView.titleTextView.textColor = UIColor.lightGray
                 self.editEventView.timeTextField.text = ""
                 self.editEventView.dateTextField.text = ""
-                self.editEventView.locationTextField.text = self.currentLocationAddress
+                self.editEventView.locationTextField.text = ""
                 self.editEventView.setListTextField.text = ""
                 self.editEventView.setNumberOfPeopleTextfield.text = ""
-//                self.editEventView.iWillPayButton.isSelected = true
-//                self.editEventView.youWillPayButton.isSelected = false
-//                self.editEventView.allButton.isSelected = false
+//                self.editEventView.locationSwitch.isOn = false
+//                self.editEventView.dateSwitch.isOn = false
+//                self.editEventView.timeSwitch.isOn = false
                 self.listID = nil
                 self.updateSelectedList = nil
                 
@@ -3370,6 +3493,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             eventData.userID = event["user_id"] as! Int
             eventData.title = event["title"] as! String
             eventData.eventAddress = event["event_address"] as! String
+            eventData.eventTimesTamp = event["event_time"] as? String ?? ""
             eventData.eventTime = BasicFunctions.checkFormat(dateTimeString: event["event_time"] as? String ?? "")
             eventData.eventCreatedTime = BasicFunctions.checkFormat(dateTimeString: event["event_update_time"] as? String ?? "")
             eventData.listName = event["list_name"] as! String
@@ -3764,7 +3888,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.dropDownPickerView.delegate = self
         self.dropDownPickerView.tag = textField.tag
         
-        if textField.tag == 2
+        if textField.tag == 2 && self.listID != nil
         {
             let row = kUserList.index(where: {$0.id == self.listID})
             self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
@@ -3782,34 +3906,34 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
         if self.selectedList != nil
         {
-        self.createEventView.setListTextField.text = self.selectedList?.name
+//        self.createEventView.setListTextField.text = self.selectedList?.name
         }
         }
         else
         {
         if self.updateSelectedList != nil
         {
-        self.editEventView.setListTextField.text = self.updateSelectedList?.name
+//        self.editEventView.setListTextField.text = self.updateSelectedList?.name
         }
             
         }
         
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         self.view.endEditing(true)
     }
     //When Press Cancel on PickerView
     @objc func cancelClick() {
         
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         self.view.endEditing(true)
     }

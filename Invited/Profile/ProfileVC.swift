@@ -8,6 +8,19 @@
 
 import UIKit
 
+extension Date {
+    var month: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM"
+        return dateFormatter.string(from: self)
+    }
+    var day: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd"
+        return dateFormatter.string(from: self)
+    }
+}
+
 class ProfileVC: UIViewController,UITextFieldDelegate {
     
     @IBOutlet var profileScrollView: UIScrollView!
@@ -27,16 +40,21 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     let dorPicker = UIDatePicker()
     
     let dateFormatter = DateFormatter()
+    
+    let currentDate = Date()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
+        
+        
+        
+        
+        
         self.profileScrollView.contentSize.height = 485.0
         
-        self.showDatePicker(textField: self.dobTextField)
-        self.showDatePicker(textField: self.dorTextField)
         
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
         self.lastNameTextField.text = kLoggedInUserProfile.lastName
@@ -44,6 +62,45 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         self.dobTextField.text = kLoggedInUserProfile.dob
         self.dorTextField.text = kLoggedInUserProfile.dor
         
+        self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        var updatedDate : Date!
+
+        if kLoggedInUserProfile.updatedAt != ""
+        {
+            updatedDate = self.dateFormatter.date(from: kLoggedInUserProfile.updatedAt!)
+        }
+        else if kLoggedInUserProfile.createdAt != ""
+        {
+            updatedDate = self.dateFormatter.date(from: kLoggedInUserProfile.createdAt!)
+        }
+
+
+
+
+        var year : Int!
+
+        if updatedDate != nil
+        {
+            year = BasicFunctions.compareDates(fromDate: updatedDate, toDate: currentDate)
+        }
+
+        if year < 1
+        {
+            if kLoggedInUserProfile.dob != ""
+            {
+                self.dobTextField.isUserInteractionEnabled = false
+            }
+
+            if kLoggedInUserProfile.dor != ""
+            {
+                self.dorTextField.isUserInteractionEnabled = false
+            }
+        }
+        
+        
+        self.showDatePicker(textField: self.dobTextField)
+        self.showDatePicker(textField: self.dorTextField)
         
         
     }
@@ -57,6 +114,20 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     
     @IBAction func updateButtonTapped(_ sender: UIButton)
     {
+//        self.dateFormatter.dateFormat = "dd/MM/yyyy"
+//        let dateObj = self.dateFormatter.date(from: self.dobTextField.text!)
+//        
+//        var dobDateString : String!
+//        if dateObj != nil
+//        {
+//            dobDateString = self.dateFormatter.string(from: dateObj!)
+//        }
+//        self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        
+//        let dobTimesTamp = self.dateFormatter.date(from: dobDateString)
+//        
+//        let year = BasicFunctions.compareDates(fromDate: currentDate, toDate: dobTimesTamp)
+    
         if self.firstNameTextField.text == ""
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put first name.")
@@ -80,15 +151,41 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         
-        self.dateFormatter.dateFormat = "yyyy-MM-dd"
+        self.dateFormatter.dateFormat = "dd/MM/yyyy"
         
         var postParams = [String : Any]()
         postParams["user_id"] = BasicFunctions.getPreferencesForInt(kUserID)
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["email"] = self.emailTextField.text
-        postParams["dob"] = self.dateFormatter.string(from: self.dobPicker.date)
-        postParams["dateofrelation"] = self.dateFormatter.string(from: self.dorPicker.date)
+        
+        var date = self.dateFormatter.date(from: self.dobTextField.text!)
+        
+        self.dateFormatter.dateFormat = "yyyy-MM-dd"
+        if date != nil
+        {
+            postParams["dob"] = self.dateFormatter.string(from: date!)
+        }
+        else
+        {
+            postParams["dob"] = ""
+        }
+        
+        self.dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        date = self.dateFormatter.date(from: self.dorTextField.text!)
+        
+        self.dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        if date != nil
+        {
+            postParams["dateofrelation"] = self.dateFormatter.string(from: date!)
+        }
+        else
+        {
+            postParams["dateofrelation"] = ""
+        }
+        
         
         ServerManager.updateUserProfile(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
@@ -136,6 +233,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     
     func showDatePicker(textField:UITextField!){
         
+        let dateString = String(format: "%@/%@/1990", currentDate.day,currentDate.month)
+        
+        self.dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        
         
         
         //ToolBar
@@ -157,16 +259,53 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         
         if textField.tag == 1
         {
-            //Formate Date
             self.dobPicker.datePickerMode = .date
+            
+            let date = self.dateFormatter.date(from: self.dobTextField.text!)
+            
+            
+            if date != nil
+            {
+                self.dobPicker.date = date!
+            }
+            else
+            {
+                //                self.dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                let date = self.dateFormatter.date(from: dateString)
+                
+                if date != nil
+                {
+                    self.dobPicker.date = date!
+                }
+            }
+            
             
             // add datepicker to textField
             textField.inputView = self.dobPicker
         }
         else
         {
-            //Formate Date
             self.dorPicker.datePickerMode = .date
+            
+            let date = self.dateFormatter.date(from: self.dorTextField.text!)
+            
+            
+            if date != nil
+            {
+                self.dorPicker.date = date!
+            }
+            else
+            {
+                //                self.dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                let date = self.dateFormatter.date(from: dateString)
+                
+                if date != nil
+                {
+                    self.dorPicker.date = date!
+                }
+            }
             
             // add datepicker to textField
             textField.inputView = self.dorPicker

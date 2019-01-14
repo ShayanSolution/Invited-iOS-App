@@ -26,6 +26,8 @@ class UserProfileData: NSObject
     var dor = String()
     var email = String()
     var password = String()
+    var createdAt = String()
+    var updatedAt = String()
     var isFBSignUp = Bool()
     
 }
@@ -84,10 +86,26 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     let userProfileData = UserProfileData()
     
+    let dateformatter = DateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        let currentDate = Date()
+        
+        
+        let dateString = String(format: "1990-%@-%@", currentDate.month,currentDate.day)
+        
+        self.dateformatter.dateFormat = "yyyy-MM-dd"
+        
+        let date = self.dateformatter.date(from: dateString)
+        
+        if date != nil
+        {
+            self.datePicker.date = date!
+        }
         
         self.showPicker(textField: self.genderTextField)
         self.showDatePicker(textField: self.dobTextField)
@@ -192,7 +210,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         let loginManager = LoginManager()
         loginManager.logOut()
 
-        loginManager.logIn(readPermissions: [.publicProfile,.email], viewController: self) { (loginResult) in
+        loginManager.logIn(readPermissions: [.publicProfile,.email,.userBirthday], viewController: self) { (loginResult) in
 
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -223,7 +241,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         if((FBSDKAccessToken.current()) != nil)
         {
 
-            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,email"]).start(completionHandler: { (connection, result, error) -> Void in
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,email,birthday"]).start(completionHandler: { (connection, result, error) -> Void in
 
                 if (error == nil){
                     
@@ -231,9 +249,21 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                     self.userProfileData.firstName = userInfo?["first_name"] as? String ?? ""
                     self.userProfileData.lastName = userInfo?["last_name"] as? String ?? ""
                     self.userProfileData.gender = 1
-                    self.userProfileData.dob = userInfo?["birthday"] as? String ?? ""
+                    let dobString = userInfo?["birthday"] as? String ?? ""
                     self.userProfileData.email = userInfo?["email"] as? String ?? ""
                     self.userProfileData.password = userInfo?["id"] as? String ?? "123456"
+                    
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "dd/MM/yyyy"
+                    
+                    let date = formatter.date(from: dobString)
+                    
+                    formatter.dateFormat = "yyyy-MM-dd"
+                    
+                    if date != nil
+                    {
+                        self.userProfileData.dob = formatter.string(from: date!)
+                    }
                     
                     
                     if isFBLogin
@@ -330,11 +360,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put bithday date.")
             return
         }
-        else if (self.emailTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please put email.")
-            return
-        }
         else if (self.passwordTextField.text?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put password.")
@@ -356,8 +381,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             return
         }
         
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyy-MM-dd"
+        
+        self.dateformatter.dateFormat = "yyyy-MM-dd"
 
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
@@ -668,10 +693,12 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             }
             else
             {
+                self.dateformatter.dateFormat = "yyyy-MM-dd"
+                
                 self.userProfileData.firstName = self.firstNameTextField.text!
                 self.userProfileData.lastName = self.lastNameTextField.text!
                 self.userProfileData.phone = self.phoneTextField.text!
-                self.userProfileData.dob = self.dobTextField.text!
+                self.userProfileData.dob = self.dateformatter.string(from: self.datePicker.date)
                 self.userProfileData.email = self.emailTextField.text!
                 self.userProfileData.password = self.passwordTextField.text!
                 
