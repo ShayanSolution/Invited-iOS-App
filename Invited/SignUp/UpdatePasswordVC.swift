@@ -61,7 +61,7 @@ class UpdatePasswordVC: UIViewController,UITextFieldDelegate {
         
         
         
-        ServerManager.updatePassword(postParams) { (result) in
+        ServerManager.updatePassword(postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponseOfUpdatePassword(result as! [String : Any])

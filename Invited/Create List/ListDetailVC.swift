@@ -252,7 +252,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         postParams["list_id"] = self.listData.id
         postParams["list_name"] = self.listData.name
         
-        ServerManager.updateList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateList(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)

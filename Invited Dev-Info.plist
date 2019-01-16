@@ -24,9 +24,7 @@
 			<key>CFBundleURLName</key>
 			<string></string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>twitterkit-UcrOJ4SLYyXKN9ezxzLqFk94r</string>
-			</array>
+			<array/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
@@ -34,15 +32,11 @@
 			<key>CFBundleURLName</key>
 			<string>fb</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fb348376062627946</string>
-			</array>
+			<array/>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.19</string>
-	<key>FacebookAppID</key>
-	<string>348376062627946</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>googlechromes</string>

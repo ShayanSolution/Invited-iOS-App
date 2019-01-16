@@ -175,7 +175,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     
             if self.isForgotPassword == true
             {
-                ServerManager.verifyForgetPasswordCode(postParams) { (result) in
+                ServerManager.verifyForgetPasswordCode(postParams, withBaseURL : kBaseURL) { (result) in
                     
                     BasicFunctions.stopActivityIndicator(vu: self.view)
                     self.handleServerResponseofVerification(result as! [String : Any])
@@ -184,7 +184,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             }
             else
             {
-                ServerManager.verifySMSCode(postParams) { (result) in
+                ServerManager.verifySMSCode(postParams, withBaseURL : kBaseURL) { (result) in
                     
                     BasicFunctions.stopActivityIndicator(vu: self.view)
                     self.handleServerResponseofVerification(result as! [String : Any])
@@ -259,7 +259,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         postParams["password_confirmation"] = self.userCredentials.password
         
         
-        ServerManager.signUp(postParams) { (result) in
+        ServerManager.signUp(postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
@@ -282,7 +282,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         postParams["password_confirmation"] = self.userCredentials.password
         
         
-        ServerManager.socialSignUp(postParams) { (result) in
+        ServerManager.socialSignUp(postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
@@ -302,7 +302,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         postParams["scope"] = "*"
         postParams["role"] = "user"
         
-        ServerManager.sign(in: postParams) { (result) in
+        ServerManager.sign(in: postParams, withBaseURL : kBaseURL) { (result) in
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
         }
@@ -386,7 +386,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         
         postParams["environment"] = environmentString
         
-        ServerManager.updateDeviceToken(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateDeviceToken(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -435,7 +435,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         
         if self.isForgotPassword == true
         {
-            ServerManager.sendSMS(withForgetPassword: postParams) { (result) in
+            ServerManager.sendSMS(withForgetPassword: postParams, withBaseURL : kBaseURL) { (result) in
                 
                 
                 BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -445,7 +445,7 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
         }
         else
         {
-            ServerManager.sendSMS(postParams) { (result) in
+            ServerManager.sendSMS(postParams, withBaseURL : kBaseURL) { (result) in
                 
                 BasicFunctions.stopActivityIndicator(vu: self.view)
                 self.handleServerResponseOfSendSMS(result as! [String : Any])

@@ -23,7 +23,6 @@ var className: String {
 
 class BasicFunctions: NSObject {
     
-
     
     class func setBorderOfView(view:UIView) -> Void {
         view.layer.cornerRadius = 2.0
@@ -137,20 +136,21 @@ class BasicFunctions: NSObject {
             sideMenuController.toggleLeftMenu()
         }
     }
+    
     class func getTitleAccordingToDateAndTimeFormat (dateTimeString : String!) -> String
     {
-        var titleString = "Date and time of message: "
+        var titleString = "Date and time of event: "
         if dateTimeString.range(of: "-") != nil && dateTimeString.range(of: ":") != nil
         {
             
         }
         else if dateTimeString.range(of: "-") != nil
         {
-            titleString = "Date of message: "
+            titleString = "Date of event: "
         }
         else if dateTimeString.range(of: ":") != nil
         {
-            titleString = "Time of message: "
+            titleString = "Time of event: "
         }
         return titleString
     }

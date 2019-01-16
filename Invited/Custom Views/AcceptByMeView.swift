@@ -25,6 +25,11 @@ class AcceptByMeView: UIView {
     @IBOutlet var startNavigationButton: UIButton!
     
     
+    @IBOutlet var dateViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var startNavigationButtonHeightConstraint: NSLayoutConstraint!
     
     
     

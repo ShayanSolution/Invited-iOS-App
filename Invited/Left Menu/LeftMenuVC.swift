@@ -41,22 +41,22 @@ class LeftMenuVC: UIViewController {
             
             BasicFunctions.showActivityIndicator(vu: self.view)
             
-            let store = TWTRTwitter.sharedInstance().sessionStore
-            if let userID = store.session()?.userID {
-                store.logOutUserID(userID)
-                BasicFunctions.showSigInVC()
-                return
-            }
-            else if (FBSDKAccessToken.current() != nil)
-            {
-                FBSDKLoginManager().logOut()
-                BasicFunctions.showSigInVC()
-                return
-            }
+//            let store = TWTRTwitter.sharedInstance().sessionStore
+//            if let userID = store.session()?.userID {
+//                store.logOutUserID(userID)
+//                BasicFunctions.showSigInVC()
+//                return
+//            }
+//            else if (FBSDKAccessToken.current() != nil)
+//            {
+//                FBSDKLoginManager().logOut()
+//                BasicFunctions.showSigInVC()
+//                return
+//            }
             
             
             
-            ServerManager.signOut(nil, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            ServerManager.signOut(nil,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
                 
                 
                 BasicFunctions.stopActivityIndicator(vu: self.view)

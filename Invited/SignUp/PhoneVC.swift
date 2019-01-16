@@ -56,7 +56,7 @@ class PhoneVC: UIViewController,UITextFieldDelegate {
         postParams["gender"] = 1
         
         
-        ServerManager.validation(postParams) { (result) in
+        ServerManager.validation(postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
@@ -139,7 +139,7 @@ class PhoneVC: UIViewController,UITextFieldDelegate {
         var postParams = [String: Any]()
         postParams["phone"] = self.phoneNumberTextField.text
         
-        ServerManager.sendSMS(postParams) { (result) in
+        ServerManager.sendSMS(postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponseOfSendSMS(isForget: false)

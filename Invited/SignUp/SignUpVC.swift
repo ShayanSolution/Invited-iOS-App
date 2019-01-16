@@ -194,7 +194,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
         
         
-        ServerManager.sendSMS(withForgetPassword: postParams) { (result) in
+        ServerManager.sendSMS(withForgetPassword: postParams, withBaseURL : kBaseURL) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -408,7 +408,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["gender"] = gender
 
 
-        ServerManager.validation(postParams) { (result) in
+        ServerManager.validation(postParams, withBaseURL : kBaseURL) { (result) in
 
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any], isLoginManually : false)
@@ -464,7 +464,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["scope"] = "*"
         postParams["role"] = "user"
         
-        ServerManager.sign(in: postParams) { (result) in
+        ServerManager.sign(in: postParams, withBaseURL : kBaseURL) { (result) in
+            
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any], isLoginManually : isLoginManually)
         }
@@ -567,7 +568,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
         postParams["environment"] = environmentString
         
-        ServerManager.updateDeviceToken(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateDeviceToken(postParams, withBaseURL : kBaseURL, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -668,7 +669,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         var postParams = [String: Any]()
         postParams["phone"] = self.phoneTextField.text
         
-        ServerManager.sendSMS(postParams) { (result) in
+        ServerManager.sendSMS(postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponseOfSendSMS(result as! [String : Any], isForget: false)

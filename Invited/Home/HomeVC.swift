@@ -621,7 +621,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func invitesStatusButtonTapped(_ sender: UIButton)
     {
-        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x)
+        {
             
             UIView.animate(withDuration: 0.25) {
                 
@@ -635,7 +636,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.mainScrollView.setContentOffset( point, animated: false)
         
         
-        if self.eventStatusView.lineView.frame.origin.x == 0
+        if self.eventStatusView.lineView.frame.origin.x == 5
         {
             self.fetchRequestsFromServer()
         }
@@ -1676,28 +1677,30 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.noCount.attributedText = NSMutableAttributedString().bold("NO count: ").normal(String(eventData.numberOfInvitationRejected))
             self.sentByMeView.createEventDate.attributedText = NSMutableAttributedString().bold("Message Sent On: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
             
-            var date : String!
+            
             if eventData.eventTime.isEmpty
             {
-                date = "Not Specified"
+                self.sentByMeView.dateViewHeightConstraint.constant = 0
             }
             else
             {
-                date = eventData.eventTime
+                self.sentByMeView.dateViewHeightConstraint.constant = 40.0
+                self.sentByMeView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
             }
             
-            self.sentByMeView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: date)).normal(String(format: "\n%@", date))
             
-            var address : String!
+            
+            
             if eventData.eventAddress == ""
             {
-                address = "Not Specified"
+                self.sentByMeView.locationViewHeightConstraint.constant = 0
             }
             else
             {
-                address = eventData.eventAddress
+                self.sentByMeView.locationViewHeightConstraint.constant = 60.0
+                self.sentByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
-            self.sentByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(address)
+            
             
             
             self.sentByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -1726,24 +1729,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if eventData.eventTime.isEmpty
             {
-                self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("\nNot Specified")
+                self.acceptByMeView.dateViewHeightConstraint.constant = 0
             }
             else
             {
+                self.acceptByMeView.dateViewHeightConstraint.constant = 50.0
                 self.acceptByMeView.eventDate.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
             }
             
             if eventData.eventAddress.isEmpty
             {
-                self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal("Not Specified")
-                self.acceptByMeView.startNavigationButton.isHidden = true
+                self.acceptByMeView.locationViewHeightConstraint.constant = 0
+                self.acceptByMeView.startNavigationButtonHeightConstraint.constant = 0
             }
             else
             {
                 self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
-                self.acceptByMeView.startNavigationButton.isHidden = false
+                self.acceptByMeView.locationViewHeightConstraint.constant = 60.0
+                self.acceptByMeView.startNavigationButtonHeightConstraint.constant = 30.5
             }
-
+            
             var invitedBy : String!
 
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitedBy.phone)
@@ -1770,6 +1775,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         }
+        
+        self.view.updateConstraints()
+        
+        
         
 //        self.specificReceivedRequestEventList.removeAll()
 //
@@ -1823,7 +1832,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         postParams["event_id"] = eventID
         postParams["email_address"] = emailAddress
         
-        ServerManager.sendReport(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.sendReport(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -1901,26 +1910,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if eventData.eventTime.isEmpty
         {
-            //            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of Message: ").normal("\nNot Specified")
+            self.detailView.dateViewHeightConstraint.constant = 0
+
             
         }
         else
         {
+            self.detailView.dateViewHeightConstraint.constant = 50.0
             self.detailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
         }
         
-        if eventData.eventAddress.isEmpty
-        {
-            //            self.eventDetailView.locationViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal("Not Specified")
-            self.detailView.startNavigationButton.isHidden = true
-        }
-        else
-        {
-            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
-            self.detailView.startNavigationButton.isHidden = false
-        }
+        
         
         self.detailView.acceptButton.tag = sender.tag
         self.detailView.rejectButton.tag = sender.tag
@@ -1929,7 +1929,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if eventData.confirmed == 0
         {
             self.detailView.acceptORRejectButtonView.isHidden = true
-            self.detailView.startNavigationView.isHidden = true
+            self.detailView.startNavigationViewHeightConstraint.constant = 0
             self.detailView.rejectLabel.isHidden = false
             self.detailView.rejectLabel.text = "No"
             self.detailView.rejectLabel.textColor = UIColor.red
@@ -1937,26 +1937,45 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if eventData.confirmed == 1
         {
             self.detailView.acceptORRejectButtonView.isHidden = true
-            self.detailView.startNavigationView.isHidden = false
+            self.detailView.startNavigationViewHeightConstraint.constant = 30.5
             self.detailView.rejectLabel.isHidden = true
             
         }
         else if eventData.confirmed == 2
         {
             self.detailView.acceptORRejectButtonView.isHidden = false
-            self.detailView.startNavigationView.isHidden = true
+            self.detailView.startNavigationViewHeightConstraint.constant = 0
             self.detailView.rejectLabel.isHidden = true
             
         }
         else if eventData.confirmed == 3
         {
             self.detailView.acceptORRejectButtonView.isHidden = true
-            self.detailView.startNavigationView.isHidden = true
+            self.detailView.startNavigationViewHeightConstraint.constant = 0
             self.detailView.rejectLabel.isHidden = false
             self.detailView.rejectLabel.text = "Too Late! Offer is no longer valid."
             self.detailView.rejectLabel.textColor = UIColor.red
             
         }
+        
+        if eventData.eventAddress.isEmpty
+        {
+            self.detailView.locationViewHeightConstraint.constant = 0
+            self.detailView.startNavigationViewHeightConstraint.constant = 0
+        }
+        else
+        {
+            self.detailView.locationViewHeightConstraint.constant = 60.0
+            self.detailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
+            
+            if eventData.confirmed != 0
+            {
+                self.detailView.startNavigationViewHeightConstraint.constant = 30.5
+            }
+            
+        }
+        
+        self.view.updateConstraints()
         
 //        var paymentMethodString : String!
 //
@@ -2029,33 +2048,35 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if eventData.eventTime.isEmpty
         {
-//            self.eventDetailView.dateViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.eventDetailView.date.attributedText = NSMutableAttributedString().bold("Date and time of message: ").normal("\nNot Specified")
+            self.eventDetailView.dateViewHeightConstraint.constant = 0
+            
             
         }
         else
         {
+            self.eventDetailView.dateViewHeightConstraint.constant = 50.0
             self.eventDetailView.date.attributedText = NSMutableAttributedString().bold(BasicFunctions.getTitleAccordingToDateAndTimeFormat(dateTimeString: eventData.eventTime)).normal(String(format: "\n%@", eventData.eventTime))
         }
         
         if eventData.eventAddress.isEmpty
         {
-//            self.eventDetailView.locationViewHeightConstraint.constant = -self.eventDetailView.dateView.frame.size.height
-            self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal("Not Specified")
-            self.eventDetailView.startNavigationButton.isHidden = true
+            self.eventDetailView.locationViewHeightConstraint.constant = 0
+            
+            self.eventDetailView.startNavigationButtonHeightConstraint.constant = 0
         }
         else
         {
+            self.eventDetailView.locationViewHeightConstraint.constant = 60.0
             self.eventDetailView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
-            self.eventDetailView.startNavigationButton.isHidden = false
+            self.eventDetailView.startNavigationButtonHeightConstraint.constant = 30.5
         }
         
         if eventData.eventType == "canceled"
         {
-            self.eventDetailView.startNavigationButton.isHidden = true
+            self.eventDetailView.startNavigationButtonHeightConstraint.constant = 0
         }
         
-        
+        self.view.updateConstraints()
         
 
         self.eventDetailView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -2404,7 +2425,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String : Any]()
         postParams["event_id"] = sender.tag
         
-        ServerManager.cancelEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.cancelEvent(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -2453,7 +2474,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String : Any]()
         postParams["event_id"] = sender.tag
         
-        ServerManager.deleteEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.deleteEvent(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -2505,7 +2526,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         postParams["event_id"] = eventdata.eventID
         postParams["request_to"] = BasicFunctions.getPreferences(kUserID)
         
-        ServerManager.acceptEventRequest(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.acceptEventRequest(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -2562,6 +2583,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //                self.detailView.startNavigationView.isHidden = false
                 self.detailView.acceptORRejectButtonView.isHidden = true
                 self.detailView.rejectLabel.isHidden = true
+                self.backButtonTapped()
             }
             BasicFunctions.showAlert(vc: self, msg: status!)
             self.fetchRequestsFromServer()
@@ -2585,7 +2607,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         postParams["event_id"] = eventdata.eventID
         postParams["request_to"] = BasicFunctions.getPreferences(kUserID)
         
-        ServerManager.rejectEventRequest(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.rejectEventRequest(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -2622,6 +2644,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.detailView.startNavigationView.isHidden = true
                 self.detailView.acceptORRejectButtonView.isHidden = true
                 self.detailView.rejectLabel.isHidden = false
+                self.backButtonTapped()
                 
             }
             BasicFunctions.showAlert(vc: self, msg: status!)
@@ -2701,7 +2724,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
         BasicFunctions.showActivityIndicator(vu: self.view)
         
-        ServerManager.getUserProfile(nil, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.getUserProfile(nil, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -2762,10 +2785,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
             
-            if kLoggedInUserProfile.dob == ""
-            {
-                self.contactsView.dobView.isHidden = false
-            }
+//            if kLoggedInUserProfile.dob == ""
+//            {
+//                self.contactsView.dobView.isHidden = false
+//            }
             
             
         }
@@ -2782,7 +2805,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String : Any]()
         postParams["user_id"] = BasicFunctions.getPreferencesForInt(kUserID)
         
-        ServerManager.getContactList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.getContactList(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -3133,7 +3156,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        ServerManager.createEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.createEvent(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -3385,7 +3408,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         postParams["latitude"] = lat
         postParams["longitude"] = long
         
-        ServerManager.updateEvent(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateEvent(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -3453,7 +3476,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String:Any]()
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
         
-        ServerManager.getUserEvents(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.getUserEvents(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             self.handleServerResponse(result as! [String : Any])
@@ -3558,7 +3581,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String:Any]()
         postParams["request_to"] = BasicFunctions.getPreferences(kUserID)
         
-        ServerManager.getRequests(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.getRequests(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -3672,7 +3695,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var postParams = [String:Any]()
         postParams["created_by"] = BasicFunctions.getPreferences(kUserID)
         
-        ServerManager.getReceivedRequests(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.getReceivedRequests(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -3821,7 +3844,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         postParams["list_id"] = index
         
         
-        ServerManager.deleteList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.deleteList(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)

@@ -493,7 +493,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         postParams["list_name"] = self.setListNameTextField.text
         
         
-        ServerManager.createList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.createList(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -562,7 +562,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         postParams["list_id"] = self.listData.id
         postParams["list_name"] = self.setListNameTextField.text
         
-        ServerManager.updateList(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateList(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)

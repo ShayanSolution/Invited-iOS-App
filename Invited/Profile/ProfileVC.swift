@@ -187,7 +187,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         }
         
         
-        ServerManager.updateUserProfile(postParams, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)

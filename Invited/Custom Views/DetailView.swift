@@ -36,6 +36,13 @@ class DetailView: UIView {
     
     @IBOutlet var rejectLabel: UILabel!
     
+    @IBOutlet var dateViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var startNavigationViewHeightConstraint: NSLayoutConstraint!
+    
+    
     
     @IBOutlet var paymentMethodLabel: UILabel!
     

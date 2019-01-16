@@ -32,3 +32,11 @@ let kDeleteInfo = "All users who have not rejected this message will get the not
 let kDeviceToken = "DeviceToken"
 let kUserProfile = "UserProfile"
 var kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+
+#if DEVELOPMENT
+var kBaseURL = "http://dev.invited.shayansolutions.com/"
+#else
+var kBaseURL = ""
+#endif
+
+let kConfigURL = "http://invited.shayansolutions.com/"

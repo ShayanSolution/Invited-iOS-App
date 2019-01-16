@@ -34,6 +34,10 @@ class SentByMeView: UIView {
     
     @IBOutlet var sendReportViewHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var dateViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var locationViewHeightConstraint: NSLayoutConstraint!
+    
     
     
     override init (frame : CGRect) {
