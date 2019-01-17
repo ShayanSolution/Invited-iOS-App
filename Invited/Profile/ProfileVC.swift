@@ -21,13 +21,15 @@ extension Date {
     }
 }
 
-class ProfileVC: UIViewController,UITextFieldDelegate {
+class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
     
     @IBOutlet var profileScrollView: UIScrollView!
     
     @IBOutlet var firstNameTextField: UITextField!
     
     @IBOutlet var lastNameTextField: UITextField!
+    
+    @IBOutlet var genderTextField: UITextField!
     
     @IBOutlet var emailTextField: UITextField!
     
@@ -42,6 +44,10 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     let dateFormatter = DateFormatter()
     
     let currentDate = Date()
+    
+    let genderList = ["Select Gender","Male","Female"]
+    
+    let dropDownPickerView = UIPickerView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +67,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         self.emailTextField.text = kLoggedInUserProfile.email
         self.dobTextField.text = kLoggedInUserProfile.dob
         self.dorTextField.text = kLoggedInUserProfile.dor
+        
         
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
@@ -98,7 +105,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
             }
         }
         
-        
+        self.showPicker(textField: self.genderTextField)
         self.showDatePicker(textField: self.dobTextField)
         self.showDatePicker(textField: self.dorTextField)
         
@@ -138,6 +145,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
             BasicFunctions.showAlert(vc: self, msg: "Please put last name.")
             return
         }
+        else if (self.genderTextField.text?.isEmpty)!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put gender.")
+            return
+        }
         else if self.emailTextField.text == ""
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put email.")
@@ -158,6 +170,19 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["email"] = self.emailTextField.text
+        
+        var gender : Int!
+        
+        if self.genderTextField.text == "Male"
+        {
+            gender = 1
+        }
+        else
+        {
+            gender = 2
+        }
+        
+        postParams["gender"] = gender
         
         var date = self.dateFormatter.date(from: self.dobTextField.text!)
         
@@ -333,6 +358,78 @@ class ProfileVC: UIViewController,UITextFieldDelegate {
     @objc func cancelClick() {
         
         self.view.endEditing(true)
+    }
+    
+    func showPicker(textField:UITextField!)
+    {
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.blue
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneClick))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+//        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancelClick))
+        
+        toolBar.setItems([spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        self.dropDownPickerView.dataSource = self
+        self.dropDownPickerView.delegate = self
+        
+        
+        if kLoggedInUserProfile.gender == 0
+        {
+            self.genderTextField.text = ""
+            self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
+        }
+        else if kLoggedInUserProfile.gender == 1
+        {
+            self.genderTextField.text = "Male"
+            self.dropDownPickerView.selectRow(1, inComponent: 0, animated: false)
+        }
+        else
+        {
+            self.genderTextField.text = "Female"
+            self.dropDownPickerView.selectRow(2, inComponent: 0, animated: false)
+        }
+        
+        
+        
+        textField.inputView = self.dropDownPickerView
+        textField.inputAccessoryView = toolBar
+        
+    }
+    
+    @objc func doneClick()
+    {
+        self.view.endEditing(true)
+    }
+    
+    // UiPickerView delegate Methods
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return 3
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return self.genderList[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if row == 0
+        {
+            self.genderTextField.text = ""
+        }
+        else
+        {
+            self.genderTextField.text = self.genderList[row]
+        }
     }
     
     

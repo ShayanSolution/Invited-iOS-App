@@ -2764,6 +2764,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             userProfileData.authToken = BasicFunctions.getPreferences(kAccessToken) as? String ?? ""
             userProfileData.firstName = userData?["firstName"] as? String ?? ""
             userProfileData.lastName = userData?["lastName"] as? String ?? ""
+            userProfileData.gender = userData?["gender_id"] as? Int ?? 0
             userProfileData.email = userData?["email"] as? String ?? ""
             userProfileData.createdAt = userData?["created_at"] as? String ?? ""
             userProfileData.updatedAt = userData?["updated_at"] as? String ?? ""
@@ -2779,7 +2780,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             
-            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, email: userProfileData.email, dob: userProfileData.dob, dor: userProfileData.dor, createdAt: userProfileData.createdAt, updatedAt: userProfileData.updatedAt)
+            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, gender: userProfileData.gender, email: userProfileData.email, dob: userProfileData.dob, dor: userProfileData.dor, createdAt: userProfileData.createdAt, updatedAt: userProfileData.updatedAt)
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
             BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
