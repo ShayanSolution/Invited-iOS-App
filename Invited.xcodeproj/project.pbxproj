@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		24D08F7D98973C443D321E8D /* Pods_Invited.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B0C073928AA016E54FB98D /* Pods_Invited.framework */; };
 		719F458A866D862DDB85027A /* Pods_Invited_Dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7EA2FD84022E08315EEBDFC /* Pods_Invited_Dev.framework */; };
+		AF02312621F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */; };
+		AF02312721F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */; };
 		AF185C6721BAAFC00003E92B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF185C6621BAAFC00003E92B /* SignUpVC.swift */; };
 		AF185C6821BAAFC00003E92B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF185C6621BAAFC00003E92B /* SignUpVC.swift */; };
 		AF1F353C20C2EB86003F4F19 /* EventStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1F353B20C2EB86003F4F19 /* EventStatusView.swift */; };
@@ -128,6 +130,7 @@
 		67A15A72DD88EEA21D9D68E5 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		890B51466B3ED38CC729BA33 /* Pods-Invited.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Invited.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Invited/Pods-Invited.debug.xcconfig"; sourceTree = "<group>"; };
 		93B0C073928AA016E54FB98D /* Pods_Invited.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Invited.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileImageVC.swift; sourceTree = "<group>"; };
 		AF185C6621BAAFC00003E92B /* SignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		AF1F353A20C27E73003F4F19 /* Invited.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Invited.entitlements; sourceTree = "<group>"; };
 		AF1F353B20C2EB86003F4F19 /* EventStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatusView.swift; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				AFCF897721D391FC00082881 /* ProfileVC.swift */,
+				AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -740,6 +744,7 @@
 				AF6E4FA52199912D00918723 /* RequestEventCell.swift in Sources */,
 				AF6E4FA62199912D00918723 /* RequestEventView.swift in Sources */,
 				AF6E4FA72199912D00918723 /* HomeVC.swift in Sources */,
+				AF02312721F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */,
 				AF6E4FA82199912D00918723 /* SentByMeView.swift in Sources */,
 				AF6E4FA92199912D00918723 /* CreateListVC.swift in Sources */,
 				AF6E4FAA2199912D00918723 /* WelcomeVC.swift in Sources */,
@@ -778,6 +783,7 @@
 				AF88848820B3EDCF002F6D4F /* HomeVC.swift in Sources */,
 				AF9D976520F4A269004A8352 /* SentByMeView.swift in Sources */,
 				AF88848B20B42CE0002F6D4F /* CreateListVC.swift in Sources */,
+				AF02312621F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */,
 				AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */,
 				AF73019B20DBA35200483267 /* RouteVC.swift in Sources */,
 				AFC9DD2120B52C0B00042708 /* ServerManager.m in Sources */,

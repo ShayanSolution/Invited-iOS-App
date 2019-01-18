@@ -21,7 +21,7 @@ extension Date {
     }
 }
 
-class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
+class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     @IBOutlet var profileScrollView: UIScrollView!
     
@@ -37,6 +37,14 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     @IBOutlet var dorTextField: UITextField!
     
+    @IBOutlet var profileView: UIView!
+    
+    
+    @IBOutlet var profileImageView: UIImageView!
+    
+    
+    @IBOutlet var editButton: UIButton!
+    
     
     let dobPicker = UIDatePicker()
     let dorPicker = UIDatePicker()
@@ -48,18 +56,16 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     let genderList = ["Select Gender","Male","Female"]
     
     let dropDownPickerView = UIPickerView()
+    
+    var profileImage : UIImage?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        
-        
-        
-        
-        
-        self.profileScrollView.contentSize.height = 485.0
+    
+        self.profileScrollView.contentSize.height = 600.0
         
         
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
@@ -111,12 +117,41 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         
     }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        if kImage != nil
+        {
+            self.profileImage = kImage
+            self.profileImageView.image = self.profileImage
+            kImage = nil
+        }
+    }
+    override func viewDidLayoutSubviews()
+    {
+        self.profileView.layer.cornerRadius = self.profileView.frame.size.width / 2
+        self.profileView.layer.borderWidth = 5.0
+        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
+    }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
         BasicFunctions.openLeftMenu(vc: self)
     }
     
+    @IBAction func editButtonTapped(_ sender: Any)
+    {
+        if self.profileImage != nil
+        {
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = self.profileImage
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+        else
+        {
+            BasicFunctions.openActionSheet(vc: self, isEditing: true)
+        }
+    }
     
     
     @IBAction func updateButtonTapped(_ sender: UIButton)
@@ -430,6 +465,28 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         {
             self.genderTextField.text = self.genderList[row]
         }
+    }
+    
+    
+    // UiimagePickerControllerDelegate Methods
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    {
+        if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
+        {
+            self.profileImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+            
+//            if Float((pickedImage?.size.height)!) < 64.0
+//            {
+//                pickedImage = BasicFunctions.resizeImage(image: pickedImage!, targetSize: CGSize.init(width: 64.0, height: 64.0))
+//            }
+            
+            self.profileImageView.image = self.profileImage
+            self.editButton.isHidden = false
+            
+            
+        }
+        
+        dismiss(animated: true, completion: nil)
     }
     
     

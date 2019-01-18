@@ -14,6 +14,7 @@ import CoreLocation
 var kContactList = [ContactData]()
 var kUserList = [UserList]()
 var kCurrentLocation : CLLocationCoordinate2D?
+var kImage : UIImage?
 let kSelectedAddress = "selectedAddress"
 let kSelectedLat = "selectedLat"
 let kSelectedLong = "selectedLong"
