@@ -55,13 +55,6 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         // Do any additional setup after loading the view.
         
         
-        
-        
-        
-        
-        self.profileScrollView.contentSize.height = 485.0
-        
-        
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
         self.lastNameTextField.text = kLoggedInUserProfile.lastName
         self.emailTextField.text = kLoggedInUserProfile.email
@@ -110,6 +103,10 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.showDatePicker(textField: self.dorTextField)
         
         
+    }
+    override func viewDidAppear(_ animated: Bool)
+    {
+        self.profileScrollView.contentSize.height = 500.0
     }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
