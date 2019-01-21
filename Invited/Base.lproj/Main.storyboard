@@ -1390,11 +1390,11 @@
                                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6U-NL-zxO">
                                                                 <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="Bw6-6J-h3I">
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="Bw6-6J-h3I" customClass="AsyncImageView">
                                                                         <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                                     </imageView>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYz-Ui-Pwu">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                                         <connections>
                                                                             <action selector="editButtonTapped:" destination="PxW-PI-cU9" eventType="touchUpInside" id="UAy-05-YEY"/>
                                                                         </connections>
@@ -1407,8 +1407,8 @@
                                                                     <constraint firstItem="MYz-Ui-Pwu" firstAttribute="leading" secondItem="p6U-NL-zxO" secondAttribute="leading" id="CZ4-0F-FBf"/>
                                                                     <constraint firstItem="Bw6-6J-h3I" firstAttribute="leading" secondItem="p6U-NL-zxO" secondAttribute="leading" id="I4x-KZ-NyD"/>
                                                                     <constraint firstAttribute="width" constant="100" id="SgS-Zv-Otg"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="MYz-Ui-Pwu" secondAttribute="bottom" constant="36" id="Yy3-l0-3IS"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="MYz-Ui-Pwu" secondAttribute="trailing" constant="36" id="ZxP-QE-4Uw"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="MYz-Ui-Pwu" secondAttribute="bottom" id="Yy3-l0-3IS"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="MYz-Ui-Pwu" secondAttribute="trailing" id="ZxP-QE-4Uw"/>
                                                                     <constraint firstAttribute="bottom" secondItem="Bw6-6J-h3I" secondAttribute="bottom" id="asx-iA-Kts"/>
                                                                     <constraint firstItem="Bw6-6J-h3I" firstAttribute="top" secondItem="p6U-NL-zxO" secondAttribute="top" id="lx2-ZX-NzL"/>
                                                                     <constraint firstItem="MYz-Ui-Pwu" firstAttribute="top" secondItem="p6U-NL-zxO" secondAttribute="top" id="uej-uh-3Rk"/>
@@ -1799,7 +1799,7 @@
                         <outlet property="firstNameTextField" destination="PnB-wp-4if" id="0pe-bs-ymP"/>
                         <outlet property="genderTextField" destination="N58-47-iP6" id="3pQ-M6-inv"/>
                         <outlet property="lastNameTextField" destination="9c8-Uu-Huy" id="Eb7-kv-43b"/>
-                        <outlet property="profileImageView" destination="Bw6-6J-h3I" id="79f-97-yJm"/>
+                        <outlet property="profileImageView" destination="Bw6-6J-h3I" id="peO-Sl-NoV"/>
                         <outlet property="profileScrollView" destination="H2Z-E0-rvG" id="0PQ-5o-Sdo"/>
                         <outlet property="profileView" destination="p6U-NL-zxO" id="Ffx-B2-krS"/>
                     </connections>
@@ -1852,7 +1852,7 @@
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PFs-Hl-NEJ">
                                         <rect key="frame" x="0.0" y="159" width="320" height="250"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4v4-ln-s18">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4v4-ln-s18" customClass="AsyncImageView">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
                                             </imageView>
                                         </subviews>
@@ -1887,7 +1887,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="profileImageView" destination="4v4-ln-s18" id="Adm-wn-thE"/>
+                        <outlet property="profileImageView" destination="4v4-ln-s18" id="MAX-Zj-ObT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cAW-3b-Rql" userLabel="First Responder" sceneMemberID="firstResponder"/>

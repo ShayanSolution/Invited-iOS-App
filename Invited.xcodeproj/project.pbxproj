@@ -11,6 +11,8 @@
 		719F458A866D862DDB85027A /* Pods_Invited_Dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7EA2FD84022E08315EEBDFC /* Pods_Invited_Dev.framework */; };
 		AF02312621F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */; };
 		AF02312721F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */; };
+		AF0BDFEE21F1F74100D451DA /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0BDFED21F1F74100D451DA /* AsyncImageView.m */; };
+		AF0BDFEF21F1F74100D451DA /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0BDFED21F1F74100D451DA /* AsyncImageView.m */; };
 		AF185C6721BAAFC00003E92B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF185C6621BAAFC00003E92B /* SignUpVC.swift */; };
 		AF185C6821BAAFC00003E92B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF185C6621BAAFC00003E92B /* SignUpVC.swift */; };
 		AF1F353C20C2EB86003F4F19 /* EventStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1F353B20C2EB86003F4F19 /* EventStatusView.swift */; };
@@ -131,6 +133,8 @@
 		890B51466B3ED38CC729BA33 /* Pods-Invited.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Invited.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Invited/Pods-Invited.debug.xcconfig"; sourceTree = "<group>"; };
 		93B0C073928AA016E54FB98D /* Pods_Invited.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Invited.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF02312521F0C63C006C4D51 /* EditProfileImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileImageVC.swift; sourceTree = "<group>"; };
+		AF0BDFEC21F1F74100D451DA /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
+		AF0BDFED21F1F74100D451DA /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		AF185C6621BAAFC00003E92B /* SignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		AF1F353A20C27E73003F4F19 /* Invited.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Invited.entitlements; sourceTree = "<group>"; };
 		AF1F353B20C2EB86003F4F19 /* EventStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatusView.swift; sourceTree = "<group>"; };
@@ -223,6 +227,15 @@
 				67A15A72DD88EEA21D9D68E5 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		AF0BDFEB21F1F6D800D451DA /* AsyncImageView */ = {
+			isa = PBXGroup;
+			children = (
+				AF0BDFEC21F1F74100D451DA /* AsyncImageView.h */,
+				AF0BDFED21F1F74100D451DA /* AsyncImageView.m */,
+			);
+			path = AsyncImageView;
 			sourceTree = "<group>";
 		};
 		AF88848620B3ED30002F6D4F /* Home */ = {
@@ -377,6 +390,7 @@
 		AFE5DFC2207CD53900652A1B /* Invited */ = {
 			isa = PBXGroup;
 			children = (
+				AF0BDFEB21F1F6D800D451DA /* AsyncImageView */,
 				AF1F353A20C27E73003F4F19 /* Invited.entitlements */,
 				AF88848C20B42EFD002F6D4F /* Custom Cells */,
 				AFC9DD2820B54EA700042708 /* Custom Views */,
@@ -754,6 +768,7 @@
 				AF6E4FAE2199912D00918723 /* ContactCell.swift in Sources */,
 				AF6E4FAF2199912D00918723 /* AppDelegate.swift in Sources */,
 				AF6E4FB02199912D00918723 /* YourEventsCell.swift in Sources */,
+				AF0BDFEF21F1F74100D451DA /* AsyncImageView.m in Sources */,
 				AF6E4FB12199912D00918723 /* Globals.swift in Sources */,
 				AF6E4FB22199912D00918723 /* EventStatusView.swift in Sources */,
 				AF6E4FB32199912D00918723 /* MapVC.swift in Sources */,
@@ -793,6 +808,7 @@
 				AF4F636420C1B14C00083873 /* YourEventsCell.swift in Sources */,
 				AFC9DD2720B5346200042708 /* Globals.swift in Sources */,
 				AF1F353C20C2EB86003F4F19 /* EventStatusView.swift in Sources */,
+				AF0BDFEE21F1F74100D451DA /* AsyncImageView.m in Sources */,
 				AFBCABDB20DA4EDF007ABE74 /* MapVC.swift in Sources */,
 				AF1F353E20C2F5F3003F4F19 /* DetailView.swift in Sources */,
 				AFEF939220E639790033801A /* VerifyCodeVC.swift in Sources */,

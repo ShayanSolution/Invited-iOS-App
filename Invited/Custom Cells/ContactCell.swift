@@ -17,6 +17,9 @@ class ContactCell: UITableViewCell {
     
     @IBOutlet var deleteButton: UIButton!
     
+    @IBOutlet var editButton: UIButton!
+    
+    
     
     
     @IBOutlet var selectedIcon: UIView!

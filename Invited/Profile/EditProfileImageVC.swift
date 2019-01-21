@@ -10,7 +10,7 @@ import UIKit
 
 class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
-    @IBOutlet var profileImageView: UIImageView!
+    @IBOutlet var profileImageView: AsyncImageView!
     
     
     var profileImage : UIImage!

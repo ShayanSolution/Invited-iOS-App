@@ -59,6 +59,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string></string>
 	<key>NSContactsUsageDescription</key>
 	<string>Allow the app to access your contacts to invite for event. Your selected contacts will be uploaded to our server for create event.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

@@ -25,6 +25,7 @@ class UserProfileData: NSObject
     var dob = String()
     var dor = String()
     var email = String()
+    var imageURL = String()
     var password = String()
     var createdAt = String()
     var updatedAt = String()

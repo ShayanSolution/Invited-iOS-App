@@ -40,7 +40,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     @IBOutlet var profileView: UIView!
     
     
-    @IBOutlet var profileImageView: UIImageView!
+    @IBOutlet var profileImageView: AsyncImageView!
     
     
     @IBOutlet var editButton: UIButton!
@@ -64,15 +64,19 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         // Do any additional setup after loading the view.
         
-    
-        self.profileScrollView.contentSize.height = 600.0
-        
         
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
         self.lastNameTextField.text = kLoggedInUserProfile.lastName
         self.emailTextField.text = kLoggedInUserProfile.email
         self.dobTextField.text = kLoggedInUserProfile.dob
         self.dorTextField.text = kLoggedInUserProfile.dor
+        
+        if kLoggedInUserProfile.imageURL != ""
+        {
+            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
+            self.profileImage = self.profileImageView.image
+            self.editButton.isHidden = false
+        }
         
         
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -117,6 +121,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         
     }
+    override func viewDidAppear(_ animated: Bool)
+    {
+        
+        self.profileScrollView.contentSize.height = 700.0
+    }
     override func viewWillAppear(_ animated: Bool)
     {
         if kImage != nil
@@ -140,11 +149,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     @IBAction func editButtonTapped(_ sender: Any)
     {
-        if self.profileImage != nil
+        if kLoggedInUserProfile.imageURL != ""
         {
             let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
             let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
-            editProfileImageVC.profileImage = self.profileImage
+            editProfileImageVC.profileImage = self.profileImageView.image
             BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
         }
         else
@@ -246,8 +255,18 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             postParams["dateofrelation"] = ""
         }
         
+        var imageData : Data?
         
-        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        if kLoggedInUserProfile.imageURL != ""
+        {
+//            var scaleImage : UIImage!
+//            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 118, height: 118))
+            
+            imageData = UIImagePNGRepresentation(self.profileImageView.image!)
+        }
+        
+        
+        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL, withImageData : imageData,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
