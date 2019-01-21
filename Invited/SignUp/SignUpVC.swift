@@ -339,11 +339,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put last name.")
             return
         }
-        else if (self.genderTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please put gender.")
-            return
-        }
         else if (self.phoneTextField.code?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select country.")
@@ -354,11 +349,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
             return
 
-        }
-        else if (self.dobTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please put bithday date.")
-            return
         }
         else if (self.passwordTextField.text?.isEmpty)!
         {
@@ -389,10 +379,21 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["phone"] = self.phoneTextField.text
-        postParams["dob"] = dateformatter.string(from: self.datePicker.date)
         postParams["email"] = self.emailTextField.text
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
+        
+        var dobDate : String!
+        if (self.dobTextField.text?.isEmpty)!
+        {
+            dobDate = ""
+        }
+        else
+        {
+            dobDate = dateformatter.string(from: self.datePicker.date)
+        }
+        
+        postParams["dob"] = dobDate
         
         var gender : Int!
         
@@ -400,9 +401,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         {
             gender = 1
         }
-        else
+        else if self.genderTextField.text == "Female"
         {
             gender = 2
+        }
+        else
+        {
+            gender = 0
         }
         
         postParams["gender"] = gender
@@ -699,9 +704,20 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                 self.userProfileData.firstName = self.firstNameTextField.text!
                 self.userProfileData.lastName = self.lastNameTextField.text!
                 self.userProfileData.phone = self.phoneTextField.text!
-                self.userProfileData.dob = self.dateformatter.string(from: self.datePicker.date)
                 self.userProfileData.email = self.emailTextField.text!
                 self.userProfileData.password = self.passwordTextField.text!
+                
+                var dobDate : String!
+                if (self.dobTextField.text?.isEmpty)!
+                {
+                    dobDate = ""
+                }
+                else
+                {
+                    dobDate = dateformatter.string(from: self.datePicker.date)
+                }
+                
+                self.userProfileData.dob = dobDate
                 
                 var gender : Int!
                 
@@ -709,9 +725,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                 {
                     gender = 1
                 }
-                else
+                else if self.genderTextField.text == "Female"
                 {
                     gender = 2
+                }
+                else
+                {
+                    gender = 0
                 }
                 
                 self.userProfileData.gender = gender

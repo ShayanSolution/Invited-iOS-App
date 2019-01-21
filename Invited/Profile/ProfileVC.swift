@@ -20,6 +20,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 }
+extension String {
+    func isValidEmail() -> Bool {
+        // here, `try!` will always succeed because the pattern is valid
+        let regex = try! NSRegularExpression(pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", options: .caseInsensitive)
+        return regex.firstMatch(in: self, options: [], range: NSRange(location: 0, length: count)) != nil
+    }
+}
 
 class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
     
@@ -157,6 +164,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             BasicFunctions.showAlert(vc: self, msg: "Please put date of birth.")
             return
         }
+        else if !(self.emailTextField.text?.isValidEmail())!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid email.")
+            return
+        }
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         
@@ -232,6 +244,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             BasicFunctions.showSigInVC()
             return
             
+        }
+        
+        if json?["email"] != nil
+        {
+            let errorString : String = (json!["email"] as! Array)[0]
+            BasicFunctions.showAlert(vc: self, msg: errorString)
+            return
         }
         
         BasicFunctions.showAlert(vc: self, msg: message)

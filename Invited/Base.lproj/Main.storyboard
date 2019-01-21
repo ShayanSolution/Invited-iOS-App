@@ -2548,7 +2548,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="rar-A5-69y"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Gender" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CvU-VF-Usj">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Gender (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CvU-VF-Usj">
                                                                 <rect key="frame" x="40" y="-3" width="240" height="26"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2630,7 +2630,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="dDn-OW-gWV"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date of Birth" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UZ9-Ve-Kyy">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date of Birth (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UZ9-Ve-Kyy">
                                                                 <rect key="frame" x="40" y="-3" width="240" height="26"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
