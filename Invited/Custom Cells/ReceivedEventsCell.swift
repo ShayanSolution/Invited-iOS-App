@@ -46,6 +46,8 @@ class ReceivedEventsCell: UITableViewCell {
     
     @IBOutlet var locationHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var profileImageView: AsyncImageView!
+    
     
     
     override func awakeFromNib() {
@@ -55,6 +57,8 @@ class ReceivedEventsCell: UITableViewCell {
         BasicFunctions.setBorderOfView(view: self.mainView)
         
         BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
+        
+        BasicFunctions.setRoundCornerOfImageView(imageView: self.profileImageView)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

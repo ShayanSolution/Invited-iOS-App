@@ -4,3 +4,4 @@
 
 #import "ServerManager.h"
 #import "AsyncImageView.h"
+#import <RSKImageCropper/RSKImageCropper.h>

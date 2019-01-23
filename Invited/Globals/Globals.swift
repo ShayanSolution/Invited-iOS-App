@@ -15,6 +15,7 @@ var kContactList = [ContactData]()
 var kUserList = [UserList]()
 var kCurrentLocation : CLLocationCoordinate2D?
 var kImage : UIImage?
+var kIsImageDeleted : Bool!
 let kSelectedAddress = "selectedAddress"
 let kSelectedLat = "selectedLat"
 let kSelectedLong = "selectedLong"
@@ -42,4 +43,4 @@ var kBaseURL = "http://dev.invited.shayansolutions.com/"
 var kBaseURL = ""
 #endif
 
-let kConfigURL = "http://invited.shayansolutions.com/"
+let kConfigURL = "invited.shayansolutions.com"

@@ -1390,7 +1390,7 @@
                                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6U-NL-zxO">
                                                                 <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="Bw6-6J-h3I" customClass="AsyncImageView">
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="Bw6-6J-h3I" customClass="AsyncImageView">
                                                                         <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                                     </imageView>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYz-Ui-Pwu">
@@ -1850,17 +1850,18 @@
                                         </connections>
                                     </button>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PFs-Hl-NEJ">
-                                        <rect key="frame" x="0.0" y="159" width="320" height="250"/>
+                                        <rect key="frame" x="0.0" y="124" width="320" height="320"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4v4-ln-s18" customClass="AsyncImageView">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4v4-ln-s18" customClass="AsyncImageView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="4v4-ln-s18" firstAttribute="leading" secondItem="PFs-Hl-NEJ" secondAttribute="leading" id="1Ou-Wu-nSd"/>
-                                            <constraint firstAttribute="height" constant="250" id="57R-Nd-8CH"/>
+                                            <constraint firstAttribute="height" constant="320" id="57R-Nd-8CH"/>
                                             <constraint firstItem="4v4-ln-s18" firstAttribute="top" secondItem="PFs-Hl-NEJ" secondAttribute="top" id="RZY-f2-bYA"/>
+                                            <constraint firstAttribute="width" secondItem="PFs-Hl-NEJ" secondAttribute="height" multiplier="1:1" id="Zrc-tc-xcZ"/>
                                             <constraint firstAttribute="bottom" secondItem="4v4-ln-s18" secondAttribute="bottom" id="aQc-A2-UR8"/>
                                             <constraint firstAttribute="trailing" secondItem="4v4-ln-s18" secondAttribute="trailing" id="t1l-hW-zBU"/>
                                         </constraints>
@@ -3088,8 +3089,8 @@
     </scenes>
     <resources>
         <image name="AddIcon" width="18" height="16"/>
-        <image name="AddPhoto" width="64" height="64"/>
         <image name="CurrentLocationIcon" width="24" height="24"/>
+        <image name="DefaultProfileImage" width="60" height="60"/>
         <image name="Email" width="27" height="20"/>
         <image name="Home Icon" width="64" height="64"/>
         <image name="Logout" width="24" height="24"/>

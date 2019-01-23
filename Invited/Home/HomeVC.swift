@@ -18,6 +18,7 @@ class UserList: NSObject
 {
     var name = String()
     var id = Int()
+    var imageURL = String()
     var contactList = [ContactData]()
     
 }
@@ -28,6 +29,8 @@ class EventData: NSObject
     var eventAddress = String()
     var listID = Int()
     var listName = String()
+    var senderName = String()
+    var imageURL = String()
     var eventTime = String()
     var eventTimesTamp = String()
     var eventCreatedTime = String()
@@ -99,7 +102,7 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate{
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate{
     
 
     
@@ -171,7 +174,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     var timer : Timer!
     
-    
+    var indexPath : IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,7 +195,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.acceptByMeView  = AcceptByMeView.instanceFromNib() as? AcceptByMeView
         self.sentByMeView  = SentByMeView.instanceFromNib() as? SentByMeView
         
-        
+        BasicFunctions.setRoundCornerOfImageView(imageView: self.detailView.profileImageView)
         
         
         
@@ -315,7 +318,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if kUserList.count < 1
             {
-            self.getContactListFromServer()
+                if kBaseURL.isEmpty
+                {
+                    self.findBaseURL()
+                }
+                else
+                {
+                    self.getContactListFromServer()
+                }
             }
             
         }
@@ -325,6 +335,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
+    }
+    func findBaseURL()
+    {
+        if kBaseURL.isEmpty
+        {
+            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+                let urlDictionary = result as? [String : Any]
+                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+                
+                self.getContactListFromServer()
+            }
+        }
     }
 //    func fetchAllContactsFromDevice()  {
 //
@@ -1058,11 +1080,35 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             contactCell?.accessoryType = .detailButton
             contactCell?.deleteButton.isHidden = true
+            contactCell?.editButton.isHidden = false
+            
+            contactCell?.editButton.tag = indexPath.row
+            
+            contactCell?.editButton.addTarget(self, action: #selector(self.editButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            
+//            contactCell?.awakeFromNib()
+            
             
         
+            
         let userListObject = kUserList[indexPath.row]
         
-            contactCell!.nameLabel.text = userListObject.name
+        contactCell!.nameLabel.text = userListObject.name
+            
+        if userListObject.imageURL != ""
+        {
+            contactCell?.profileImageView.imageURL = URL.init(string: userListObject.imageURL)
+        }
+        else
+        {
+            contactCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+        }
+            
+        
+            
+            
+            
+            
             
             return contactCell!
             
@@ -1106,11 +1152,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if fullName == " "
             {
-                invitedBy = eventData.phone
+                invitedBy = String(format: "%@\nSent from %@", eventData.senderName,eventData.phone)
             }
             else
             {
-                invitedBy = fullName + " " + "(" + eventData.phone + ")"
+                invitedBy = String(format: "%@\nSaved in your phone as %@ (%@)", eventData.senderName,fullName,eventData.phone)
             }
             
 
@@ -1122,6 +1168,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
             requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
 //            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+            
+            if eventData.imageURL != ""
+            {
+                requestEventCell?.profileImageView.imageURL = URL.init(string: eventData.imageURL)
+            }
+            else
+            {
+                requestEventCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+            }
+            
             
             if eventData.eventTime.isEmpty
             {
@@ -1328,6 +1384,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
             let eventData = self.receivedRequestEventList[indexPath.row]
+            
+            if eventData.imageURL != ""
+            {
+                receivedEventsCell?.profileImageView.imageURL = URL.init(string: eventData.imageURL)
+            }
+            else
+            {
+                receivedEventsCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+            }
             
 //            let dateformatter = DateFormatter()
 //            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -1581,6 +1646,76 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let listDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "ListDetailVC") as! ListDetailVC
         listDetailVC.listData = kUserList[indexPath.row]
         BasicFunctions.pushVCinNCwithObject(vc: listDetailVC, popTop: false)
+    }
+    
+    // UiimagePickerControllerDelegate Methods
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    {
+        var originalImage : UIImage?
+        if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
+        {
+            originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+            
+            
+        }
+        
+        dismiss(animated: true) {
+            
+            var imageCropVC : RSKImageCropViewController!
+            imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
+            imageCropVC.delegate = self
+            self.navigationController?.pushViewController(imageCropVC, animated: true)
+        }
+    }
+    
+    // RSKImageCropViewControllerDelegate Methods
+    func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
+        
+        let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
+        cell.profileImageView.image = croppedImage
+        self.navigationController?.popViewController(animated: true)
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        let userListObject = kUserList[indexPath.row]
+        
+        var postParams = [String : Any]()
+        postParams["list_id"] = userListObject.id
+        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: UIImagePNGRepresentation(croppedImage), accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as! [String : Any]
+            let msg = json["messages"] as! String
+            
+            let message = json["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if json["error"] == nil
+            {
+                BasicFunctions.showAlert(vc: self, msg: msg)
+            }
+        }
+    }
+    
+    
+    // Edit button Action Method
+    @objc func editButtonTapped(sender:UIButton)
+    {
+        BasicFunctions.openActionSheet(vc: self, isEditing: false)
+        self.indexPath = IndexPath.init(row: sender.tag, section: 0)
     }
     
     
@@ -1867,6 +2002,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let eventData = self.requestEventList[sender.tag]
         
+//        BasicFunctions.setRoundCornerOfImageView(imageView: self.detailView.profileImageView)
+        
+        if eventData.imageURL != ""
+        {
+            self.detailView.profileImageView.imageURL = URL.init(string: eventData.imageURL)
+        }
+        else
+        {
+            self.detailView.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+        }
+        
 //        let dateformatter = DateFormatter()
 //        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 //
@@ -1886,17 +2032,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        let time = formatter2.date(from: eventData.eventTime)
 //
 //        formatter2.dateFormat = "hh:mm a"
+        
+        
         var invitedBy : String!
         
         let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
         
         if fullName == " "
         {
-            invitedBy = eventData.phone
+            invitedBy = String(format: "%@\nSent from %@", eventData.senderName,eventData.phone)
         }
         else
         {
-            invitedBy = fullName + " " + "(" + eventData.phone + ")"
+            invitedBy = String(format: "%@\nSaved in your phone as %@ (%@)", eventData.senderName,fullName,eventData.phone)
         }
         
         self.detailView.titleTextView.text = eventData.title
@@ -2848,8 +2996,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         for list in contactListArray {
 
             let userListObject = UserList()
-            userListObject.name = list["list_name"] as! String
-            userListObject.id = list["id"] as! Int
+            userListObject.name = list["list_name"] as? String ?? ""
+            userListObject.id = list["id"] as? Int ?? 0
+            userListObject.imageURL = list["group_image"] as? String ?? ""
             
             var contactsArray : [[String : Any]]!
             if list["contacts"] as? [[String : Any]]  != nil
@@ -3164,6 +3313,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let json = result as? [String : Any]
             let message = json?["message"] as? String
+            let nonAppUsersPhoneNumbers = json?["non_users"] as? String
             
             
             if message != nil && message == "Unauthorized"
@@ -3208,34 +3358,35 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
                 
-                if message != nil
+                if nonAppUsersPhoneNumbers != ""
                 {
-                    BasicFunctions.showAlert(vc: self, msg: message)
+                  
+                let phoneNumberString = nonAppUsersPhoneNumbers
+                let recipientsArray = phoneNumberString!.components(separatedBy: ",")
+                
+                let alert = UIAlertController.init(title: "Event Created", message: String(format: "There are %d contacts you have send are not using Invited App.Do you want to invite them on Invited app?", recipientsArray.count), preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+
+
+                if (MFMessageComposeViewController.canSendText())
+                {
+                    let controller = MFMessageComposeViewController()
+                    controller.body = "You are invited to join a specific event. Install the Invited app for free at:\nhttps://itunes.apple.com/us/app/invited/id1370374964?ls=1&mt=8."
+                    let phoneNumberString = nonAppUsersPhoneNumbers
+                    let recipientsArray = phoneNumberString!.components(separatedBy: ",")
+                    controller.recipients = recipientsArray
+                    controller.messageComposeDelegate = self
+                    self.present(controller, animated: true, completion: nil)
                 }
-                
-                
-//                let alert = UIAlertController.init(title: "Invited", message: "Event Created successfully.Are you sure you want to send invitation to those members in the selected list whose don't install the app?", preferredStyle: UIAlertControllerStyle.alert)
-//                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
-//                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-//
-//
-//                if (MFMessageComposeViewController.canSendText())
-//                {
-//                    let controller = MFMessageComposeViewController()
-//                    controller.body = "Testing SMS Feature with shayan solutions."
-//                    let phoneNumberString = "03338717137,03366006260"
-//                    let recipientsArray = phoneNumberString.components(separatedBy: ",")
-//                    controller.recipients = recipientsArray
-//                    controller.messageComposeDelegate = self
-//                    self.present(controller, animated: true, completion: nil)
-//                }
-//                else
-//                {
-//                    print("Error")
-//                }
-//                }))
-//
-//                self.present(alert, animated: true, completion: nil)
+                else
+                {
+                    print("Error")
+                }
+                }))
+
+                self.present(alert, animated: true, completion: nil)
+                }
             }
             else
             {
@@ -3249,9 +3400,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
     }
-//    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-//        self.dismiss(animated: true, completion: nil)
-//    }
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        self.dismiss(animated: true, completion: nil)
+    }
 //    func addPhoneNumber(phNo : String) {
 //        if #available(iOS 9.0, *) {
 //            let store = CNContactStore()
@@ -3626,6 +3777,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.totalInvited = event["total_invited"] as? Int ?? 0
                 eventData.createdBy = event["create_by"] as? String ?? ""
                 eventData.eventAddress = event["address"] as? String ?? ""
+                eventData.senderName = event["invited_by"] as? String ?? ""
+                eventData.imageURL = event["profileImage"] as? String ?? ""
                 eventData.confirmed = event["confirmed"] as? Int ?? 0
                 eventData.eventTime = BasicFunctions.checkFormat(dateTimeString: event["event_time"] as? String ?? "")
                 eventData.phone = event["phone"] as? String ?? ""
@@ -3784,6 +3937,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     userData.id = owner["id"] as! Int
                     userData.email = owner["email"] as? String ?? ""
                     userData.phone = owner["phone"] as? String ?? ""
+                    
+                    eventData.imageURL = owner["profileImage"] as? String ?? ""
                     
                     eventData.invitedBy = userData
                     

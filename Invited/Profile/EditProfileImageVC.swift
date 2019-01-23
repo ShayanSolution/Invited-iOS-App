@@ -8,7 +8,8 @@
 
 import UIKit
 
-class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RSKImageCropViewControllerDelegate {
+    
     
     @IBOutlet var profileImageView: AsyncImageView!
     
@@ -20,11 +21,10 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
 
         // Do any additional setup after loading the view.
         
-//        if self.profileImage.size.width < self.profileImageView.frame.size.width
-//        {
-//            self.profileImage = BasicFunctions.resizeImage(image: self.profileImage, targetSize: self.profileImageView.frame.size)
-//        }
-        self.profileImageView.image = profileImage
+
+        self.profileImage = BasicFunctions.resizeImage(image: self.profileImage, targetSize: self.profileImageView.frame.size)
+
+        self.profileImageView.image = self.profileImage
     }
     
     @IBAction func backButtonTapped(_ sender: UIButton)
@@ -34,22 +34,43 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
     
     @IBAction func editButtonTapped(_ sender: Any)
     {
-        BasicFunctions.openActionSheet(vc: self, isEditing: true)
+        BasicFunctions.openActionSheet(vc: self, isEditing: false)
     }
     
     // UiimagePickerControllerDelegate Methods
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
     {
+        var originalImage : UIImage?
+        
         if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
         {
-            kImage = info[UIImagePickerControllerOriginalImage] as? UIImage
-            
-            self.profileImageView.image = kImage
+            originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+
+//            self.profileImageView.image = originalImage
             
             
         }
         
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            
+            var imageCropVC : RSKImageCropViewController!
+            imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
+            imageCropVC.delegate = self
+            self.navigationController?.pushViewController(imageCropVC, animated: true)
+        }
+    }
+    
+    // RSKImageCropViewControllerDelegate Methods
+    func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
+        
+        kImage = croppedImage
+        self.profileImageView.image = kImage
+        self.navigationController?.popViewController(animated: true)
     }
     
     

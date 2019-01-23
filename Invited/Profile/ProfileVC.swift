@@ -21,7 +21,7 @@ extension Date {
     }
 }
 
-class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RSKImageCropViewControllerDelegate {
     
     @IBOutlet var profileScrollView: UIScrollView!
     
@@ -57,7 +57,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     let dropDownPickerView = UIPickerView()
     
-    var profileImage : UIImage?
+//    var profileImage : UIImage?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,8 +74,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         if kLoggedInUserProfile.imageURL != ""
         {
             self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
-            self.profileImage = self.profileImageView.image
+//            self.profileImage = self.profileImageView.image
             self.editButton.isHidden = false
+        }
+        else
+        {
+            self.profileImageView.image = UIImage.init(named: "AddPhoto")
+            self.editButton.isHidden = true
         }
         
         
@@ -130,16 +135,16 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     {
         if kImage != nil
         {
-            self.profileImage = kImage
-            self.profileImageView.image = self.profileImage
+//            self.profileImage = kImage
+            self.profileImageView.image = kImage
             kImage = nil
         }
     }
     override func viewDidLayoutSubviews()
     {
         self.profileView.layer.cornerRadius = self.profileView.frame.size.width / 2
-        self.profileView.layer.borderWidth = 5.0
-        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
+//        self.profileView.layer.borderWidth = 5.0
+//        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
     }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
@@ -158,7 +163,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         }
         else
         {
-            BasicFunctions.openActionSheet(vc: self, isEditing: true)
+            BasicFunctions.openActionSheet(vc: self, isEditing: false)
         }
     }
     
@@ -257,10 +262,10 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         var imageData : Data?
         
-        if kLoggedInUserProfile.imageURL != ""
+        if kLoggedInUserProfile.imageURL != "" || self.editButton.isHidden
         {
 //            var scaleImage : UIImage!
-//            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 118, height: 118))
+//            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: self.profileImageView.frame.size.width, height: self.profileImageView.frame.size.height))
             
             imageData = UIImagePNGRepresentation(self.profileImageView.image!)
         }
@@ -490,22 +495,42 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     // UiimagePickerControllerDelegate Methods
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
     {
+        var originalImage : UIImage?
+        
         if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
         {
-            self.profileImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+            originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage
             
 //            if Float((pickedImage?.size.height)!) < 64.0
 //            {
 //                pickedImage = BasicFunctions.resizeImage(image: pickedImage!, targetSize: CGSize.init(width: 64.0, height: 64.0))
 //            }
             
-            self.profileImageView.image = self.profileImage
-            self.editButton.isHidden = false
+//            self.profileImageView.image = self.profileImage
+//            self.editButton.isHidden = false
             
             
         }
         
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            
+            var imageCropVC : RSKImageCropViewController!
+            imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
+            imageCropVC.delegate = self
+            self.navigationController?.pushViewController(imageCropVC, animated: true)
+        }
+    }
+    
+    // RSKImageCropViewControllerDelegate Methods
+    func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
+        
+        self.profileImageView.image = croppedImage
+        self.navigationController?.popViewController(animated: true)
     }
     
     

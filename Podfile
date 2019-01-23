@@ -20,6 +20,7 @@ pod 'FacebookCore'
 pod 'FacebookLogin'
 pod 'FacebookShare'
 pod 'PGSideMenu'
+pod 'RSKImageCropper'
 
 end
 

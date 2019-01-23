@@ -42,6 +42,7 @@ class DetailView: UIView {
     
     @IBOutlet var startNavigationViewHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var profileImageView: AsyncImageView!
     
     
     @IBOutlet var paymentMethodLabel: UILabel!

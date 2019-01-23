@@ -13,7 +13,7 @@ class RequestEventCell: UITableViewCell {
     
     @IBOutlet var mainView: UIView!
     
-    @IBOutlet var profileImageView: UIImageView!
+    @IBOutlet var profileImageView: AsyncImageView!
     
     @IBOutlet var acceptButton: UIButton!
     
@@ -60,6 +60,8 @@ class RequestEventCell: UITableViewCell {
         BasicFunctions.setRoundCornerOfButton(button: self.startNavigationButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.acceptButton, radius: 5.0)
         BasicFunctions.setRoundCornerOfButton(button: self.rejectButton, radius: 5.0)
+        
+        BasicFunctions.setRoundCornerOfImageView(imageView: self.profileImageView)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

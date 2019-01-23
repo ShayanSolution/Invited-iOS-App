@@ -488,7 +488,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @objc func createList()
     {
         var postParams = [String : Any]()
-        postParams["contact_list"] = self.convertSelectedDataintoJson()
+        postParams["contact_list"] = BasicFunctions.convertSelectedDataintoJson(contactList: self.selectedContactList)
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
         postParams["list_name"] = self.setListNameTextField.text
         
@@ -558,7 +558,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @objc func updateList()
     {
         var postParams = [String : Any]()
-        postParams["contact_list"] = self.convertSelectedDataintoJson()
+        postParams["contact_list"] = BasicFunctions.convertSelectedDataintoJson(contactList: self.selectedContactList)
         postParams["list_id"] = self.listData.id
         postParams["list_name"] = self.setListNameTextField.text
         
@@ -621,35 +621,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     }
     
     
-    func convertSelectedDataintoJson() -> String
-    {
-        
-        var jsonFormSelectedContactList = [[String : Any]]()
     
-        for contact in self.selectedContactList
-        {
-            var contactDic = [String: Any]()
-            contactDic["name"] = BasicFunctions.getNameFromContactList(phoneNumber: contact.phoneNumber)
-        
-            contactDic["phone"] = contact.phoneNumber.stringByRemovingWhitespaces
-            
-            
-            jsonFormSelectedContactList.append(contactDic)
-            
-        }
-        
-        let jsonString = self.convertToJsonString(from: jsonFormSelectedContactList)
-        
-        
-        return jsonString!
-    }
-    func convertToJsonString(from object: Any) -> String? {
-        if let objectData = try? JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions(rawValue: 0)) {
-            let objectString = String(data: objectData, encoding: .utf8)
-            return objectString
-        }
-        return nil
-    }
 //    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool
 //    {
 //

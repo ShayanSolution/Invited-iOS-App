@@ -70,6 +70,10 @@ class BasicFunctions: NSObject {
         
         
     }
+    class func deletePhoto() -> Void
+    {
+        
+    }
     class func openPhotoLibrary(vc:UIViewController!, isEditing:Bool!) -> Void
     {
         let imagePicker = UIImagePickerController()
@@ -104,11 +108,33 @@ class BasicFunctions: NSObject {
     {
         var alert = UIAlertController()
         
-        alert = UIAlertController.init(title: "Please choose a source type", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction.init(title: "Camera", style: UIAlertActionStyle.default, handler: { (action) in
+        alert = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction.init(title: "Take Photo", style: UIAlertActionStyle.default, handler: { (action) in
             self.openCamera(vc: vc, isEditing: isEditing)
         }))
-        alert.addAction(UIAlertAction.init(title: "Photo Library", style: UIAlertActionStyle.default, handler: { (action) in
+        alert.addAction(UIAlertAction.init(title: "Choose Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.openPhotoLibrary(vc: vc, isEditing: isEditing)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { (action) in
+            // self.dismissViewControllerAnimated(true, completion: nil) is not needed, this is handled automatically,
+            //Plus whatever method you define here, gets called,
+            //If you tap outside the UIAlertController action buttons area, then also this handler gets called.
+        }))
+        
+        vc.present(alert, animated: true, completion: nil)
+    }
+    class func openActionSheetWithDeleteOption(vc:UIViewController!, isEditing:Bool!)
+    {
+        var alert = UIAlertController()
+        
+        alert = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction.init(title: "Delete Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.deletePhoto()
+        }))
+        alert.addAction(UIAlertAction.init(title: "Take Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.openCamera(vc: vc, isEditing: isEditing)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Choose Photo", style: UIAlertActionStyle.default, handler: { (action) in
             self.openPhotoLibrary(vc: vc, isEditing: isEditing)
         }))
         alert.addAction(UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { (action) in
@@ -209,6 +235,35 @@ class BasicFunctions: NSObject {
         if let sideMenuController = vc.parent as? PGSideMenu {
             sideMenuController.toggleLeftMenu()
         }
+    }
+    class func convertSelectedDataintoJson(contactList : [ContactData]) -> String
+    {
+        
+        var jsonFormSelectedContactList = [[String : Any]]()
+        
+        for contact in contactList
+        {
+            var contactDic = [String: Any]()
+            contactDic["name"] = BasicFunctions.getNameFromContactList(phoneNumber: contact.phoneNumber)
+            
+            contactDic["phone"] = contact.phoneNumber.stringByRemovingWhitespaces
+            
+            
+            jsonFormSelectedContactList.append(contactDic)
+            
+        }
+        
+        let jsonString = self.convertToJsonString(from: jsonFormSelectedContactList)
+        
+        
+        return jsonString!
+    }
+    class func convertToJsonString(from object: Any) -> String? {
+        if let objectData = try? JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions(rawValue: 0)) {
+            let objectString = String(data: objectData, encoding: .utf8)
+            return objectString
+        }
+        return nil
     }
     
     class func getTitleAccordingToDateAndTimeFormat (dateTimeString : String!) -> String

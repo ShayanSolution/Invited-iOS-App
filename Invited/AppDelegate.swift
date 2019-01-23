@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         // Override point for customization after application launch.
         
 
-        GMSPlacesClient.provideAPIKey("")
-        GMSServices.provideAPIKey("")
+        GMSPlacesClient.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
+        GMSServices.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
 
         
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
@@ -175,13 +175,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        if kBaseURL.isEmpty
-        {
-            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
-                let urlDictionary = result as? [String : Any]
-                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
-            }
-        }
         
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()

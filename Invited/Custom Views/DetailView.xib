@@ -26,7 +26,7 @@
                             </constraints>
                             <state key="normal" image="icArrowBack"/>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="YIE-KE-ReR">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="YIE-KE-ReR" customClass="AsyncImageView">
                             <rect key="frame" x="130" y="10" width="60" height="60"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="60" id="ORH-w1-eSs"/>
@@ -304,6 +304,7 @@
                 <outlet property="dateViewHeightConstraint" destination="Cdy-d3-xPI" id="nJi-Rw-BQP"/>
                 <outlet property="location" destination="lgk-14-k2U" id="8lw-ox-GLY"/>
                 <outlet property="locationViewHeightConstraint" destination="Lx4-rD-zkM" id="BOj-kb-qk2"/>
+                <outlet property="profileImageView" destination="YIE-KE-ReR" id="ycP-HM-d9r"/>
                 <outlet property="rejectButton" destination="Sy9-pD-wrJ" id="G3g-aF-LlD"/>
                 <outlet property="rejectLabel" destination="Kng-IL-J7t" id="Exm-Fd-JVf"/>
                 <outlet property="startNavigationButton" destination="ODI-e8-rOl" id="T3I-oU-ieK"/>
