@@ -95,7 +95,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         // Do any additional setup after loading the view.
         
         
-        self.findBaseURL()
+//        self.findBaseURL()
         
         let currentDate = Date()
         
@@ -152,16 +152,16 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func findBaseURL()
-    {
-        if kBaseURL.isEmpty
-        {
-            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
-                let urlDictionary = result as? [String : Any]
-                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
-            }
-        }
-    }
+//    func findBaseURL()
+//    {
+//        if kBaseURL.isEmpty
+//        {
+//            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+//                let urlDictionary = result as? [String : Any]
+//                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+//            }
+//        }
+//    }
     
     
     

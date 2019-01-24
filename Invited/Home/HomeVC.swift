@@ -318,14 +318,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if kUserList.count < 1
             {
-                if kBaseURL.isEmpty
-                {
-                    self.findBaseURL()
-                }
-                else
-                {
-                    self.getContactListFromServer()
-                }
+                self.getContactListFromServer()
             }
             
         }
@@ -336,18 +329,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
     }
-    func findBaseURL()
-    {
-        if kBaseURL.isEmpty
-        {
-            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
-                let urlDictionary = result as? [String : Any]
-                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
-                
-                self.getContactListFromServer()
-            }
-        }
-    }
+//    func findBaseURL()
+//    {
+//        if kBaseURL.isEmpty
+//        {
+//            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+//                let urlDictionary = result as? [String : Any]
+//                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+//
+//                self.getContactListFromServer()
+//            }
+//        }
+//    }
 //    func fetchAllContactsFromDevice()  {
 //
 //            var contacts: [CNContact] = {
