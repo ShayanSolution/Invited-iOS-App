@@ -74,10 +74,15 @@
 			<key>orderHint</key>
 			<integer>12</integer>
 		</dict>
-		<key>SwiftyJSON.xcscheme</key>
+		<key>RSKImageCropper.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>14</integer>
+		</dict>
+		<key>SwiftyJSON.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>15</integer>
 		</dict>
 	</dict>
 </dict>

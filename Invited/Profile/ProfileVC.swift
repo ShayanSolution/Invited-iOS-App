@@ -61,6 +61,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         // Do any additional setup after loading the view.
         
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
         self.lastNameTextField.text = kLoggedInUserProfile.lastName
@@ -115,6 +116,15 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     {
         self.profileScrollView.contentSize.height = 500.0
     }
+//    @objc func receivedNotification(notification : Notification)
+//    {
+//        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+//        let homeVC : HomeVC = storyBoard.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+//        
+//        homeVC.notificationData = notification
+//        
+//        BasicFunctions.pushVCinNCwithObject(vc: homeVC, popTop: true)
+//    }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {

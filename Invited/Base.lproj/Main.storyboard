@@ -929,7 +929,7 @@
         <!--HomeVC-->
         <scene sceneID="mB4-TD-T5w">
             <objects>
-                <viewController id="OCq-Dd-nWP" customClass="HomeVC" customModule="Invited" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeVC" id="OCq-Dd-nWP" customClass="HomeVC" customModule="Invited" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gwe-E4-AZA"/>
                         <viewControllerLayoutGuide type="bottom" id="xwe-HY-F0c"/>

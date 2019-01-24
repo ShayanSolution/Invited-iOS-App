@@ -25,15 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         // Override point for customization after application launch.
         
 
-        GMSPlacesClient.provideAPIKey("")
-        GMSServices.provideAPIKey("")
+        GMSPlacesClient.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
+        GMSServices.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
 
         
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
 
 
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
-
 
 
         
@@ -141,6 +140,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         print("Notification data: \(response.notification.request.content.userInfo)")
         NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [AnyHashable : Any] )
+        
+        
+        
     }
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
 //        return SDKApplicationDelegate.shared.application(app, open: url, options: options)
@@ -180,8 +182,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
                 let urlDictionary = result as? [String : Any]
                 kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+                
             }
         }
+
+        
         
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()
