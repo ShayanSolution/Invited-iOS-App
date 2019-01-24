@@ -20,6 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 
     var window: UIWindow?
 
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        
+        
+        return true
+        
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -33,14 +40,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 
 
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
-
-
+        
+        
+        if kBaseURL.isEmpty
+        {
+            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+                let urlDictionary = result as? [String : Any]
+                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+                
+                
+                
+            }
+        }
+        
         
         if BasicFunctions.getIfUserLoggedIn()
         {
             BasicFunctions.setHomeVC()
         }
-        
         
         
         self.registerForPushNotifications(application: application)
@@ -177,14 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        if kBaseURL.isEmpty
-        {
-            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
-                let urlDictionary = result as? [String : Any]
-                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
-                
-            }
-        }
+        
 
         
         

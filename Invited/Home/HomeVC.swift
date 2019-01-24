@@ -203,14 +203,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.setUpScrollView()
         
-        if kBaseURL.isEmpty
-        {
-            self.findBaseURL()
-        }
-        else
-        {
+//        if kBaseURL.isEmpty
+//        {
+//            self.findBaseURL()
+//        }
+//        else
+//        {
             self.getProfileFromServer()
-        }
+//        }
 //        self.fetchUserEventsFromServer()
         
 //        self.fetchRequestsFromServer()
@@ -327,7 +327,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.mainScrollView.setContentOffset( point, animated: true)
             
             
-            if kUserList.count < 1 && !kBaseURL.isEmpty
+            if kUserList.count < 1
             {
                 self.getContactListFromServer()
             }
