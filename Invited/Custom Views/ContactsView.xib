@@ -25,7 +25,7 @@
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNW-Sj-lIc">
                             <rect key="frame" x="10" y="253" width="300" height="187"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6K-Ew-DdN">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6K-Ew-DdN">
                                     <rect key="frame" x="10" y="0.0" width="280" height="187"/>
                                     <string key="text">It is highly recommended that you provide “Date of Birth” for getting exclusive special discounts, or even completely free “Birthday Presents” from top brands ;and free “Dining Offers” from some of the best restaurants in your city on your special day. Go to “PROFILE” in the menu and update now.</string>
                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
