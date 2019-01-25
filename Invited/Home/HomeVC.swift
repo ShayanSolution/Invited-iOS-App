@@ -2874,7 +2874,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if kLoggedInUserProfile.dob == ""
             {
                 self.contactsView.dobView.isHidden = false
-                self.contactsView.dobTextView.text = kBirthdayMessage
+                self.contactsView.dobLabel.text = kBirthdayMessage
             }
             
             
