@@ -1677,14 +1677,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let userListObject = kUserList[indexPath.row]
         
+        var imageData : Data?
+        
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: cell.profileImageView.image!, targetSize: CGSize.init(width: cell.profileImageView.frame.size.width, height: cell.profileImageView.frame.size.height))
+            
+            imageData = UIImagePNGRepresentation(scaleImage)
+        
         var postParams = [String : Any]()
         postParams["list_id"] = userListObject.id
-        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: UIImagePNGRepresentation(croppedImage), accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
             let json = result as! [String : Any]
-            let msg = json["messages"] as! String
+            let msg = json["messages"] as? String
             
             let message = json["message"] as? String
             
@@ -3394,7 +3401,36 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) {
+            
+//            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+//
+//                UIView.animate(withDuration: 0.25) {
+//
+//                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+//
+//                }
+//
+//            }
+//
+//            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+//            self.mainScrollView.setContentOffset( point, animated: true)
+//
+//
+//            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+//
+//                UIView.animate(withDuration: 0.25) {
+//
+//                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+//
+//                }
+//
+//
+//            }
+//            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+//            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+//            self.fetchUserEventsFromServer()
+        }
     }
 //    func addPhoneNumber(phNo : String) {
 //        if #available(iOS 9.0, *) {

@@ -264,10 +264,10 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         if kLoggedInUserProfile.imageURL != "" || self.editButton.isHidden
         {
-//            var scaleImage : UIImage!
-//            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: self.profileImageView.frame.size.width, height: self.profileImageView.frame.size.height))
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
             
-            imageData = UIImagePNGRepresentation(self.profileImageView.image!)
+            imageData = UIImagePNGRepresentation(scaleImage)
         }
         
         
