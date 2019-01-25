@@ -15,6 +15,9 @@ class ContactsView: UIView {
     
     @IBOutlet var dobView: UIView!
     
+    @IBOutlet var dobTextView: UITextView!
+    
+    
     
     
     override init (frame : CGRect) {

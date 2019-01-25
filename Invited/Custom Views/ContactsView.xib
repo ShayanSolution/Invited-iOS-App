@@ -23,24 +23,23 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNW-Sj-lIc">
-                            <rect key="frame" x="10" y="330" width="300" height="110"/>
+                            <rect key="frame" x="10" y="301" width="300" height="139"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uXO-0D-xgx">
-                                    <rect key="frame" x="5" y="0.0" width="290" height="110"/>
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8g-dm-Xlc">
+                                    <rect key="frame" x="5" y="0.0" width="290" height="158"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <string key="text">It is highly recomended that you provide date of birth for getting exclusive special discounts or even completely free dining offers from many of the top restuarant in your city.</string>
-                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                </textView>
                             </subviews>
                             <color key="backgroundColor" red="0.81568627449999997" green="0.0" blue="0.043137254899999998" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
-                                <constraint firstAttribute="bottom" secondItem="uXO-0D-xgx" secondAttribute="bottom" id="GOm-92-IDu"/>
-                                <constraint firstAttribute="trailing" secondItem="uXO-0D-xgx" secondAttribute="trailing" constant="5" id="Hoh-R2-v5w"/>
-                                <constraint firstAttribute="height" constant="110" id="d8K-Lk-6SS"/>
-                                <constraint firstItem="uXO-0D-xgx" firstAttribute="leading" secondItem="eNW-Sj-lIc" secondAttribute="leading" constant="5" id="vIG-zg-aeQ"/>
-                                <constraint firstItem="uXO-0D-xgx" firstAttribute="top" secondItem="eNW-Sj-lIc" secondAttribute="top" id="yKz-mM-mFI"/>
+                                <constraint firstItem="b8g-dm-Xlc" firstAttribute="top" secondItem="eNW-Sj-lIc" secondAttribute="top" id="7PL-jA-Icc"/>
+                                <constraint firstAttribute="bottom" secondItem="b8g-dm-Xlc" secondAttribute="bottom" constant="-19" id="a4U-kX-oLF"/>
+                                <constraint firstAttribute="trailing" secondItem="b8g-dm-Xlc" secondAttribute="trailing" constant="5" id="cdC-qb-EeQ"/>
+                                <constraint firstAttribute="height" constant="139" id="d8K-Lk-6SS"/>
+                                <constraint firstItem="b8g-dm-Xlc" firstAttribute="leading" secondItem="eNW-Sj-lIc" secondAttribute="leading" constant="5" id="gC4-Wu-fdE"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -68,6 +67,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="contactsTableView" destination="HgC-8P-BnU" id="XD1-bb-kkf"/>
+                <outlet property="dobTextView" destination="b8g-dm-Xlc" id="G98-Nl-NU3"/>
                 <outlet property="dobView" destination="eNW-Sj-lIc" id="8y7-Xa-mOl"/>
             </connections>
             <point key="canvasLocation" x="131.25" y="155"/>

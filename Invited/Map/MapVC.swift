@@ -45,9 +45,12 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
     
     @IBAction func backButtonTapped(_ sender: UIButton)
     {
-        BasicFunctions.setPreferences(self.addressLabel.text, key: kSelectedAddress)
-        BasicFunctions.setPreferences(self.destinationLocation?.latitude, key: kSelectedLat)
-        BasicFunctions.setPreferences(self.destinationLocation?.longitude, key: kSelectedLong)
+//        BasicFunctions.setPreferences(self.addressLabel.text, key: kSelectedAddress)
+//        BasicFunctions.setPreferences(self.destinationLocation?.latitude, key: kSelectedLat)
+//        BasicFunctions.setPreferences(self.destinationLocation?.longitude, key: kSelectedLong)
+        
+        kSelectedLocation = self.destinationLocation
+        kSelectedAddress = self.addressLabel.text
         
         self.navigationController?.popViewController(animated: true)
         
@@ -138,7 +141,7 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
     }
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition)
     {
-        destinationLocation = CLLocationCoordinate2D.init(latitude: position.target.latitude, longitude: position.target.longitude)
+        self.destinationLocation = CLLocationCoordinate2D.init(latitude: position.target.latitude, longitude: position.target.longitude)
         self.reverseGeocodeCoordinate(self.destinationLocation!)
         
         
@@ -152,7 +155,7 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
             self.destinationMarker?.icon = UIImage(named:"BlackDot")
             self.destinationMarker?.iconView?.layer.cornerRadius = (self.destinationMarker?.iconView?.frame.size.width)! / 2
             self.destinationMarker?.map = self.mapView
-            destinationMarker?.appearAnimation = GMSMarkerAnimation.pop
+            self.destinationMarker?.appearAnimation = GMSMarkerAnimation.pop
         }
         else
         {
