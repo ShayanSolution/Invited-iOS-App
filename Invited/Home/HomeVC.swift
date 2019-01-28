@@ -146,6 +146,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var locationCoordinate : CLLocationCoordinate2D?
     
     var placeSelectedORCancelled : Bool!
+    var isMessageControllerPresented : Bool!
     
 //    var selectedButton : UIButton!
     
@@ -200,6 +201,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.placeSelectedORCancelled = false
+        self.isMessageControllerPresented = false
         
         
         self.setUpScrollView()
@@ -302,7 +304,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            self.mainScrollView.setContentOffset(point, animated: false)
 //
 //        }
-        else
+        else if !self.isMessageControllerPresented
         {
             if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
                 
@@ -3372,12 +3374,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 if (MFMessageComposeViewController.canSendText())
                 {
                     let controller = MFMessageComposeViewController()
-                    controller.body = "You are invited to join a specific event. Install the Invited app for free at:\nhttps://itunes.apple.com/us/app/invited/id1370374964?ls=1&mt=8."
+                    controller.body = String(format: "%@ %@ wants to send you a message. Please download invited app for free to receive the message", kLoggedInUserProfile.firstName!,kLoggedInUserProfile.lastName!)
                     let phoneNumberString = nonAppUsersPhoneNumbers
                     let recipientsArray = phoneNumberString!.components(separatedBy: ",")
                     controller.recipients = recipientsArray
                     controller.messageComposeDelegate = self
-                    self.present(controller, animated: true, completion: nil)
+                    self.present(controller, animated: true, completion: {
+                        
+                        self.isMessageControllerPresented = true
+                    })
                 }
                 else
                 {
@@ -3403,35 +3408,38 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         self.dismiss(animated: true) {
             
-//            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
-//
-//                UIView.animate(withDuration: 0.25) {
-//
-//                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
-//
-//                }
-//
-//            }
-//
-//            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
-//            self.mainScrollView.setContentOffset( point, animated: true)
-//
-//
-//            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
-//
-//                UIView.animate(withDuration: 0.25) {
-//
-//                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
-//
-//                }
-//
-//
-//            }
-//            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
-//            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
-//            self.fetchUserEventsFromServer()
+            self.isMessageControllerPresented = false
+            
+            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+
+                UIView.animate(withDuration: 0.25) {
+
+                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+
+                }
+
+            }
+
+            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+            self.mainScrollView.setContentOffset( point, animated: true)
+
+
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+
+                UIView.animate(withDuration: 0.25) {
+
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+
+                }
+
+
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
         }
     }
+    
 //    func addPhoneNumber(phNo : String) {
 //        if #available(iOS 9.0, *) {
 //            let store = CNContactStore()
