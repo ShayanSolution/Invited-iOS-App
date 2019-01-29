@@ -151,7 +151,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //    var selectedButton : UIButton!
     
     var currentLocationAddress : String?
-    var selectedLocationAddress : String?
+//    var selectedLocationAddress : String?
     
     var userEventList = [EventData]()
     var requestEventList = [EventData]()
@@ -205,7 +205,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         self.setUpScrollView()
-        self.getProfileFromServer()
+        
+//        if kBaseURL.isEmpty
+//        {
+//            self.findBaseURL()
+//        }
+//        else
+//        {
+            self.getProfileFromServer()
+//        }
 //        self.fetchUserEventsFromServer()
         
 //        self.fetchRequestsFromServer()
@@ -215,6 +223,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
+        
         
 //        let tapRecognizer = UITapGestureRecognizer()
 //        tapRecognizer.addTarget(self, action: #selector(self.didTapView))
@@ -250,29 +260,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
             let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
             self.mainScrollView.setContentOffset(point, animated: false)
             self.placeSelectedORCancelled = false
             
-            self.selectedLocationAddress = BasicFunctions.getPreferences(kSelectedAddress) as? String
-            if self.selectedLocationAddress != nil
+            //            self.selectedLocationAddress = kSelectedAddress
+            if kSelectedAddress != nil
             {
-                self.createEventView.locationTextField.text = self.selectedLocationAddress
+                self.createEventView.locationTextField.text = kSelectedAddress
                 
+                kSelectedAddress = nil
                 
-            
             }
-//            else
-//            {
-//                self.createEventView.locationTextField.text = self.currentLocationAddress
-//            }
+            //            else
+            //            {
+            //                self.createEventView.locationTextField.text = self.currentLocationAddress
+            //            }
             
         }
         else if self.isUpdated == true && self.placeSelectedORCancelled == true
@@ -281,29 +288,27 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.mainScrollView.setContentOffset(point, animated: false)
             self.placeSelectedORCancelled = false
             
-            self.selectedLocationAddress = BasicFunctions.getPreferences(kSelectedAddress) as? String
-            if self.selectedLocationAddress != nil
+            //            self.selectedLocationAddress = kSelectedAddress
+            if kSelectedAddress != nil
             {
-                self.editEventView.locationTextField.text = self.selectedLocationAddress
+                self.editEventView.locationTextField.text = kSelectedAddress
                 
+                kSelectedAddress = nil
                 
                 
             }
-//            else
-//            {
-//                self.reverseGeocodeCoordinate(self.currentLocationCoordinate)
-//            }
+            //            else
+            //            {
+            //                self.reverseGeocodeCoordinate(self.currentLocationCoordinate)
+            //            }
             
             
         }
-//        else if self.isStartNavigationButtonTapped == true
-//        {
-//            self.isStartNavigationButtonTapped = false
-//
-//            let point = CGPoint(x: self.mainScrollView.frame.size.width * 2, y: 0)
-//            self.mainScrollView.setContentOffset(point, animated: false)
-//
-//        }
+        else if kNotificationData != nil
+        {
+            self.receivedNotificationOutsideFromHomeVC(notificationData: kNotificationData!)
+            kNotificationData = nil
+        }
         else if !self.isMessageControllerPresented
         {
             if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
@@ -318,12 +323,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let point = CGPoint(x: 0, y: 0)
             self.mainScrollView.setContentOffset( point, animated: true)
             
+            
             if kUserList.count < 1
             {
                 self.getContactListFromServer()
             }
-            
         }
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        
+        
         
         
         
@@ -333,14 +347,34 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
 //    func findBaseURL()
 //    {
-//        if kBaseURL.isEmpty
-//        {
-//            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
-//                let urlDictionary = result as? [String : Any]
-//                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+
+//        BasicFunctions.showActivityIndicator(vu: self.view)
 //
+//        ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+//
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//            let urlDictionary = result as? [String : Any]
+//            kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+//
+//            self.getProfileFromServer()
+//
+//            if kUserList.count < 1
+//            {
 //                self.getContactListFromServer()
 //            }
+//
+//
+//
+//        }
+//
+//    }
+//    func checkNotificationData()
+//    {
+//        if self.notificationData != nil
+//        {
+//            self.receivedNotification(notification: notificationData!)
+////            self.invitesStatusButtonTapped(self.invitesStatusButton)
+//            self.notificationData = nil
 //        }
 //    }
 //    func fetchAllContactsFromDevice()  {
@@ -418,7 +452,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func receivedNotification(notification : Notification)
     {
-//        self.backButtonTapped()
+        
+        BasicFunctions.hideLeftMenu(vc: self)
+        
+//        if self.presentedViewController != nil
+//        {
+//            self.dismiss(animated: true) {
+//
+//                kIsNotificationReceived = false
+//            }
+//        }
         
         if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
 
@@ -450,12 +493,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
 
             }
-            point = CGPoint(x: 0, y: 0)
+            point = CGPoint(x: 5, y: 0)
             self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
             self.fetchRequestsFromServer()
             
         }
-        else if status == "confirmed"   //  status == "accepted"
+        else if status == "YES"   //  status == "accepted"
         {
 
             if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
@@ -474,6 +517,111 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         }
+        else if status == "NO"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
+            
+            
+        }
+        
+        self.backButtonTapped()
+        
+        
+        
+    }
+    func receivedNotificationOutsideFromHomeVC(notificationData : [String : Any])
+    {
+        
+        BasicFunctions.hideLeftMenu(vc: self)
+        
+        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+            
+            UIView.animate(withDuration: 0.25) {
+                
+                self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+                
+            }
+            
+        }
+        
+        
+        var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+        self.mainScrollView.setContentOffset( point, animated: true)
+        
+        
+        
+        let status = notificationData["status"] as! String
+        if status == "request" ||  status == "cancelled" || status == "closed"
+        {
+            
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesReceivedView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesReceivedView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: 5, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchRequestsFromServer()
+            
+        }
+        else if status == "YES"   //  status == "accepted"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchReceivedRequestsFromServer()
+            
+            
+        }
+        else if status == "NO"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
+            
+            
+        }
+        
         
         
         
@@ -552,8 +700,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        
 //                })
         
-        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
-        self.present(createListVC!, animated: true, completion: nil)
+//        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
+//        self.present(createListVC!, animated: true, completion: nil)
+        
+        BasicFunctions.pushVCinNCwithName("CreateListVC", popTop: false)
     }
     
     
@@ -571,6 +721,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let point = CGPoint(x: 0, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
         self.isUpdated = false
+        
+        if kUserList.count < 1
+        {
+            self.getContactListFromServer()
+        }
     }
     
     @IBAction func createInviteButtonTapped(_ sender: UIButton)
@@ -589,12 +744,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
         
-//        self.createEventView.titleTextView.text = "Invite Title"
-//        self.createEventView.titleTextView.textColor = UIColor.lightGray
-//        self.createEventView.setNumberOfPeopleTextfield.text = ""
-//        self.createEventView.setListTextField.text = ""
-//        self.createEventView.dateTextField.text = ""
-//        self.createEventView.timeTextField.text = ""
+        self.createEventView.titleTextView.text = "Message"
+        self.createEventView.titleTextView.textColor = UIColor.lightGray
+        self.createEventView.setListTextField.text = ""
+        self.createEventView.setNumberOfPeopleTextfield.text = ""
+        self.createEventView.timeTextField.text = ""
+        self.createEventView.dateTextField.text = ""
+        self.createEventView.locationTextField.text = ""
+        
+        self.createEventView.locationTextField.isUserInteractionEnabled = false
+        self.createEventView.dateTextField.isUserInteractionEnabled = false
+        self.createEventView.timeTextField.isUserInteractionEnabled = false
+        
+        self.createEventView.locationSwitch.isOn = false
+        self.createEventView.dateSwitch.isOn = false
+        self.createEventView.timeSwitch.isOn = false
+        
+        self.selectedList = nil
+        self.listID = nil
+        
+        self.showPicker(textField: self.createEventView.setListTextField)
         
         
         
@@ -603,10 +772,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        self.createEventView.setListTextField.text = ""
 //        self.selectedList = nil
         
-        UserDefaults.standard.removeObject(forKey: kSelectedLat)
-        UserDefaults.standard.removeObject(forKey: kSelectedLong)
-        UserDefaults.standard.removeObject(forKey: kSelectedAddress)
-        UserDefaults.standard.synchronize()
+//        UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//        UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//        UserDefaults.standard.removeObject(forKey: kSelectedAddress)
+//        UserDefaults.standard.synchronize()
         
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
@@ -942,7 +1111,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 self.updateSelectedList = nil
-                self.listID = nil
+//                self.listID = nil
                 
                 self.editEventView.setListTextField.text = ""
                 self.editEventView.setNumberOfPeopleTextfield.text = ""
@@ -1423,7 +1592,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             receivedEventsCell?.acceptedORSentByMe.text = eventData.eventType
-            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
+            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
 //            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             
@@ -1860,7 +2029,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
             
-            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
+            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
             
@@ -2255,6 +2424,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.setListTextField.tag = 2
         
         self.selectedList = nil
+        self.updateSelectedList = nil
         
         
         self.editEventView.titleTextView.delegate = self
@@ -2282,7 +2452,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.updateButton.tag = eventData.eventID
         self.editEventView.cancelButton.tag = eventData.eventID
         self.editEventView.deleteButton.tag = eventData.eventID
-        self.listID = eventData.listID
+//        self.listID = eventData.listID
         
         for list in kUserList
         {
@@ -2403,9 +2573,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.selectedLat = eventData.lat
         self.selectedLong = eventData.long
         
-        UserDefaults.standard.removeObject(forKey: kSelectedLat)
-        UserDefaults.standard.removeObject(forKey: kSelectedLong)
-        UserDefaults.standard.synchronize()
+        kSelectedLocation = nil
+        
+//        UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//        UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//        UserDefaults.standard.synchronize()
         
         
         
@@ -2937,10 +3109,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
             
-//            if kLoggedInUserProfile.dob == ""
-//            {
-//                self.contactsView.dobView.isHidden = false
-//            }
+            if kLoggedInUserProfile.dob == ""
+            {
+                self.contactsView.dobView.isHidden = false
+                self.contactsView.dobLabel.text = kBirthdayMessage
+            }
             
             
         }
@@ -2984,7 +3157,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if json["error"] == nil && status == nil
         {
             
-            
+//        self.checkNotificationData()
         
         kUserList.removeAll()
         
@@ -3274,15 +3447,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
-        let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
+        let selectedLat = kSelectedLocation?.latitude
+        let selectedLong = kSelectedLocation?.longitude
         
         var lat: Any!
         var long: Any!
         
         if self.createEventView.locationSwitch.isOn
         {
-            if self.selectedLat == nil && self.selectedLong == nil
+            if selectedLat == nil && selectedLong == nil
             {
                 
             if self.currentLocationCoordinate != nil
@@ -3349,16 +3522,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.selectedList = nil
                 self.listID = nil
                 
+                self.showPicker(textField: self.createEventView.setListTextField)
+                
 //                self.currentLocationCoordinate = nil
                 
-                UserDefaults.standard.removeObject(forKey: kSelectedLat)
-                UserDefaults.standard.removeObject(forKey: kSelectedLong)
-                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
-                UserDefaults.standard.synchronize()
+//                UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//                UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
+//                UserDefaults.standard.synchronize()
+                
+                kSelectedLocation = nil
                 
             
                 
-                self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
                 
                 if nonAppUsersPhoneNumbers != ""
                 {
@@ -3468,7 +3644,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the message.")
             return
         }
-        else if self.updateSelectedList == nil && self.listID == nil
+        else if self.updateSelectedList == nil
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select List.")
             return
@@ -3560,14 +3736,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             postParams["list_id"] = self.updateSelectedList?.id
         }
-        else
-        {
-            postParams["list_id"] = self.listID
-        }
+//        else
+//        {
+//            postParams["list_id"] = self.listID
+//        }
         
     
-        let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
-        let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
+        let selectedLat = kSelectedLocation?.latitude
+        let selectedLong = kSelectedLocation?.longitude
         
         var lat: Any!
         var long: Any!
@@ -3576,12 +3752,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             if selectedLat == nil && selectedLong == nil
             {
-                
-                if self.currentLocationCoordinate != nil
-                {
-                    lat = self.currentLocationCoordinate?.latitude
-                    long = self.currentLocationCoordinate?.longitude
-                }
+                lat = self.selectedLat
+                long = self.selectedLong
+//                if self.currentLocationCoordinate != nil
+//                {
+//                    lat = self.currentLocationCoordinate?.latitude
+//                    long = self.currentLocationCoordinate?.longitude
+//                }
             }
             else
             {
@@ -3627,13 +3804,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //                self.editEventView.locationSwitch.isOn = false
 //                self.editEventView.dateSwitch.isOn = false
 //                self.editEventView.timeSwitch.isOn = false
-                self.listID = nil
+//                self.listID = nil
                 self.updateSelectedList = nil
                 
-                UserDefaults.standard.removeObject(forKey: kSelectedLat)
-                UserDefaults.standard.removeObject(forKey: kSelectedLong)
-                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
-                UserDefaults.standard.synchronize()
+                kSelectedLocation = nil
+                
+//                UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//                UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
+//                UserDefaults.standard.synchronize()
                 
                 self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
                 
@@ -4105,10 +4284,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.dropDownPickerView.delegate = self
         self.dropDownPickerView.tag = textField.tag
         
-        if textField.tag == 2 && self.listID != nil
+        if textField.tag == 2 && self.updateSelectedList?.id != nil
         {
-            let row = kUserList.index(where: {$0.id == self.listID})
-            self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+            let row = kUserList.index(where: {$0.id == self.updateSelectedList?.id})
+            if row != nil
+            {
+                self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+            }
         }
         
         

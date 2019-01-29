@@ -299,7 +299,9 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="backButton" destination="baD-r8-a0y" id="fNA-NR-Vz6"/>
-                <outlet property="dateViewHeightConstraint" destination="Ro7-Cq-qoJ" id="HXU-8q-CkI"/>
+
+                <outlet property="dateViewHeightConstraint" destination="Ro7-Cq-qoJ" id="PAX-3r-WZz"/>
+
                 <outlet property="eventDate" destination="XxZ-n9-6CC" id="1Gc-qc-aDW"/>
                 <outlet property="eventReceivedDate" destination="TvM-pi-ZBd" id="LLc-6t-v0i"/>
                 <outlet property="invitedBy" destination="uUd-UO-jlR" id="lZb-eq-R0S"/>

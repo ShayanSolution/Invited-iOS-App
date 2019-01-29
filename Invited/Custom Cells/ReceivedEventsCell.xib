@@ -79,7 +79,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date and time of the event" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7z-3j-9lF">
                                         <rect key="frame" x="0.0" y="154" width="203" height="60"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" priority="750" constant="60" id="dpz-l0-AUb"/>
+                                            <constraint firstAttribute="height" constant="60" id="dpz-l0-AUb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>

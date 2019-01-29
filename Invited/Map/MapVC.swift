@@ -33,9 +33,12 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
         
         self.mapView.isMyLocationEnabled = true
         
-        let camera = GMSCameraPosition.camera(withLatitude: (self.selectedLocationCoordinate.latitude), longitude: (self.selectedLocationCoordinate.longitude), zoom: 14.0)
+        if kCurrentLocation != nil
+        {
+            let camera = GMSCameraPosition.camera(withLatitude: self.mapView.myLocation?.coordinate.latitude ?? (kCurrentLocation?.latitude)!, longitude: self.mapView.myLocation?.coordinate.longitude ?? (kCurrentLocation?.longitude)!, zoom: 14.0)
         
-        self.mapView?.animate(to: camera)
+            self.mapView?.animate(to: camera)
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
@@ -45,9 +48,12 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
     
     @IBAction func backButtonTapped(_ sender: UIButton)
     {
-        BasicFunctions.setPreferences(self.addressLabel.text, key: kSelectedAddress)
-        BasicFunctions.setPreferences(self.destinationLocation?.latitude, key: kSelectedLat)
-        BasicFunctions.setPreferences(self.destinationLocation?.longitude, key: kSelectedLong)
+//        BasicFunctions.setPreferences(self.addressLabel.text, key: kSelectedAddress)
+//        BasicFunctions.setPreferences(self.destinationLocation?.latitude, key: kSelectedLat)
+//        BasicFunctions.setPreferences(self.destinationLocation?.longitude, key: kSelectedLong)
+        
+        kSelectedLocation = self.destinationLocation
+        kSelectedAddress = self.addressLabel.text
         
         self.navigationController?.popViewController(animated: true)
         
@@ -56,7 +62,7 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
     {
         if kCurrentLocation != nil
         {
-            self.mapView.animate(toLocation: kCurrentLocation!)
+            self.mapView.animate(toLocation: self.mapView.myLocation?.coordinate ?? kCurrentLocation!)
         }
     }
     
@@ -138,7 +144,7 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
     }
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition)
     {
-        destinationLocation = CLLocationCoordinate2D.init(latitude: position.target.latitude, longitude: position.target.longitude)
+        self.destinationLocation = CLLocationCoordinate2D.init(latitude: position.target.latitude, longitude: position.target.longitude)
         self.reverseGeocodeCoordinate(self.destinationLocation!)
         
         
@@ -152,7 +158,7 @@ class MapVC: UIViewController,GMSAutocompleteViewControllerDelegate,GMSMapViewDe
             self.destinationMarker?.icon = UIImage(named:"BlackDot")
             self.destinationMarker?.iconView?.layer.cornerRadius = (self.destinationMarker?.iconView?.frame.size.width)! / 2
             self.destinationMarker?.map = self.mapView
-            destinationMarker?.appearAnimation = GMSMarkerAnimation.pop
+            self.destinationMarker?.appearAnimation = GMSMarkerAnimation.pop
         }
         else
         {

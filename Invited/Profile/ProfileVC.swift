@@ -20,6 +20,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 }
+extension String {
+    func isValidEmail() -> Bool {
+        // here, `try!` will always succeed because the pattern is valid
+        let regex = try! NSRegularExpression(pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", options: .caseInsensitive)
+        return regex.firstMatch(in: self, options: [], range: NSRange(location: 0, length: count)) != nil
+    }
+}
 
 class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RSKImageCropViewControllerDelegate {
     
@@ -146,6 +153,16 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 //        self.profileView.layer.borderWidth = 5.0
 //        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
     }
+//    @objc func receivedNotification(notification : Notification)
+//    {
+////        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+////        let homeVC : HomeVC = storyBoard.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+////
+////        homeVC.isNotificationReceived = true
+//
+//        kISNotificationReceived = true
+//        self.navigationController?.popViewController(animated: true)
+//    }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
@@ -207,6 +224,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         else if self.dobTextField.text == ""
         {
             BasicFunctions.showAlert(vc: self, msg: "Please put date of birth.")
+            return
+        }
+        else if !(self.emailTextField.text?.isValidEmail())!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid email.")
             return
         }
         
@@ -294,6 +316,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             BasicFunctions.showSigInVC()
             return
             
+        }
+        
+        if json?["email"] != nil
+        {
+            let errorString : String = (json!["email"] as! Array)[0]
+            BasicFunctions.showAlert(vc: self, msg: errorString)
+            return
         }
         
         BasicFunctions.showAlert(vc: self, msg: message)
