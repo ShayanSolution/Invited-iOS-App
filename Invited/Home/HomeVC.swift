@@ -171,8 +171,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     var timer : Timer!
     
-    var notificationData : Notification?
-    
     
     
     override func viewDidLoad() {
@@ -257,30 +255,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
-        
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
             let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
             self.mainScrollView.setContentOffset(point, animated: false)
             self.placeSelectedORCancelled = false
             
-//            self.selectedLocationAddress = kSelectedAddress
+            //            self.selectedLocationAddress = kSelectedAddress
             if kSelectedAddress != nil
             {
                 self.createEventView.locationTextField.text = kSelectedAddress
                 
                 kSelectedAddress = nil
-            
+                
             }
-//            else
-//            {
-//                self.createEventView.locationTextField.text = self.currentLocationAddress
-//            }
+            //            else
+            //            {
+            //                self.createEventView.locationTextField.text = self.currentLocationAddress
+            //            }
             
         }
         else if self.isUpdated == true && self.placeSelectedORCancelled == true
@@ -289,7 +283,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.mainScrollView.setContentOffset(point, animated: false)
             self.placeSelectedORCancelled = false
             
-//            self.selectedLocationAddress = kSelectedAddress
+            //            self.selectedLocationAddress = kSelectedAddress
             if kSelectedAddress != nil
             {
                 self.editEventView.locationTextField.text = kSelectedAddress
@@ -298,21 +292,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 
             }
-//            else
-//            {
-//                self.reverseGeocodeCoordinate(self.currentLocationCoordinate)
-//            }
+            //            else
+            //            {
+            //                self.reverseGeocodeCoordinate(self.currentLocationCoordinate)
+            //            }
             
             
         }
-//        else if self.isStartNavigationButtonTapped == true
-//        {
-//            self.isStartNavigationButtonTapped = false
-//
-//            let point = CGPoint(x: self.mainScrollView.frame.size.width * 2, y: 0)
-//            self.mainScrollView.setContentOffset(point, animated: false)
-//
-//        }
+            //        else if self.isStartNavigationButtonTapped == true
+            //        {
+            //            self.isStartNavigationButtonTapped = false
+            //
+            //            let point = CGPoint(x: self.mainScrollView.frame.size.width * 2, y: 0)
+            //            self.mainScrollView.setContentOffset(point, animated: false)
+            //
+            //        }
+        else if kNotificationData != nil
+        {
+            self.receivedNotificationOutsideFromHomeVC(notificationData: kNotificationData!)
+            kNotificationData = nil
+        }
         else
         {
             if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
@@ -332,9 +331,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 self.getContactListFromServer()
             }
-
-            
         }
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        
+        
         
         
         
@@ -366,11 +372,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //    }
 //    func checkNotificationData()
 //    {
-//        if notificationData != nil
+//        if self.notificationData != nil
 //        {
 //            self.receivedNotification(notification: notificationData!)
 ////            self.invitesStatusButtonTapped(self.invitesStatusButton)
-//            notificationData = nil
+//            self.notificationData = nil
 //        }
 //    }
 //    func fetchAllContactsFromDevice()  {
@@ -448,7 +454,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func receivedNotification(notification : Notification)
     {
-//        self.backButtonTapped()
+        
+        BasicFunctions.hideLeftMenu(vc: self)
+        
+//        if self.presentedViewController != nil
+//        {
+//            self.dismiss(animated: true) {
+//
+//                kIsNotificationReceived = false
+//            }
+//        }
         
         if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
 
@@ -529,6 +544,90 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
     }
+    func receivedNotificationOutsideFromHomeVC(notificationData : [String : Any])
+    {
+        
+        BasicFunctions.hideLeftMenu(vc: self)
+        
+        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+            
+            UIView.animate(withDuration: 0.25) {
+                
+                self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+                
+            }
+            
+        }
+        
+        
+        var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+        self.mainScrollView.setContentOffset( point, animated: true)
+        
+        
+        
+        let status = notificationData["status"] as! String
+        if status == "request" ||  status == "cancelled" || status == "closed"
+        {
+            
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesReceivedView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesReceivedView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: 5, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchRequestsFromServer()
+            
+        }
+        else if status == "YES"   //  status == "accepted"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchReceivedRequestsFromServer()
+            
+            
+        }
+        else if status == "NO"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
+            
+            
+        }
+        
+        
+        
+        
+    }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
 
@@ -603,8 +702,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        
 //                })
         
-        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
-        self.present(createListVC!, animated: true, completion: nil)
+//        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
+//        self.present(createListVC!, animated: true, completion: nil)
+        
+        BasicFunctions.pushVCinNCwithName("CreateListVC", popTop: false)
     }
     
     
@@ -622,6 +723,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let point = CGPoint(x: 0, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
         self.isUpdated = false
+        
+        if kUserList.count < 1
+        {
+            self.getContactListFromServer()
+        }
     }
     
     @IBAction func createInviteButtonTapped(_ sender: UIButton)

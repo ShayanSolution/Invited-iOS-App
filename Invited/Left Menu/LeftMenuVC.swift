@@ -23,12 +23,13 @@ class LeftMenuVC: UIViewController {
     @IBAction func homeButtonTapped(_ sender: UIButton)
     {
         BasicFunctions.hideLeftMenu(vc: self)
-        BasicFunctions.setHomeVC()
+        BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
     }
     @IBAction func profileButtonTapped(_ sender: UIButton)
     {
+        
         BasicFunctions.hideLeftMenu(vc: self)
-        BasicFunctions.pushVCinNCwithName("ProfileVC", popTop: false)
+        BasicFunctions.pushVCinNCwithName("ProfileVC", popTop: true)
         
     }
     @IBAction func logoutButtonTapped(_ sender: UIButton)

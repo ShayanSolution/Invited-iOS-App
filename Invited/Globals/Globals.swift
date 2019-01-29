@@ -16,6 +16,8 @@ var kUserList = [UserList]()
 var kCurrentLocation : CLLocationCoordinate2D?
 var kSelectedLocation : CLLocationCoordinate2D?
 var kSelectedAddress : String?
+var kNotificationData : [String : Any]?
+//var kIsNotificationReceived = false
 //let kSelectedLat = "selectedLat"
 //let kSelectedLong = "selectedLong"
 let kIfUserLoggedIn = "isUserLoggedIn"

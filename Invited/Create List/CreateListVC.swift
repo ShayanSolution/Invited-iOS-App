@@ -322,7 +322,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @IBAction func backButtonSelected(_ sender: Any)
     {
         
-        self.dismiss(animated: true, completion: nil)
+        self.dismissVC()
         
     }
     @objc func searchRecordsAsPerText(_ textfield:UITextField) {
@@ -518,7 +518,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 kUserList.removeAll()
                 
-                self.dismiss(animated: true, completion: nil)
+                self.dismissVC()
                 
                 if msg != nil
                 {
@@ -615,8 +615,9 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             presentViewcontroller.listData = self.listData
         }
         
+        self.navigationController?.popViewController(animated: true)
         
-        self.dismiss(animated: true, completion: nil)
+//        self.dismiss(animated: true, completion: nil)
         
     }
     

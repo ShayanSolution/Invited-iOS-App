@@ -13,6 +13,7 @@ import UserNotifications
 import Contacts
 import FacebookCore
 import TwitterKit
+import PGSideMenu
 
 
 @UIApplicationMain
@@ -157,7 +158,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         
         print("Notification data: \(response.notification.request.content.userInfo)")
-        NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [AnyHashable : Any] )
+        
+        
+        if ((self.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController)?.topViewController is HomeVC
+        {
+//            kIsNotificationReceived = true
+            NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [String : Any] )
+        }
+        else
+        {
+            kNotificationData = response.notification.request.content.userInfo["custom_data"] as? [String : Any]
+            BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
+        }
+        
+        
+        
+        
         
         
         

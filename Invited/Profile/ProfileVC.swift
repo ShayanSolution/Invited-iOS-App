@@ -118,12 +118,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     }
 //    @objc func receivedNotification(notification : Notification)
 //    {
-//        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
-//        let homeVC : HomeVC = storyBoard.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+////        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+////        let homeVC : HomeVC = storyBoard.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+////
+////        homeVC.isNotificationReceived = true
 //
-//        homeVC.notificationData = notification
-//
-//        BasicFunctions.pushVCinNCwithObject(vc: homeVC, popTop: true)
+//        kISNotificationReceived = true
+//        self.navigationController?.popViewController(animated: true)
 //    }
     
     
