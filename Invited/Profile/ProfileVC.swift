@@ -130,6 +130,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
+        self.view.endEditing(true)
         BasicFunctions.openLeftMenu(vc: self)
     }
     

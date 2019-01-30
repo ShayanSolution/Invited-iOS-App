@@ -23,10 +23,10 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNW-Sj-lIc">
-                            <rect key="frame" x="10" y="253" width="300" height="187"/>
+                            <rect key="frame" x="10" y="219" width="300" height="221"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6K-Ew-DdN">
-                                    <rect key="frame" x="10" y="0.0" width="280" height="187"/>
+                                    <rect key="frame" x="10" y="0.0" width="280" height="221"/>
                                     <string key="text">It is highly recommended that you provide “Date of Birth” for getting exclusive special discounts, or even completely free “Birthday Presents” from top brands ;and free “Dining Offers” from some of the best restaurants in your city on your special day. Go to “PROFILE” in the menu and update now.</string>
                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -38,7 +38,7 @@
                                 <constraint firstItem="y6K-Ew-DdN" firstAttribute="leading" secondItem="eNW-Sj-lIc" secondAttribute="leading" constant="10" id="At4-Je-yLV"/>
                                 <constraint firstItem="y6K-Ew-DdN" firstAttribute="top" secondItem="eNW-Sj-lIc" secondAttribute="top" id="Etx-BP-h5D"/>
                                 <constraint firstAttribute="trailing" secondItem="y6K-Ew-DdN" secondAttribute="trailing" constant="10" id="UeY-uO-Cll"/>
-                                <constraint firstAttribute="height" constant="187" id="d8K-Lk-6SS"/>
+                                <constraint firstAttribute="height" constant="221" id="d8K-Lk-6SS"/>
                                 <constraint firstAttribute="bottom" secondItem="y6K-Ew-DdN" secondAttribute="bottom" id="hzF-99-c2N"/>
                             </constraints>
                         </view>
