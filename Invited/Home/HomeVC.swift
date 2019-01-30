@@ -262,6 +262,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     override func viewDidAppear(_ animated: Bool)
     {
+        
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
             let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
@@ -335,7 +336,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     override func viewWillAppear(_ animated: Bool)
     {
 //        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
         
         
         
@@ -685,6 +685,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
+        self.view.endEditing(true)
         BasicFunctions.openLeftMenu(vc: self)
     }
     
@@ -703,12 +704,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
 //        self.present(createListVC!, animated: true, completion: nil)
         
+        self.view.endEditing(true)
         BasicFunctions.pushVCinNCwithName("CreateListVC", popTop: false)
     }
     
     
     @IBAction func myListsButtonTapped(_ sender: UIButton)
     {
+        
+        self.view.endEditing(true)
+        
         if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
             
             UIView.animate(withDuration: 0.25) {
@@ -807,6 +812,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func invitesStatusButtonTapped(_ sender: UIButton)
     {
+        
+        self.view.endEditing(true)
+        
         if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x)
         {
             
@@ -1361,7 +1369,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else
             {
-                requestEventCell?.locationHeightConstraint.constant = 62
+                requestEventCell?.locationHeightConstraint.constant = 90.0
                 requestEventCell?.startNavigationViewHeightConstraint.constant = 30.5
                 requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
@@ -1615,11 +1623,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if eventData.eventAddress.isEmpty
             {
                 receivedEventsCell?.locationHeightConstraint.constant = 0
+//                receivedEventsCell?.locationHeightConstraint.priority = UILayoutPriority(rawValue: 750.0)
                 receivedEventsCell?.startNavigationButton.isHidden = true
             }
             else
             {
-                receivedEventsCell?.locationHeightConstraint.constant = 62.5
+                receivedEventsCell?.locationHeightConstraint.constant = 90.0
+//                receivedEventsCell?.locationHeightConstraint.priority = UILayoutPriority(rawValue: 1000.0)
                 receivedEventsCell?.startNavigationButton.isHidden = false
                 receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
@@ -1892,11 +1902,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         
         textField.resignFirstResponder()
@@ -2000,10 +2010,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if eventData.eventAddress == ""
             {
                 self.sentByMeView.locationViewHeightConstraint.constant = 0
+//                self.sentByMeView.locationViewHeightConstraint.priority = UILayoutPriority(rawValue: 750.0)
+                
             }
             else
             {
                 self.sentByMeView.locationViewHeightConstraint.constant = 60.0
+//                self.sentByMeView.locationViewHeightConstraint.priority = UILayoutPriority(rawValue: 1000.0)
                 self.sentByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
             
@@ -2051,7 +2064,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
-                self.acceptByMeView.locationViewHeightConstraint.constant = 60.0
+                self.acceptByMeView.locationViewHeightConstraint.constant = 80.0
                 self.acceptByMeView.startNavigationButtonHeightConstraint.constant = 30.5
             }
             
@@ -3269,11 +3282,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         //dismiss date picker dialog
         self.view.endEditing(true)
@@ -3327,11 +3340,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         //dismiss date picker dialog
         self.view.endEditing(true)

@@ -526,7 +526,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
 //            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
-            
+//            kUserList.removeAll()
+//            BasicFunctions.setUserLoggedIn()
+//            BasicFunctions.setHomeVC()
+//            BasicFunctions.fetchAllContactsFromDevice()
             self.updateDeviceToken()
             
             

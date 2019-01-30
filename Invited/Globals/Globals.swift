@@ -47,4 +47,4 @@ var kBaseURL = "http://dev.invited.shayansolutions.com/"
 var kBaseURL = ""
 #endif
 
-let kConfigURL = "invited.shayansolutions.com"
+let kConfigURL = "http://invited.shayansolutions.com/"
