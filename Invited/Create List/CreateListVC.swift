@@ -20,6 +20,7 @@ class ContactData: NSObject
     var desc = String()
     var photo = String()
     var phoneNumber = String()
+    var imageURL = String()
     var isSelected = Bool()
     var confirmed = Int()
     

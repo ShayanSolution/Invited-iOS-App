@@ -1338,7 +1338,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if tableView.tag == 5
         {
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 30.0))
-            headerView.backgroundColor = UIColor.lightGray
+            headerView.backgroundColor = UIColor.init(red: 255/255, green: 0, blue: 35/255, alpha: 1.0)
             
         let imageView = UIImageView.init(frame: CGRect.init(x: 0, y: 0, width: 20.0, height: headerView.frame.size.height))
         imageView.contentMode = UIViewContentMode.scaleAspectFit
@@ -1359,18 +1359,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        button.setImage(UIImage.init(named: "PlusIcon"), for: UIControlState.normal)
 //        button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 150);
         
-        let label = UILabel.init(frame: CGRect.init(x: 20.0, y: headerView.frame.origin.y, width: headerView.frame.size.width , height: headerView.frame.size.height))
-        label.textColor = UIColor.black
+        let label = UILabel.init(frame: CGRect.init(x: 25.0, y: headerView.frame.origin.y, width: headerView.frame.size.width - 30 , height: headerView.frame.size.height))
+        label.textColor = UIColor.white
+        label.font = label.font.withSize(15.0)
         label.numberOfLines = 0
             
             
         if section == 0
         {
-            label.text = "List of people who Accepted."
+            label.text = "List of people who replied with yes."
         }
         else if section == 1
         {
-            label.text = "List of people who Rejected."
+            label.text = "List of people who replied with no."
         }
         else
         {
@@ -1389,9 +1390,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView?
     {
-        let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 10.0))
+        if tableView.tag == 5
+        {
+            let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 10.0))
         
-        return footerView
+            return footerView
+        }
+        
+        return nil
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        if tableView.tag == 5
+        {
+            return 10.0
+        }
+        return 0
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
@@ -2106,8 +2120,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     // Edit button Action Method
     @objc func editButtonTapped(sender:UIButton)
     {
-        BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
         self.indexPath = IndexPath.init(row: sender.tag, section: 0)
+        
+        let userListObject = kUserList[self.indexPath.row]
+        
+        if userListObject.imageURL != ""
+        {
+            BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
+        }
+        else
+        {
+            BasicFunctions.openActionSheet(vc: self, isEditing: false)
+        }
+        
     }
     
     func didDeleteImage()
@@ -3460,6 +3485,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 {
                     contactData.phoneNumber = contact["phone"] as! String
                 }
+                
+                contactData.imageURL = contact["profileImage"] as? String ?? ""
                 
 //                if contact["name"] as? String != nil
 //                {

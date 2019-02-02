@@ -153,6 +153,15 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             cell?.nameLabel.text = name + " " + "(" + contactData.phoneNumber + ")"
         }
         
+        if contactData.imageURL != ""
+        {
+            cell?.profileImageView.imageURL = URL.init(string: contactData.imageURL)
+        }
+        else
+        {
+            cell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+        }
+        
         return cell!
         
         }
