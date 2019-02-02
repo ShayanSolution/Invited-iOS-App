@@ -14,6 +14,12 @@ import TwitterKit
 import FBSDKLoginKit
 import MessageUI
 
+
+
+struct ExpandableData {
+    var isExpanded : Bool
+    var eventData : [EventTrackData]
+}
 class UserList: NSObject
 {
     var name = String()
@@ -53,7 +59,9 @@ class EventData: NSObject
     var fullName = String()
     var maximumNumberOfPeople = Int()
     var userList = [ContactData]()
-    var acceptedEventList = [EventAcceptedData]()
+    var acceptedEventList = [EventTrackData]()
+    var rejectedEventList = [EventTrackData]()
+    var pendingEventList = [EventTrackData]()
     var invitedBy = UserData()
     
 }
@@ -64,10 +72,11 @@ class UserData: NSObject
     var lastName = String()
     var userName = String()
     var email = String()
+    var imageURL = String()
     var phone = String()
     
 }
-class EventAcceptedData: NSObject
+class EventTrackData: NSObject
 {
     var id = Int()
     var eventID = Int()
@@ -102,7 +111,8 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate{
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate,EditImageDelegate{
+    
     
 
     
@@ -157,7 +167,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var requestEventList = [EventData]()
     var receivedRequestEventList = [EventData]()
     var invitedList : [ContactData]!
-    var acceptedEventList = [EventAcceptedData]()
+    
+    var eventList = [ExpandableData(isExpanded: false, eventData: [EventTrackData]()), ExpandableData(isExpanded: false, eventData: [EventTrackData]()), ExpandableData(isExpanded: false, eventData: [EventTrackData]())]
+//    var rejectedEventList = ExpandableData(isExpanded: false, eventData: [EventTrackData]())
+//    var pendingEventList = ExpandableData(isExpanded: false, eventData: [EventTrackData]())
     
     var dropDownPickerView : UIPickerView!
     var dropDownPickerView2 : UIPickerView!
@@ -325,10 +338,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.mainScrollView.setContentOffset( point, animated: true)
             
             
-            if kUserList.count < 1
-            {
-                self.getContactListFromServer()
-            }
+            
+            self.getContactListFromServer()
+            
         }
     }
     
@@ -727,10 +739,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.mainScrollView.setContentOffset( point, animated: false)
         self.isUpdated = false
         
-        if kUserList.count < 1
-        {
-            self.getContactListFromServer()
-        }
+        
+        self.getContactListFromServer()
+        
     }
     
     @IBAction func createInviteButtonTapped(_ sender: UIButton)
@@ -1210,7 +1221,187 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //    }
     
+    @objc func handleExpandClose(sender : UIButton)
+    {
+        
+        let section = sender.tag
+        
+        var indexPaths = [IndexPath]()
+
+        for row in self.eventList[section].eventData.indices
+        {
+            let indexPath = IndexPath(row: row, section: section)
+            indexPaths.append(indexPath)
+        }
+        
+        let isExpanded = self.eventList[section].isExpanded
+        self.eventList[section].isExpanded = !isExpanded
+        
+//        var imageView : UIImageView!
+//
+//        for subview in (sender.superview?.subviews)!
+//        {
+//            if let imgView = subview as? UIImageView
+//            {
+//                imageView = imgView
+//            }
+//        }
+        
+        for index in 0...self.eventList.count - 1
+        {
+            if index != section && self.eventList[index].isExpanded
+            {
+                self.eventList[index].isExpanded = false
+            }
+        }
+        
+        self.sentByMeView.acceptedUserTableView.reloadData()
+        
+        
+        if !isExpanded
+        {
+            if indexPaths.count > 0
+            {
+                self.sentByMeView.acceptedUserTableView.scrollToRow(at: indexPaths.first!, at: UITableViewScrollPosition.top
+                , animated: true)
+            }
+        }
+        
+        
+        
+//        if isExpanded
+//        {
+////            imageView.image = UIImage.init(named: "PlusIcon")
+//            self.sentByMeView.acceptedUserTableView.deleteRows(at: indexPaths, with: UITableViewRowAnimation.fade)
+//        }
+//        else
+//        {
+//            imageView.image = UIImage.init(named: "MinusIcon")
+//            self.sentByMeView.acceptedUserTableView.insertRows(at: indexPaths, with: UITableViewRowAnimation.fade)
+//            if indexPaths.count > 0
+//            {
+////            self.sentByMeView.acceptedUserTableView.scrollToRow(at: indexPaths.first!, at: UITableViewScrollPosition.top
+////                , animated: true)
+//
+//                for index in 0...self.eventList.count - 1
+//                {
+//                    if index != section && self.eventList[index].isExpanded
+//                    {
+//                        self.eventList[index].isExpanded = false
+//
+////                        var indexPathse = [IndexPath]()
+////                        for row in self.eventList[index].eventData.indices
+////                        {
+////                            let indexPath = IndexPath(row: row, section: index)
+////                            indexPathse.append(indexPath)
+////                        }
+////
+////                        self.eventList[index].isExpanded = false
+////
+////                        let view = self.sentByMeView.acceptedUserTableView.headerView(forSection: index)
+////
+////                        for subview in (view?.subviews)!
+////                        {
+////                            if let imgView = subview as? UIImageView
+////                            {
+////                                imageView = imgView
+////                            }
+////                        }
+////
+////                        imageView.image = UIImage.init(named: "PlusIcon")
+//
+////                        if indexPathse.count > 0
+////                        {
+////                        self.sentByMeView.acceptedUserTableView.deleteRows(at: indexPathse, with: UITableViewRowAnimation.fade)
+////                        }
+//                    }
+//                }
+//                self.sentByMeView.acceptedUserTableView.reloadData()
+//
+//            }
+        
+//        }
+    }
     
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        if tableView.tag == 5
+        {
+            return self.eventList.count
+        }
+        
+        return 1
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
+    {
+        if tableView.tag == 5
+        {
+        let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 30.0))
+            headerView.backgroundColor = UIColor.lightGray
+            
+        let imageView = UIImageView.init(frame: CGRect.init(x: 0, y: 0, width: 20.0, height: headerView.frame.size.height))
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
+            
+        if self.eventList[section].isExpanded
+        {
+            imageView.image = UIImage.init(named: "MinusIcon")
+        }
+        else
+        {
+            imageView.image = UIImage.init(named: "PlusIcon")
+        }
+            
+        let button = UIButton(type: .custom)
+        button.frame = CGRect.init(x: 0, y: 0, width: headerView.frame.size.width, height: headerView.frame.size.height)
+        button.tag = section
+        button.addTarget(self, action: #selector(self.handleExpandClose(sender:)), for: UIControlEvents.touchUpInside)
+//        button.setImage(UIImage.init(named: "PlusIcon"), for: UIControlState.normal)
+//        button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 150);
+        
+        let label = UILabel.init(frame: CGRect.init(x: 20.0, y: headerView.frame.origin.y, width: headerView.frame.size.width , height: headerView.frame.size.height))
+        label.textColor = UIColor.black
+        label.numberOfLines = 0
+            
+            
+        if section == 0
+        {
+            label.text = "List of people who Accepted."
+        }
+        else if section == 1
+        {
+            label.text = "List of people who Rejected."
+        }
+        else
+        {
+            label.text = "List of people with no response."
+        }
+        
+        headerView.addSubview(imageView)
+        headerView.addSubview(label)
+        headerView.addSubview(button)
+
+        return headerView
+            
+        }
+        
+        return nil
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView?
+    {
+        let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 10.0))
+        
+        return footerView
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if tableView.tag == 5
+        {
+            return 30.0
+        }
+        
+        return 0
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -1232,7 +1423,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else if tableView.tag == 5
         {
-            return self.acceptedEventList.count
+            if !self.eventList[section].isExpanded
+            {
+                return 0
+            }
+            
+            return self.eventList[section].eventData.count
+            
         }
         return self.invitedList.count
     }
@@ -1703,17 +1900,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 contactCell = Bundle.main.loadNibNamed("ContactCell", owner: nil, options: nil)?[0] as? ContactCell
             }
-            
+
             contactCell?.deleteButton.isHidden = true
+
+
+            let eventData = self.eventList[indexPath.section].eventData[indexPath.row]
+
             
-            
-            let eventData = self.acceptedEventList[indexPath.row]
-            
-            
+
+
+
             var invitedTo : String!
-            
+
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitee.phone)
-            
+
             if fullName == " "
             {
                 invitedTo = eventData.invitee.phone
@@ -1722,12 +1922,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 invitedTo = fullName + " " + "(" + eventData.invitee.phone + ")"
             }
-            
+
             contactCell?.nameLabel.text = invitedTo
             
-            
+            if eventData.invitee.imageURL != ""
+            {
+                contactCell?.profileImageView.imageURL = URL.init(string: eventData.invitee.imageURL)
+            }
+            else
+            {
+                contactCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+            }
+
+
+
+
             return contactCell!
-            
+
 
         }
         
@@ -1851,17 +2062,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
         let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
-        cell.profileImageView.image = croppedImage
-        self.navigationController?.popViewController(animated: true)
+//        cell.profileImageView.image = croppedImage
         
-        BasicFunctions.showActivityIndicator(vu: self.view)
+        BasicFunctions.showActivityIndicator(vu: controller.view)
         
-        let userListObject = kUserList[indexPath.row]
+        let userListObject = kUserList[self.indexPath.row]
         
         var imageData : Data?
         
             var scaleImage : UIImage!
-            scaleImage = BasicFunctions.resizeImage(image: cell.profileImageView.image!, targetSize: CGSize.init(width: cell.profileImageView.frame.size.width, height: cell.profileImageView.frame.size.height))
+            scaleImage = BasicFunctions.resizeImage(image: croppedImage, targetSize: CGSize.init(width: cell.profileImageView.frame.size.width, height: cell.profileImageView.frame.size.height))
             
             imageData = UIImagePNGRepresentation(scaleImage)
         
@@ -1869,7 +2079,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         postParams["list_id"] = userListObject.id
         ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
-            BasicFunctions.stopActivityIndicator(vu: self.view)
+            BasicFunctions.stopActivityIndicator(vu: controller.view)
             
             let json = result as! [String : Any]
             let msg = json["messages"] as? String
@@ -1886,6 +2096,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if json["error"] == nil
             {
+                self.navigationController?.popViewController(animated: true)
                 BasicFunctions.showAlert(vc: self, msg: msg)
             }
         }
@@ -1895,8 +2106,45 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     // Edit button Action Method
     @objc func editButtonTapped(sender:UIButton)
     {
-        BasicFunctions.openActionSheet(vc: self, isEditing: false)
+        BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
         self.indexPath = IndexPath.init(row: sender.tag, section: 0)
+    }
+    
+    func didDeleteImage()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        let userListObject = kUserList[self.indexPath.row]
+        
+        var postParams = [String : Any]()
+        postParams["list_id"] = userListObject.id
+        
+        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as? [String:Any]
+            
+            let status = json?["status"] as? String
+            let message = json?["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if status == "success"
+            {
+                self.getContactListFromServer()
+            }
+            
+            BasicFunctions.showAlert(vc: self, msg: message)
+            
+            
+        }
     }
     
     
@@ -2027,8 +2275,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.sendReportButton.tag = eventData.eventID
             self.sentByMeView.sendReportButton.addTarget(self, action: #selector(self.sendButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             
-            self.acceptedEventList.removeAll()
-            self.acceptedEventList = eventData.acceptedEventList
+            self.eventList[0].isExpanded = false
+            self.eventList[0].eventData.removeAll()
+            self.eventList[0].eventData = eventData.acceptedEventList
+
+            self.eventList[1].isExpanded = false
+            self.eventList[1].eventData.removeAll()
+            self.eventList[1].eventData = eventData.rejectedEventList
+
+            self.eventList[2].isExpanded = false
+            self.eventList[2].eventData.removeAll()
+            self.eventList[2].eventData = eventData.pendingEventList
+            
             
             self.sentByMeView.acceptedUserTableView.reloadData()
             
@@ -3555,7 +3813,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 let phoneNumberString = nonAppUsersPhoneNumbers
                 let recipientsArray = phoneNumberString!.components(separatedBy: ",")
                 
-                let alert = UIAlertController.init(title: "Event Created", message: String(format: "There are %d contacts you have send are not using Invited App.Do you want to invite them on Invited app?", recipientsArray.count), preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController.init(title: "Event Created", message: "Some contacts from your list are not using invited APP. Do you want to invite them on invited app ?", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
 
@@ -3563,7 +3821,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 if (MFMessageComposeViewController.canSendText())
                 {
                     let controller = MFMessageComposeViewController()
-                    controller.body = String(format: "%@ %@ wants to send you a message. Please download invited app for free to receive the message", kLoggedInUserProfile.firstName!,kLoggedInUserProfile.lastName!)
+                    controller.body = String(format: "%@ %@ wants to send you a message. Please download invited app for free to receive the message http://onelink.to/bfyctf", kLoggedInUserProfile.firstName!,kLoggedInUserProfile.lastName!)
                     let phoneNumberString = nonAppUsersPhoneNumbers
                     let recipientsArray = phoneNumberString!.components(separatedBy: ",")
                     controller.recipients = recipientsArray
@@ -3580,6 +3838,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 }))
 
                 self.present(alert, animated: true, completion: nil)
+                }
+                else
+                {
+                    if message != nil
+                    {
+                        BasicFunctions.showAlert(vc: self, msg: message)
+                    }
                 }
             }
             else
@@ -4171,13 +4436,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     eventData.invitedBy = userData
                     
-                    let acceptedRequestArray = event["accepted_requests"] as! [[String : Any]]
+                    let acceptedRequestArray = event["accepted_requests"] as? [[String : Any]]
                     
-                    
-                    
-                    for acceptedEvent in acceptedRequestArray
+                    if acceptedRequestArray != nil
                     {
-                        let eventAcceptedData = EventAcceptedData()
+                        for acceptedEvent in acceptedRequestArray!
+                    {
+                        let eventAcceptedData = EventTrackData()
                         eventAcceptedData.id = acceptedEvent["id"] as! Int
                         eventAcceptedData.eventID = acceptedEvent["event_id"] as! Int
                         
@@ -4189,11 +4454,68 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                         userData.id = invitee["id"] as! Int
                         userData.email = invitee["email"] as? String ?? ""
                         userData.phone = invitee["phone"] as? String ?? ""
+                        userData.imageURL = invitee["profileImage"] as? String ?? ""
                         
                         eventAcceptedData.invitee = userData
                         }
                         
                         eventData.acceptedEventList.append(eventAcceptedData)
+                    }
+                    }
+                    
+                    
+                    let rejectRequestArray = event["reject_requests"] as? [[String : Any]]
+                    
+                    if rejectRequestArray != nil
+                    {
+                        for rejectEvent in rejectRequestArray!
+                    {
+                        let eventRejectedData = EventTrackData()
+                        eventRejectedData.id = rejectEvent["id"] as? Int ?? 0
+                        eventRejectedData.eventID = rejectEvent["event_id"] as? Int ?? 0
+                        
+                        if rejectEvent["invitee"] as? [String : Any] != nil
+                        {
+                            let invitee = rejectEvent["invitee"] as! [String : Any]
+                            
+                            let userData = UserData()
+                            userData.id = invitee["id"] as? Int ?? 0
+                            userData.email = invitee["email"] as? String ?? ""
+                            userData.phone = invitee["phone"] as? String ?? ""
+                            userData.imageURL = invitee["profileImage"] as? String ?? ""
+                            
+                            eventRejectedData.invitee = userData
+                        }
+                        
+                        eventData.rejectedEventList.append(eventRejectedData)
+                    }
+                    }
+                    
+                    let pendingRequestArray = event["pending_requests"] as? [[String : Any]]
+                    
+                    if pendingRequestArray != nil
+                    {
+                        for pendingEvent in pendingRequestArray!
+                    {
+                        let eventPendingData = EventTrackData()
+                        eventPendingData.id = pendingEvent["id"] as? Int ?? 0
+                        eventPendingData.eventID = pendingEvent["event_id"] as? Int ?? 0
+                        
+                        if pendingEvent["invitee"] as? [String : Any] != nil
+                        {
+                            let invitee = pendingEvent["invitee"] as! [String : Any]
+                            
+                            let userData = UserData()
+                            userData.id = invitee["id"] as? Int ?? 0
+                            userData.email = invitee["email"] as? String ?? ""
+                            userData.phone = invitee["phone"] as? String ?? ""
+                            userData.imageURL = invitee["profileImage"] as? String ?? ""
+                            
+                            eventPendingData.invitee = userData
+                        }
+                        
+                        eventData.pendingEventList.append(eventPendingData)
+                    }
                     }
                     
                     

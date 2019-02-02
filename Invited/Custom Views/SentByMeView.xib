@@ -304,17 +304,8 @@
                                 <constraint firstItem="EG1-oj-eIr" firstAttribute="leading" secondItem="wXp-w3-74j" secondAttribute="leading" id="yAf-2i-Mcb"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="List of people who accepted." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rSA-5S-pAX">
-                            <rect key="frame" x="37.5" y="338" width="245" height="20"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="20" id="myD-q7-4yj"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <tableView clipsSubviews="YES" tag="5" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="85e-Gj-H87">
-                            <rect key="frame" x="20" y="363" width="280" height="135"/>
+                        <tableView clipsSubviews="YES" tag="5" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="85e-Gj-H87">
+                            <rect key="frame" x="20" y="343" width="280" height="155"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hZ-Hf-lv9">
@@ -343,19 +334,16 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="gWV-kg-uz8" firstAttribute="top" secondItem="NZn-v7-dTB" secondAttribute="top" id="1Oj-f3-Tof"/>
-                        <constraint firstItem="rSA-5S-pAX" firstAttribute="top" secondItem="wXp-w3-74j" secondAttribute="bottom" constant="5" id="7kx-xh-o3v"/>
                         <constraint firstItem="gWV-kg-uz8" firstAttribute="leading" secondItem="NZn-v7-dTB" secondAttribute="leading" id="7yq-lh-pix"/>
                         <constraint firstItem="85e-Gj-H87" firstAttribute="leading" secondItem="NZn-v7-dTB" secondAttribute="leading" constant="20" id="9GF-UM-0oH"/>
                         <constraint firstItem="wXp-w3-74j" firstAttribute="top" secondItem="gWV-kg-uz8" secondAttribute="bottom" id="DkX-GP-t4D"/>
+                        <constraint firstItem="85e-Gj-H87" firstAttribute="top" secondItem="wXp-w3-74j" secondAttribute="bottom" constant="10" id="Nwa-9D-SwK"/>
                         <constraint firstItem="7hZ-Hf-lv9" firstAttribute="centerX" secondItem="NZn-v7-dTB" secondAttribute="centerX" id="RNl-18-gCP"/>
-                        <constraint firstItem="rSA-5S-pAX" firstAttribute="leading" secondItem="NZn-v7-dTB" secondAttribute="leading" constant="37.5" id="VN1-07-TXU"/>
-                        <constraint firstItem="85e-Gj-H87" firstAttribute="top" secondItem="rSA-5S-pAX" secondAttribute="bottom" constant="5" id="ZYL-Xp-A98"/>
                         <constraint firstAttribute="trailing" secondItem="85e-Gj-H87" secondAttribute="trailing" constant="20" id="aY0-Va-Ty4"/>
                         <constraint firstAttribute="trailing" secondItem="wXp-w3-74j" secondAttribute="trailing" constant="20" id="eUT-b7-wFA"/>
                         <constraint firstItem="7hZ-Hf-lv9" firstAttribute="top" secondItem="85e-Gj-H87" secondAttribute="bottom" constant="10" id="nn7-id-KvP"/>
                         <constraint firstItem="wXp-w3-74j" firstAttribute="leading" secondItem="NZn-v7-dTB" secondAttribute="leading" constant="20" id="q2Q-WH-fbe"/>
                         <constraint firstAttribute="bottom" secondItem="7hZ-Hf-lv9" secondAttribute="bottom" constant="20" id="reS-ZA-Hg3"/>
-                        <constraint firstAttribute="trailing" secondItem="rSA-5S-pAX" secondAttribute="trailing" constant="37.5" id="zxX-GN-EDi"/>
                     </constraints>
                 </view>
             </subviews>

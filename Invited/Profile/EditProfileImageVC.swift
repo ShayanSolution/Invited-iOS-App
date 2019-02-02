@@ -8,8 +8,8 @@
 
 import UIKit
 
-class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RSKImageCropViewControllerDelegate {
-    
+class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RSKImageCropViewControllerDelegate,EditImageDelegate {
+
     
     @IBOutlet var profileImageView: AsyncImageView!
     
@@ -29,12 +29,13 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
     
     @IBAction func backButtonTapped(_ sender: UIButton)
     {
+        kImage = self.profileImageView.image
         self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func editButtonTapped(_ sender: Any)
     {
-        BasicFunctions.openActionSheet(vc: self, isEditing: false)
+        BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
     }
     
     // UiimagePickerControllerDelegate Methods
@@ -68,9 +69,126 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
     
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
-        kImage = croppedImage
-        self.profileImageView.image = kImage
+        self.profileImageView.image = croppedImage
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    //DeleteDelegateMethod
+    func didDeleteImage() {
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        var postParams = [String : Any]()
+        postParams["user_id"] = kLoggedInUserProfile.userID
+        
+        ServerManager.deleteProfileImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as? [String:Any]
+            
+            let status = json?["status"] as? String
+            let message = json?["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if status == "success"
+            {
+                self.getProfileFromServer()
+            }
+            else
+            {
+                BasicFunctions.showAlert(vc: self, msg: message)
+            }
+            
+        }
+        
+    }
+    
+    func getProfileFromServer()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        ServerManager.getUserProfile(nil, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            self.handleServerResponseOfGetProfile(json: result as? [String : Any])
+            
+        }
+    }
+    func handleServerResponseOfGetProfile(json : [String : Any]?)
+    {
+        let message = json?["message"] as? String
+        let userData = json?["user"] as? [String : Any]
+        
+        if message != nil && message == "Unauthorized"
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+            BasicFunctions.showSigInVC()
+            return
+            
+        }
+        
+        if json?["error"] == nil && userData != nil
+        {
+            
+            let dobString = userData?["dob"] as? String ?? ""
+            let dorString = userData?["dateofrelation"] as? String ?? ""
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let dobDate = dateFormatter.date(from: dobString)
+            let dorDate = dateFormatter.date(from: dorString)
+            
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            
+            let userProfileData = UserProfileData()
+            userProfileData.authID = userData?["id"] as? Int ?? 0
+            userProfileData.authToken = BasicFunctions.getPreferences(kAccessToken) as? String ?? ""
+            userProfileData.firstName = userData?["firstName"] as? String ?? ""
+            userProfileData.lastName = userData?["lastName"] as? String ?? ""
+            userProfileData.gender = userData?["gender_id"] as? Int ?? 0
+            userProfileData.email = userData?["email"] as? String ?? ""
+            userProfileData.imageURL = userData?["profileImage"] as? String ?? ""
+            userProfileData.createdAt = userData?["created_at"] as? String ?? ""
+            userProfileData.updatedAt = userData?["updated_at"] as? String ?? ""
+            
+            if dobDate != nil
+            {
+                userProfileData.dob = dateFormatter.string(from: dobDate!)
+            }
+            
+            if dorDate != nil
+            {
+                userProfileData.dor = dateFormatter.string(from: dorDate!)
+            }
+            
+            
+            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, gender: userProfileData.gender, email: userProfileData.email, imageURL : userProfileData.imageURL, dob: userProfileData.dob, dor: userProfileData.dor, createdAt: userProfileData.createdAt, updatedAt: userProfileData.updatedAt)
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
+            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
+            
+            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+            
+            self.profileImageView.image = nil
+            kImage = nil
+            self.navigationController?.popViewController(animated: true)
+            
+            
+        }
+        else if message != nil
+        {
+            BasicFunctions.showAlert(vc: self, msg: message!)
+        }
     }
     
     

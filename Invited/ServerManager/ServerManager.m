@@ -865,5 +865,61 @@
     
     
 }
++ (void) deleteProfileImage:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService: url] POST:@"delete-user-profile-image" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                            if (operation.responseObject)
+                                            {
+                                                resultBlock((NSDictionary*)operation.responseObject);
+                                            }
+                                            else
+                                            {
+                                                resultBlock(@{
+                                                              @"error": @"1",
+                                                              @"message": @"Something went wrong"});
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                        }];
+    
+    
+}
++ (void) deleteListImage:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService: url] POST:@"delete-list-image" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                            if (operation.responseObject)
+                                            {
+                                                resultBlock((NSDictionary*)operation.responseObject);
+                                            }
+                                            else
+                                            {
+                                                resultBlock(@{
+                                                              @"error": @"1",
+                                                              @"message": @"Something went wrong"});
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                        }];
+    
+    
+}
 
 @end

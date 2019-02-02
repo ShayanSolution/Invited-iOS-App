@@ -1415,10 +1415,7 @@
                                                                 </constraints>
                                                             </view>
                                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hm2-oc-eBC">
-                                                                <rect key="frame" x="0.0" y="100" width="64" height="36"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="64" id="ZWL-wJ-RcO"/>
-                                                                </constraints>
+                                                                <rect key="frame" x="0.0" y="100" width="100" height="36"/>
                                                                 <state key="normal" title="Edit"/>
                                                                 <connections>
                                                                     <action selector="editButtonTapped:" destination="PxW-PI-cU9" eventType="touchUpInside" id="Z5V-s5-UWT"/>
@@ -1427,6 +1424,7 @@
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
+                                                            <constraint firstItem="Hm2-oc-eBC" firstAttribute="trailing" secondItem="p6U-NL-zxO" secondAttribute="trailing" id="0A9-3C-syy"/>
                                                             <constraint firstItem="Hm2-oc-eBC" firstAttribute="top" secondItem="p6U-NL-zxO" secondAttribute="bottom" id="2ft-UC-aE2"/>
                                                             <constraint firstItem="Hm2-oc-eBC" firstAttribute="leading" secondItem="C8g-Po-CAq" secondAttribute="leading" id="KR1-Ms-EaY"/>
                                                             <constraint firstItem="p6U-NL-zxO" firstAttribute="top" secondItem="C8g-Po-CAq" secondAttribute="top" id="LDX-ge-QWl"/>

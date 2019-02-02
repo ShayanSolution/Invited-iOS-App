@@ -39,10 +39,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8OY-dX-Eg4">
-                                <rect key="frame" x="81" y="15" width="189" height="64.5"/>
+                                <rect key="frame" x="81" y="0.0" width="189" height="74.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="College" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EmO-W2-DRP">
-                                        <rect key="frame" x="0.0" y="0.0" width="189" height="64.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="189" height="74.5"/>
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -93,7 +93,7 @@
                         <constraints>
                             <constraint firstItem="nbs-9e-upj" firstAttribute="top" secondItem="WXW-bF-Ii9" secondAttribute="bottom" id="Gx3-PP-DGs"/>
                             <constraint firstItem="nbs-9e-upj" firstAttribute="centerX" secondItem="WXW-bF-Ii9" secondAttribute="centerX" id="HeS-gl-1t2"/>
-                            <constraint firstAttribute="bottom" secondItem="8OY-dX-Eg4" secondAttribute="bottom" constant="15" id="KbT-yz-bjE"/>
+                            <constraint firstAttribute="bottom" secondItem="8OY-dX-Eg4" secondAttribute="bottom" constant="20" id="KbT-yz-bjE"/>
                             <constraint firstItem="WXW-bF-Ii9" firstAttribute="leading" secondItem="o3U-if-b07" secondAttribute="leading" constant="21" id="P1e-5Z-cgZ"/>
                             <constraint firstAttribute="trailing" secondItem="14e-N1-uxF" secondAttribute="trailing" constant="10" id="QJ9-Dy-1BL"/>
                             <constraint firstAttribute="bottom" secondItem="nbs-9e-upj" secondAttribute="bottom" id="RjD-Kv-SwH"/>
@@ -101,7 +101,7 @@
                             <constraint firstItem="Grv-Di-tRI" firstAttribute="leading" secondItem="8OY-dX-Eg4" secondAttribute="trailing" constant="15" id="ho7-EE-9pl"/>
                             <constraint firstItem="14e-N1-uxF" firstAttribute="centerY" secondItem="o3U-if-b07" secondAttribute="centerY" id="kIL-6T-cbW"/>
                             <constraint firstItem="WXW-bF-Ii9" firstAttribute="top" secondItem="o3U-if-b07" secondAttribute="top" constant="15" id="rWD-nU-NrQ"/>
-                            <constraint firstItem="8OY-dX-Eg4" firstAttribute="top" secondItem="o3U-if-b07" secondAttribute="top" constant="15" id="sek-5a-RjI"/>
+                            <constraint firstItem="8OY-dX-Eg4" firstAttribute="top" secondItem="o3U-if-b07" secondAttribute="top" id="sek-5a-RjI"/>
                             <constraint firstItem="8OY-dX-Eg4" firstAttribute="leading" secondItem="WXW-bF-Ii9" secondAttribute="trailing" constant="15" id="tyK-bj-9SP"/>
                             <constraint firstItem="Grv-Di-tRI" firstAttribute="centerY" secondItem="o3U-if-b07" secondAttribute="centerY" id="zh9-5v-PZo"/>
                         </constraints>

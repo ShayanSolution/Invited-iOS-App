@@ -20,9 +20,20 @@ var className: String {
     
 }
 
+extension UIViewController {
+    var vcClassName: String {
+        return NSStringFromClass(self.classForCoder).components(separatedBy: ".").last!;
+    }
+}
+
+protocol EditImageDelegate:class {
+    func didDeleteImage()
+}
+
 
 class BasicFunctions: NSObject {
     
+    static weak var delegate: EditImageDelegate?
     
     class func setBorderOfView(view:UIView) -> Void {
         view.layer.cornerRadius = 2.0
@@ -70,9 +81,22 @@ class BasicFunctions: NSObject {
         
         
     }
-    class func deletePhoto() -> Void
+    class func deletePhoto(vc:UIViewController!) -> Void
     {
         
+        
+        
+        
+        if vc.vcClassName == "HomeVC"
+        {
+            self.delegate = vc as! HomeVC
+        }
+        else
+        {
+            self.delegate = vc as! EditProfileImageVC
+        }
+        
+        self.delegate?.didDeleteImage()
     }
     class func openPhotoLibrary(vc:UIViewController!, isEditing:Bool!) -> Void
     {
@@ -129,7 +153,7 @@ class BasicFunctions: NSObject {
         
         alert = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction.init(title: "Delete Photo", style: UIAlertActionStyle.default, handler: { (action) in
-            self.deletePhoto()
+            self.deletePhoto(vc: vc)
         }))
         alert.addAction(UIAlertAction.init(title: "Take Photo", style: UIAlertActionStyle.default, handler: { (action) in
             self.openCamera(vc: vc, isEditing: isEditing)

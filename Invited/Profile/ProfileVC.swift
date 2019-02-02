@@ -71,6 +71,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         // Do any additional setup after loading the view.
         
+        kImage = nil
         
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
         self.lastNameTextField.text = kLoggedInUserProfile.lastName
@@ -78,17 +79,17 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.dobTextField.text = kLoggedInUserProfile.dob
         self.dorTextField.text = kLoggedInUserProfile.dor
         
-        if kLoggedInUserProfile.imageURL != ""
-        {
-            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
-//            self.profileImage = self.profileImageView.image
-            self.editButton.isHidden = false
-        }
-        else
-        {
-            self.profileImageView.image = UIImage.init(named: "AddPhoto")
-            self.editButton.isHidden = true
-        }
+//        if kLoggedInUserProfile.imageURL != ""
+//        {
+//            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
+////            self.profileImage = self.profileImageView.image
+//            self.editButton.isHidden = false
+//        }
+//        else
+//        {
+//            self.profileImageView.image = UIImage.init(named: "AddPhoto")
+//            self.editButton.isHidden = true
+//        }
         
         
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -144,8 +145,21 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         {
 //            self.profileImage = kImage
             self.profileImageView.image = kImage
-            kImage = nil
+            self.editButton.isHidden = false
         }
+        else if kImage == nil && (kLoggedInUserProfile.imageURL?.isEmpty)!
+        {
+            self.profileImageView.image = UIImage.init(named: "AddPhoto")
+            self.editButton.isHidden = true
+        }
+        else if kImage == nil && kLoggedInUserProfile.imageURL != ""
+        {
+            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
+            //            self.profileImage = self.profileImageView.image
+            self.editButton.isHidden = false
+            kImage = self.profileImageView.image
+        }
+        
     }
     override func viewDidLayoutSubviews()
     {
@@ -172,7 +186,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     @IBAction func editButtonTapped(_ sender: Any)
     {
-        if kLoggedInUserProfile.imageURL != ""
+        if kImage != nil
         {
             let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
             let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
@@ -238,7 +252,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.dateFormatter.dateFormat = "dd/MM/yyyy"
         
         var postParams = [String : Any]()
-        postParams["user_id"] = BasicFunctions.getPreferencesForInt(kUserID)
+        postParams["user_id"] = kLoggedInUserProfile.userID
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["email"] = self.emailTextField.text
@@ -285,7 +299,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         var imageData : Data?
         
-        if kLoggedInUserProfile.imageURL != "" || self.editButton.isHidden
+        if kImage != nil
         {
             var scaleImage : UIImage!
             scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
@@ -559,9 +573,12 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
-        self.profileImageView.image = croppedImage
+        kImage = croppedImage
         self.navigationController?.popViewController(animated: true)
     }
+    
+    
+    
     
     
     
