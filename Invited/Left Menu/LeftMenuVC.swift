@@ -11,11 +11,21 @@ import FBSDKLoginKit
 import TwitterKit
 
 class LeftMenuVC: UIViewController {
+    
+    @IBOutlet var versionLabel: UILabel!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
+        
+        if appVersion != nil
+        {
+            self.versionLabel.text = String(format: "v%@", appVersion!)
+        }
     }
     
     

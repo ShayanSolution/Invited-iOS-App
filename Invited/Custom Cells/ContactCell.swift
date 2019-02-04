@@ -23,6 +23,7 @@ class ContactCell: UITableViewCell {
     
     @IBOutlet var profileView: UIView!
     
+    @IBOutlet var profileButton: UIButton!
     
     
     

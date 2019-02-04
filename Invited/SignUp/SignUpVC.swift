@@ -176,6 +176,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         self.signInScrollView.isHidden = true
         self.mainScrollView.isHidden = false
         
+        self.view.endEditing(true)
+        
     }
     
     @IBAction func signInButtonTapped(_ sender: UIButton)
@@ -187,6 +189,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
         self.signInScrollView.isHidden = false
         self.mainScrollView.isHidden = true
+        
+        self.view.endEditing(true)
     }
     
     @IBAction func forgetPassword(_ sender: UIButton)
@@ -526,11 +530,11 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
 //            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
-            kUserList.removeAll()
-            BasicFunctions.setUserLoggedIn()
-            BasicFunctions.setHomeVC()
-            BasicFunctions.fetchAllContactsFromDevice()
-//            self.updateDeviceToken()
+//            kUserList.removeAll()
+//            BasicFunctions.setUserLoggedIn()
+//            BasicFunctions.setHomeVC()
+//            BasicFunctions.fetchAllContactsFromDevice()
+            self.updateDeviceToken()
             
             
         }

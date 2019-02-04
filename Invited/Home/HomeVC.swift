@@ -157,6 +157,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     var placeSelectedORCancelled : Bool!
     var isMessageControllerPresented : Bool!
+    var isCropImage : Bool!
     
 //    var selectedButton : UIButton!
     
@@ -215,6 +216,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.placeSelectedORCancelled = false
         self.isMessageControllerPresented = false
+        self.isCropImage = false
         
         
         self.setUpScrollView()
@@ -323,7 +325,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.receivedNotificationOutsideFromHomeVC(notificationData: kNotificationData!)
             kNotificationData = nil
         }
-        else if !self.isMessageControllerPresented
+        else if !self.isMessageControllerPresented && !self.isCropImage
         {
             if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
                 
@@ -1464,10 +1466,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             contactCell?.accessoryType = .detailButton
             contactCell?.deleteButton.isHidden = true
             contactCell?.editButton.isHidden = false
+            contactCell?.profileButton.isHidden = false
             
             contactCell?.editButton.tag = indexPath.row
+            contactCell?.profileButton.tag = indexPath.row
             
             contactCell?.editButton.addTarget(self, action: #selector(self.editButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            contactCell?.profileButton.addTarget(self, action: #selector(self.editButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             
 //            contactCell?.awakeFromNib()
             
@@ -2054,6 +2059,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
         {
             originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+            self.isCropImage = true
             
             
         }
@@ -2070,6 +2076,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     // RSKImageCropViewControllerDelegate Methods
     func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
         
+        self.isCropImage = false
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -2085,7 +2092,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         var imageData : Data?
         
             var scaleImage : UIImage!
-            scaleImage = BasicFunctions.resizeImage(image: croppedImage, targetSize: CGSize.init(width: cell.profileImageView.frame.size.width, height: cell.profileImageView.frame.size.height))
+            scaleImage = BasicFunctions.resizeImage(image: croppedImage, targetSize: CGSize.init(width: 320.0, height: 320.0))
             
             imageData = UIImagePNGRepresentation(scaleImage)
         
@@ -2110,9 +2117,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             if json["error"] == nil
             {
+                self.isCropImage = false
                 self.navigationController?.popViewController(animated: true)
-                BasicFunctions.showAlert(vc: self, msg: msg)
+//                BasicFunctions.showAlert(vc: self, msg: msg)
             }
+            
         }
     }
     
@@ -2164,6 +2173,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if status == "success"
             {
                 self.getContactListFromServer()
+                return
             }
             
             BasicFunctions.showAlert(vc: self, msg: message)
