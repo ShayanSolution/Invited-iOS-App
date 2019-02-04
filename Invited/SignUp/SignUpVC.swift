@@ -160,6 +160,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         self.signInScrollView.isHidden = true
         self.mainScrollView.isHidden = false
         
+        self.view.endEditing(true)
+        
     }
     
     @IBAction func signInButtonTapped(_ sender: UIButton)
@@ -171,6 +173,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
         self.signInScrollView.isHidden = false
         self.mainScrollView.isHidden = true
+        
+        self.view.endEditing(true)
     }
     
     @IBAction func forgetPassword(_ sender: UIButton)
@@ -428,7 +432,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     func login(isLoginManually : Bool)
     {
-        BasicFunctions.showActivityIndicator(vu: self.view)
         
         var postParams = [String: Any]()
         
@@ -452,6 +455,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             return
         }
             
+            
             postParams["username"] = self.loginPhoneTextField.text
             postParams["password"] = self.loginPasswordTextField.text
             
@@ -468,6 +472,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["grant_type"] = "password"
         postParams["scope"] = "*"
         postParams["role"] = "user"
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
         
         ServerManager.sign(in: postParams, withBaseURL : kBaseURL) { (result) in
             
@@ -596,11 +602,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             
             if status != nil
             {
-                kUserList.removeAll()
-                BasicFunctions.setUserLoggedIn()
-                BasicFunctions.setHomeVC()
-                BasicFunctions.fetchAllContactsFromDevice()
+                
             }
+            
+            kUserList.removeAll()
+            BasicFunctions.setUserLoggedIn()
+            BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
             
             
         }
