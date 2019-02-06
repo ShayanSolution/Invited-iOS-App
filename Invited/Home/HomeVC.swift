@@ -2069,6 +2069,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             var imageCropVC : RSKImageCropViewController!
             imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
             imageCropVC.delegate = self
+            imageCropVC.avoidEmptySpaceAroundImage = true
             self.navigationController?.pushViewController(imageCropVC, animated: true)
         }
     }
@@ -2082,7 +2083,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
-        let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
+//        let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
 //        cell.profileImageView.image = croppedImage
         
         BasicFunctions.showActivityIndicator(vu: controller.view)
@@ -2103,7 +2104,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.stopActivityIndicator(vu: controller.view)
             
             let json = result as! [String : Any]
-            let msg = json["messages"] as? String
+//            let msg = json["messages"] as? String
             
             let message = json["message"] as? String
             
@@ -2123,6 +2124,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
         }
+    }
+    
+    // RSKImageCropViewControllerDataSource Methods
+    func imageCropViewControllerCustomMaskRect(_ controller: RSKImageCropViewController) -> CGRect {
+        
+        return CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 200)
+    }
+    
+    func imageCropViewControllerCustomMaskPath(_ controller: RSKImageCropViewController) -> UIBezierPath {
+        
+        return UIBezierPath(rect: controller.maskRect)
     }
     
     

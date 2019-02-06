@@ -448,7 +448,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     func login(isLoginManually : Bool)
     {
-        BasicFunctions.showActivityIndicator(vu: self.view)
         
         var postParams = [String: Any]()
         
@@ -488,6 +487,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["grant_type"] = "password"
         postParams["scope"] = "*"
         postParams["role"] = "user"
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
         
         ServerManager.sign(in: postParams, withBaseURL : kBaseURL) { (result) in
             

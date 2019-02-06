@@ -57,6 +57,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             var imageCropVC : RSKImageCropViewController!
             imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
             imageCropVC.delegate = self
+            imageCropVC.avoidEmptySpaceAroundImage = true
             self.navigationController?.pushViewController(imageCropVC, animated: true)
         }
     }
@@ -71,6 +72,17 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         
         self.profileImageView.image = croppedImage
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // RSKImageCropViewControllerDataSource Methods
+    func imageCropViewControllerCustomMaskRect(_ controller: RSKImageCropViewController) -> CGRect {
+        
+        return CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 200)
+    }
+    
+    func imageCropViewControllerCustomMaskPath(_ controller: RSKImageCropViewController) -> UIBezierPath {
+        
+        return UIBezierPath(rect: controller.maskRect)
     }
     
     
