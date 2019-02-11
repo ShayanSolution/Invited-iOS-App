@@ -15,6 +15,9 @@ class RequestEventCell: UITableViewCell {
     
     @IBOutlet var profileImageView: AsyncImageView!
     
+    @IBOutlet var profileImageButton: UIButton!
+    
+    
     @IBOutlet var acceptButton: UIButton!
     
     @IBOutlet var rejectButton: UIButton!

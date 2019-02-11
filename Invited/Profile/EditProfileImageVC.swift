@@ -14,7 +14,11 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
     @IBOutlet var profileImageView: AsyncImageView!
     
     
+    @IBOutlet var editButton: UIButton!
+    
+    
     var profileImage : UIImage!
+    var userListObject : UserList?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +26,14 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         // Do any additional setup after loading the view.
         
 
-        self.profileImage = BasicFunctions.resizeImage(image: self.profileImage, targetSize: self.profileImageView.frame.size)
+//        self.profileImage = BasicFunctions.resizeImage(image: self.profileImage, targetSize: self.profileImageView.frame.size)
 
         self.profileImageView.image = self.profileImage
+        
+        if kIsDisplayOnlyImage
+        {
+            self.editButton.isHidden = true
+        }
     }
     
     @IBAction func backButtonTapped(_ sender: UIButton)
@@ -72,6 +81,12 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         
         self.profileImageView.image = croppedImage
         self.navigationController?.popViewController(animated: true)
+        
+        if self.userListObject != nil
+        {
+            self.uploadGroupImageOnServer()
+        }
+        
     }
     
     // RSKImageCropViewControllerDataSource Methods
@@ -85,10 +100,99 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         return UIBezierPath(rect: controller.maskRect)
     }
     
+    func uploadGroupImageOnServer()
+    {
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        var imageData : Data?
+        
+        var scaleImage : UIImage!
+        scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
+        
+        imageData = UIImagePNGRepresentation(scaleImage)
+        
+        var postParams = [String : Any]()
+        postParams["list_id"] = self.userListObject!.id
+        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as? [String : Any]
+            //            let msg = json["messages"] as? String
+            
+            let message = json?["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if json?["error"] == nil
+            {
+                self.navigationController?.popViewController(animated: true)
+                //                BasicFunctions.showAlert(vc: self, msg: msg)
+            }
+            
+        }
+    }
+    
     
     //DeleteDelegateMethod
-    func didDeleteImage() {
+    func didDeleteImage()
+    {
+        if self.userListObject != nil
+        {
+            self.deleteGroupImageFromServer()
+        }
+        else
+        {
+            self.deleteProfileImageFromServer()
+        }
+    }
+    
+    func deleteGroupImageFromServer()
+    {
+        BasicFunctions.showActivityIndicator(vu: self.view)
         
+        
+        var postParams = [String : Any]()
+        postParams["list_id"] = self.userListObject!.id
+        
+        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as? [String:Any]
+            
+            let status = json?["status"] as? String
+            let message = json?["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if status == "success"
+            {
+                self.navigationController?.popViewController(animated: true)
+                return
+            }
+            
+            BasicFunctions.showAlert(vc: self, msg: message)
+            
+            
+        }
+    }
+    
+    func deleteProfileImageFromServer()
+    {
         BasicFunctions.showActivityIndicator(vu: self.view)
         
         var postParams = [String : Any]()
@@ -121,7 +225,6 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             }
             
         }
-        
     }
     
     func getProfileFromServer()

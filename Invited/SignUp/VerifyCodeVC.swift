@@ -406,11 +406,13 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
             
             if status != nil
             {
-                kUserList.removeAll()
-                BasicFunctions.setUserLoggedIn()
-                BasicFunctions.setHomeVC()
-                BasicFunctions.fetchAllContactsFromDevice()
+                
             }
+            
+            kUserList.removeAll()
+            BasicFunctions.setUserLoggedIn()
+            BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
             
             
         }

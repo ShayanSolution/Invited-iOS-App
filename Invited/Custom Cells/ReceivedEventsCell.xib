@@ -35,12 +35,19 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="l3j-tH-1tn" customClass="AsyncImageView">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zhs-2O-LHM">
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="zhs-2O-LHM" firstAttribute="top" secondItem="CRT-Fn-CGI" secondAttribute="top" id="23h-S2-2SO"/>
                                     <constraint firstItem="l3j-tH-1tn" firstAttribute="top" secondItem="CRT-Fn-CGI" secondAttribute="top" id="3Nw-HN-wdZ"/>
                                     <constraint firstAttribute="width" constant="60" id="774-Ei-qOr"/>
+                                    <constraint firstItem="zhs-2O-LHM" firstAttribute="leading" secondItem="CRT-Fn-CGI" secondAttribute="leading" id="8Dl-eg-re3"/>
                                     <constraint firstAttribute="bottom" secondItem="l3j-tH-1tn" secondAttribute="bottom" id="GG8-3r-C1K"/>
+                                    <constraint firstAttribute="bottom" secondItem="zhs-2O-LHM" secondAttribute="bottom" id="GKZ-UJ-Qus"/>
+                                    <constraint firstAttribute="trailing" secondItem="zhs-2O-LHM" secondAttribute="trailing" id="LRb-rG-QlX"/>
                                     <constraint firstAttribute="height" constant="60" id="MGs-fl-2Gk"/>
                                     <constraint firstAttribute="trailing" secondItem="l3j-tH-1tn" secondAttribute="trailing" id="rCR-Ic-o6A"/>
                                     <constraint firstItem="l3j-tH-1tn" firstAttribute="leading" secondItem="CRT-Fn-CGI" secondAttribute="leading" id="xcR-k2-BQW"/>
@@ -170,6 +177,7 @@
                 <outlet property="listName" destination="XLQ-1M-jBo" id="g6c-md-G8M"/>
                 <outlet property="locationHeightConstraint" destination="507-a6-H2m" id="zvG-TZ-nqJ"/>
                 <outlet property="mainView" destination="Ao7-91-wbr" id="qjF-DQ-WXh"/>
+                <outlet property="profileImageButton" destination="zhs-2O-LHM" id="nRS-9J-9jJ"/>
                 <outlet property="profileImageView" destination="l3j-tH-1tn" id="4m8-Pr-fp2"/>
                 <outlet property="startNavigationButton" destination="KMp-nL-MxW" id="MYR-Ah-7fZ"/>
                 <outlet property="title" destination="YUE-F5-eFS" id="CK2-dq-kP8"/>

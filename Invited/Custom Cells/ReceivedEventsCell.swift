@@ -48,6 +48,9 @@ class ReceivedEventsCell: UITableViewCell {
     
     @IBOutlet var profileImageView: AsyncImageView!
     
+    @IBOutlet var profileImageButton: UIButton!
+    
+    
     
     
     override func awakeFromNib() {

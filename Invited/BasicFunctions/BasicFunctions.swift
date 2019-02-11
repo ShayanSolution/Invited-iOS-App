@@ -84,17 +84,7 @@ class BasicFunctions: NSObject {
     class func deletePhoto(vc:UIViewController!) -> Void
     {
         
-        
-        
-        
-        if vc.vcClassName == "HomeVC"
-        {
-            self.delegate = vc as! HomeVC
-        }
-        else
-        {
-            self.delegate = vc as! EditProfileImageVC
-        }
+        self.delegate = vc as! EditProfileImageVC
         
         self.delegate?.didDeleteImage()
     }

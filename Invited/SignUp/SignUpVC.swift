@@ -617,11 +617,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             
             if status != nil
             {
-                kUserList.removeAll()
-                BasicFunctions.setUserLoggedIn()
-                BasicFunctions.setHomeVC()
-                BasicFunctions.fetchAllContactsFromDevice()
+        
             }
+            
+            kUserList.removeAll()
+            BasicFunctions.setUserLoggedIn()
+            BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
             
             
         }

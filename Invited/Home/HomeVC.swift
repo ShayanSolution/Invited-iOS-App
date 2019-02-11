@@ -99,6 +99,21 @@ extension NSMutableAttributedString {
         
         return self
     }
+    @discardableResult func boldWithItalic(_ text: String) -> NSMutableAttributedString {
+        if #available(iOS 8.2, *) {
+            let attrs: [NSAttributedStringKey: Any] = [.font: UIFont(name: "Avenir-HeavyOblique", size: 15.0)!]
+            
+            let boldString = NSMutableAttributedString(string:text, attributes: attrs)
+            append(boldString)
+        }
+            
+        else {
+            // Fallback on earlier versions
+        }
+        
+        
+        return self
+    }
     
     @discardableResult func normal(_ text: String) -> NSMutableAttributedString {
         let normal = NSAttributedString(string: text)
@@ -111,7 +126,7 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate,EditImageDelegate{
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate{
     
     
 
@@ -182,6 +197,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //    var isStartNavigationButtonTapped : Bool!
     var listID : Int?
     
+    var sectionForCollapse : Int!
+    
     var selectedLat : String?
     var selectedLong : String?
     
@@ -217,6 +234,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.placeSelectedORCancelled = false
         self.isMessageControllerPresented = false
         self.isCropImage = false
+        kIsDisplayOnlyImage = false
         
         
         self.setUpScrollView()
@@ -324,6 +342,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             self.receivedNotificationOutsideFromHomeVC(notificationData: kNotificationData!)
             kNotificationData = nil
+        }
+        else if kIsDisplayOnlyImage
+        {
+            kIsDisplayOnlyImage = false
         }
         else if !self.isMessageControllerPresented && !self.isCropImage
         {
@@ -1534,17 +1556,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.timeStyle = .medium
 //            formatter2.dateFormat = "hh:mm a"
             
-            var invitedBy : String!
+            
+            var phoneBookName : String!
             
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
             
             if fullName == " "
             {
-                invitedBy = String(format: "%@\nSent from %@", eventData.senderName,eventData.phone)
+                phoneBookName = String(format: "\n[Sent from %@]", eventData.phone)
             }
             else
             {
-                invitedBy = String(format: "%@\nSaved in your phone as %@ (%@)", eventData.senderName,fullName,eventData.phone)
+                phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.phone)
             }
             
 
@@ -1552,10 +1575,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            requestEventCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             
             
-            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(eventData.senderName).boldWithItalic(phoneBookName)
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
             requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
 //            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+            
+            
             
             if eventData.imageURL != ""
             {
@@ -1594,11 +1619,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             requestEventCell?.startNavigationButton.tag = indexPath.row
             requestEventCell?.acceptButton.tag = indexPath.row
             requestEventCell?.rejectButton.tag = indexPath.row
+            requestEventCell?.profileImageButton.tag = indexPath.row
             
             requestEventCell?.expandButton.addTarget(self, action: #selector(self.showDetailView(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            requestEventCell?.profileImageButton.addTarget(self, action: #selector(self.displayOnlyImageForMessageReceived(sender:)), for: UIControlEvents.touchUpInside)
             
 //            if eventData.eventType == "canceled"
 //            {
@@ -1802,17 +1829,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //            formatter2.dateFormat = "hh:mm a"
             
-            var invitedBy : String!
+            var phoneBookName : String!
 
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitedBy.phone)
 
             if fullName == " "
             {
-                invitedBy = eventData.invitedBy.phone
+                phoneBookName = String(format: "\n[Sent from %@]", eventData.invitedBy.phone)
             }
             else
             {
-                invitedBy = fullName + " " + "(" + eventData.invitedBy.phone + ")"
+                phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.invitedBy.phone)
             }
             
             receivedEventsCell?.acceptedORSentByMe.text = eventData.eventType
@@ -1869,7 +1896,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else
             {
-                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(String(format: "%@ %@", eventData.invitedBy.firstName,eventData.invitedBy.lastName)).boldWithItalic(phoneBookName)
                 receivedEventsCell?.totalInvitedHeightConstraint.constant = 0
                 
                 
@@ -1902,9 +1929,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             receivedEventsCell?.expandButton.tag = indexPath.row
             receivedEventsCell?.startNavigationButton.tag = indexPath.row
+            receivedEventsCell?.profileImageButton.tag = indexPath.row
             
             receivedEventsCell?.expandButton.addTarget(self, action: #selector(self.showReceivedEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
             receivedEventsCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromReceivedRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
+            receivedEventsCell?.profileImageButton.addTarget(self, action: #selector(self.displayOnlyImageForMyMessages(sender:)), for: UIControlEvents.touchUpInside)
             
             
             
@@ -1952,8 +1981,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 contactCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
             }
-
-
+            
+            contactCell?.profileButton.isHidden = false
+            contactCell?.profileButton.tag = indexPath.row
+            
+            contactCell?.profileButton.addTarget(self, action: #selector(self.displayOnlyImageForCollapseViews(sender:)), for: UIControlEvents.touchUpInside)
 
 
             return contactCell!
@@ -2137,6 +2169,71 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         return UIBezierPath(rect: controller.maskRect)
     }
     
+    @objc func displayOnlyImageForMessageReceived(sender : UIButton)
+    {
+        let eventData = self.requestEventList[sender.tag]
+        
+        
+        if eventData.imageURL != ""
+        {
+        let cell : RequestEventCell = self.requestEventView.requestEventTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: 0)) as! RequestEventCell
+            
+        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+        let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+        editProfileImageVC.profileImage = cell.profileImageView.image
+        kIsDisplayOnlyImage = true
+        BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
+    
+    @objc func displayOnlyImageForMyMessages(sender : UIButton)
+    {
+        let eventData = self.receivedRequestEventList[sender.tag]
+        
+        
+        if eventData.imageURL != ""
+        {
+            let cell : ReceivedEventsCell = self.receivedEventsView.receivedEventsTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: 0)) as! ReceivedEventsCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            kIsDisplayOnlyImage = true
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
+    
+    @objc func displayOnlyImageForCollapseViews(sender : UIButton)
+    {
+        
+        var eventData : EventTrackData!
+        var section : Int!
+        var x = 0
+        
+        for index in self.eventList
+        {
+            if index.isExpanded
+            {
+                section = x
+                eventData = index.eventData[sender.tag]
+                break
+            }
+            
+            x = x + 1
+        }
+        
+        
+        if eventData.invitee.imageURL != ""
+        {
+            let cell : ContactCell = self.sentByMeView.acceptedUserTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: section)) as! ContactCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            kIsDisplayOnlyImage = true
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
     
     // Edit button Action Method
     @objc func editButtonTapped(sender:UIButton)
@@ -2147,7 +2244,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         if userListObject.imageURL != ""
         {
-            BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
+//            BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
+            
+            let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            editProfileImageVC.userListObject = userListObject
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
         }
         else
         {
@@ -2156,43 +2261,43 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    func didDeleteImage()
-    {
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        
-        let userListObject = kUserList[self.indexPath.row]
-        
-        var postParams = [String : Any]()
-        postParams["list_id"] = userListObject.id
-        
-        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
-            
-            BasicFunctions.stopActivityIndicator(vu: self.view)
-            
-            let json = result as? [String:Any]
-            
-            let status = json?["status"] as? String
-            let message = json?["message"] as? String
-            
-            if message != nil && message == "Unauthorized"
-            {
-                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
-                BasicFunctions.showSigInVC()
-                return
-                
-            }
-            
-            if status == "success"
-            {
-                self.getContactListFromServer()
-                return
-            }
-            
-            BasicFunctions.showAlert(vc: self, msg: message)
-            
-            
-        }
-    }
+//    func didDeleteImage()
+//    {
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//
+//        let userListObject = kUserList[self.indexPath.row]
+//
+//        var postParams = [String : Any]()
+//        postParams["list_id"] = userListObject.id
+//
+//        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+//
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//
+//            let json = result as? [String:Any]
+//
+//            let status = json?["status"] as? String
+//            let message = json?["message"] as? String
+//
+//            if message != nil && message == "Unauthorized"
+//            {
+//                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+//                BasicFunctions.showSigInVC()
+//                return
+//
+//            }
+//
+//            if status == "success"
+//            {
+//                self.getContactListFromServer()
+//                return
+//            }
+//
+//            BasicFunctions.showAlert(vc: self, msg: message)
+//
+//
+//        }
+//    }
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
@@ -2373,20 +2478,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.acceptByMeView.startNavigationButtonHeightConstraint.constant = 30.5
             }
             
-            var invitedBy : String!
+            var phoneBookName : String!
 
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitedBy.phone)
 
             if fullName == " "
             {
-                invitedBy = eventData.invitedBy.phone
+                phoneBookName = String(format: "\n[Sent from %@]", eventData.invitedBy.phone)
             }
             else
             {
-                invitedBy = fullName + " " + "(" + eventData.invitedBy.phone + ")"
+                phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.invitedBy.phone)
             }
 
-            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(String(format: "%@ %@", eventData.invitedBy.firstName,eventData.invitedBy.lastName)).boldWithItalic(phoneBookName)
 
 
             self.acceptByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -2522,24 +2627,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //        formatter2.dateFormat = "hh:mm a"
         
-        
-        var invitedBy : String!
+        var phoneBookName : String!
         
         let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
         
         if fullName == " "
         {
-            invitedBy = String(format: "%@\nSent from %@", eventData.senderName,eventData.phone)
+            phoneBookName = String(format: "\n[Sent from %@]", eventData.phone)
         }
         else
         {
-            invitedBy = String(format: "%@\nSaved in your phone as %@ (%@)", eventData.senderName,fullName,eventData.phone)
+            phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.phone)
         }
         
         self.detailView.titleTextView.text = eventData.title
         
         
-        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(eventData.senderName).boldWithItalic(phoneBookName)
 //        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
         self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
 //        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
@@ -2562,6 +2666,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.detailView.acceptButton.tag = sender.tag
         self.detailView.rejectButton.tag = sender.tag
         self.detailView.startNavigationButton.tag = sender.tag
+        self.detailView.profileImageButton.tag = sender.tag
         
         if eventData.confirmed == 0
         {
@@ -2635,8 +2740,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.detailView.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-        
-        self.detailView.startNavigationButton.tag = sender.tag
+        self.detailView.profileImageButton.addTarget(self, action: #selector(self.displayOnlyImageForMessageReceived(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
         
         
@@ -4478,6 +4582,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     let userData = UserData()
                     userData.id = owner["id"] as! Int
+                    userData.firstName = owner["firstName"] as? String ?? ""
+                    userData.lastName = owner["lastName"] as? String ?? ""
                     userData.email = owner["email"] as? String ?? ""
                     userData.phone = owner["phone"] as? String ?? ""
                     

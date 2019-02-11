@@ -16,7 +16,7 @@ var kUserList = [UserList]()
 var kCurrentLocation : CLLocationCoordinate2D?
 
 var kImage : UIImage?
-var kIsImageDeleted : Bool!
+var kIsDisplayOnlyImage : Bool!
 var kSelectedLocation : CLLocationCoordinate2D?
 var kSelectedAddress : String?
 var kNotificationData : [String : Any]?
