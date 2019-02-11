@@ -20,6 +20,7 @@ class ContactData: NSObject
     var desc = String()
     var photo = String()
     var phoneNumber = String()
+    var imageURL = String()
     var isSelected = Bool()
     var confirmed = Int()
     
@@ -322,7 +323,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @IBAction func backButtonSelected(_ sender: Any)
     {
         
-        self.dismiss(animated: true, completion: nil)
+        self.dismissVC()
         
     }
     @objc func searchRecordsAsPerText(_ textfield:UITextField) {
@@ -488,7 +489,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @objc func createList()
     {
         var postParams = [String : Any]()
-        postParams["contact_list"] = self.convertSelectedDataintoJson()
+        postParams["contact_list"] = BasicFunctions.convertSelectedDataintoJson(contactList: self.selectedContactList)
         postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
         postParams["list_name"] = self.setListNameTextField.text
         
@@ -518,7 +519,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
                 
                 kUserList.removeAll()
                 
-                self.dismiss(animated: true, completion: nil)
+                self.dismissVC()
                 
                 if msg != nil
                 {
@@ -558,7 +559,7 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     @objc func updateList()
     {
         var postParams = [String : Any]()
-        postParams["contact_list"] = self.convertSelectedDataintoJson()
+        postParams["contact_list"] = BasicFunctions.convertSelectedDataintoJson(contactList: self.selectedContactList)
         postParams["list_id"] = self.listData.id
         postParams["list_name"] = self.setListNameTextField.text
         
@@ -615,41 +616,14 @@ class CreateListVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             presentViewcontroller.listData = self.listData
         }
         
+        self.navigationController?.popViewController(animated: true)
         
-        self.dismiss(animated: true, completion: nil)
+//        self.dismiss(animated: true, completion: nil)
         
     }
     
     
-    func convertSelectedDataintoJson() -> String
-    {
-        
-        var jsonFormSelectedContactList = [[String : Any]]()
     
-        for contact in self.selectedContactList
-        {
-            var contactDic = [String: Any]()
-            contactDic["name"] = BasicFunctions.getNameFromContactList(phoneNumber: contact.phoneNumber)
-        
-            contactDic["phone"] = contact.phoneNumber.stringByRemovingWhitespaces
-            
-            
-            jsonFormSelectedContactList.append(contactDic)
-            
-        }
-        
-        let jsonString = self.convertToJsonString(from: jsonFormSelectedContactList)
-        
-        
-        return jsonString!
-    }
-    func convertToJsonString(from object: Any) -> String? {
-        if let objectData = try? JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions(rawValue: 0)) {
-            let objectString = String(data: objectData, encoding: .utf8)
-            return objectString
-        }
-        return nil
-    }
 //    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool
 //    {
 //

@@ -20,9 +20,20 @@ var className: String {
     
 }
 
+extension UIViewController {
+    var vcClassName: String {
+        return NSStringFromClass(self.classForCoder).components(separatedBy: ".").last!;
+    }
+}
+
+protocol EditImageDelegate:class {
+    func didDeleteImage()
+}
+
 
 class BasicFunctions: NSObject {
     
+    static weak var delegate: EditImageDelegate?
     
     class func setBorderOfView(view:UIView) -> Void {
         view.layer.cornerRadius = 2.0
@@ -69,6 +80,109 @@ class BasicFunctions: NSObject {
         MBProgressHUD.hide(for: vu, animated: true)
         
         
+    }
+    class func deletePhoto(vc:UIViewController!) -> Void
+    {
+        
+        self.delegate = vc as! EditProfileImageVC
+        
+        self.delegate?.didDeleteImage()
+    }
+    class func openPhotoLibrary(vc:UIViewController!, isEditing:Bool!) -> Void
+    {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = vc as! (UIImagePickerControllerDelegate & UINavigationControllerDelegate)?
+        imagePicker.allowsEditing = isEditing
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary){
+            
+            
+            imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+            
+        }
+        vc.present(imagePicker, animated: true, completion: nil)
+        
+    }
+    class func openCamera(vc:UIViewController!, isEditing:Bool!) -> Void
+    {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = vc as! (UIImagePickerControllerDelegate & UINavigationControllerDelegate)?
+        imagePicker.allowsEditing = isEditing
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera){
+            
+            
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+            
+        }
+        vc.present(imagePicker, animated: true, completion: nil)
+        
+    }
+    class func openActionSheet(vc:UIViewController!, isEditing:Bool!)
+    {
+        var alert = UIAlertController()
+        
+        alert = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction.init(title: "Take Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.openCamera(vc: vc, isEditing: isEditing)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Choose Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.openPhotoLibrary(vc: vc, isEditing: isEditing)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { (action) in
+            // self.dismissViewControllerAnimated(true, completion: nil) is not needed, this is handled automatically,
+            //Plus whatever method you define here, gets called,
+            //If you tap outside the UIAlertController action buttons area, then also this handler gets called.
+        }))
+        
+        vc.present(alert, animated: true, completion: nil)
+    }
+    class func openActionSheetWithDeleteOption(vc:UIViewController!, isEditing:Bool!)
+    {
+        var alert = UIAlertController()
+        
+        alert = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction.init(title: "Delete Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.deletePhoto(vc: vc)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Take Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.openCamera(vc: vc, isEditing: isEditing)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Choose Photo", style: UIAlertActionStyle.default, handler: { (action) in
+            self.openPhotoLibrary(vc: vc, isEditing: isEditing)
+        }))
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { (action) in
+            // self.dismissViewControllerAnimated(true, completion: nil) is not needed, this is handled automatically,
+            //Plus whatever method you define here, gets called,
+            //If you tap outside the UIAlertController action buttons area, then also this handler gets called.
+        }))
+        
+        vc.present(alert, animated: true, completion: nil)
+    }
+    class func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
     }
     class func showSigInVC()
     {
@@ -135,6 +249,35 @@ class BasicFunctions: NSObject {
         if let sideMenuController = vc.parent as? PGSideMenu {
             sideMenuController.toggleLeftMenu()
         }
+    }
+    class func convertSelectedDataintoJson(contactList : [ContactData]) -> String
+    {
+        
+        var jsonFormSelectedContactList = [[String : Any]]()
+        
+        for contact in contactList
+        {
+            var contactDic = [String: Any]()
+            contactDic["name"] = BasicFunctions.getNameFromContactList(phoneNumber: contact.phoneNumber)
+            
+            contactDic["phone"] = contact.phoneNumber.stringByRemovingWhitespaces
+            
+            
+            jsonFormSelectedContactList.append(contactDic)
+            
+        }
+        
+        let jsonString = self.convertToJsonString(from: jsonFormSelectedContactList)
+        
+        
+        return jsonString!
+    }
+    class func convertToJsonString(from object: Any) -> String? {
+        if let objectData = try? JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions(rawValue: 0)) {
+            let objectString = String(data: objectData, encoding: .utf8)
+            return objectString
+        }
+        return nil
     }
     
     class func getTitleAccordingToDateAndTimeFormat (dateTimeString : String!) -> String

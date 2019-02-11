@@ -11,11 +11,21 @@ import FBSDKLoginKit
 import TwitterKit
 
 class LeftMenuVC: UIViewController {
+    
+    @IBOutlet var versionLabel: UILabel!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
+        
+        if appVersion != nil
+        {
+            self.versionLabel.text = String(format: "v%@", appVersion!)
+        }
     }
     
     
@@ -23,12 +33,13 @@ class LeftMenuVC: UIViewController {
     @IBAction func homeButtonTapped(_ sender: UIButton)
     {
         BasicFunctions.hideLeftMenu(vc: self)
-        BasicFunctions.setHomeVC()
+        BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
     }
     @IBAction func profileButtonTapped(_ sender: UIButton)
     {
+        
         BasicFunctions.hideLeftMenu(vc: self)
-        BasicFunctions.pushVCinNCwithName("ProfileVC", popTop: false)
+        BasicFunctions.pushVCinNCwithName("ProfileVC", popTop: true)
         
     }
     @IBAction func logoutButtonTapped(_ sender: UIButton)

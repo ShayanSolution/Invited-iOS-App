@@ -14,10 +14,17 @@ import TwitterKit
 import FBSDKLoginKit
 import MessageUI
 
+
+
+struct ExpandableData {
+    var isExpanded : Bool
+    var eventData : [EventTrackData]
+}
 class UserList: NSObject
 {
     var name = String()
     var id = Int()
+    var imageURL = String()
     var contactList = [ContactData]()
     
 }
@@ -28,6 +35,8 @@ class EventData: NSObject
     var eventAddress = String()
     var listID = Int()
     var listName = String()
+    var senderName = String()
+    var imageURL = String()
     var eventTime = String()
     var eventTimesTamp = String()
     var eventCreatedTime = String()
@@ -50,7 +59,9 @@ class EventData: NSObject
     var fullName = String()
     var maximumNumberOfPeople = Int()
     var userList = [ContactData]()
-    var acceptedEventList = [EventAcceptedData]()
+    var acceptedEventList = [EventTrackData]()
+    var rejectedEventList = [EventTrackData]()
+    var pendingEventList = [EventTrackData]()
     var invitedBy = UserData()
     
 }
@@ -61,10 +72,11 @@ class UserData: NSObject
     var lastName = String()
     var userName = String()
     var email = String()
+    var imageURL = String()
     var phone = String()
     
 }
-class EventAcceptedData: NSObject
+class EventTrackData: NSObject
 {
     var id = Int()
     var eventID = Int()
@@ -87,6 +99,21 @@ extension NSMutableAttributedString {
         
         return self
     }
+    @discardableResult func boldWithItalic(_ text: String) -> NSMutableAttributedString {
+        if #available(iOS 8.2, *) {
+            let attrs: [NSAttributedStringKey: Any] = [.font: UIFont(name: "Avenir-HeavyOblique", size: 15.0)!]
+            
+            let boldString = NSMutableAttributedString(string:text, attributes: attrs)
+            append(boldString)
+        }
+            
+        else {
+            // Fallback on earlier versions
+        }
+        
+        
+        return self
+    }
     
     @discardableResult func normal(_ text: String) -> NSMutableAttributedString {
         let normal = NSAttributedString(string: text)
@@ -99,7 +126,8 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate{
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate{
+    
     
 
     
@@ -143,17 +171,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var locationCoordinate : CLLocationCoordinate2D?
     
     var placeSelectedORCancelled : Bool!
+    var isMessageControllerPresented : Bool!
+    var isCropImage : Bool!
     
 //    var selectedButton : UIButton!
     
     var currentLocationAddress : String?
-    var selectedLocationAddress : String?
+//    var selectedLocationAddress : String?
     
     var userEventList = [EventData]()
     var requestEventList = [EventData]()
     var receivedRequestEventList = [EventData]()
     var invitedList : [ContactData]!
-    var acceptedEventList = [EventAcceptedData]()
+    
+    var eventList = [ExpandableData(isExpanded: false, eventData: [EventTrackData]()), ExpandableData(isExpanded: false, eventData: [EventTrackData]()), ExpandableData(isExpanded: false, eventData: [EventTrackData]())]
+//    var rejectedEventList = ExpandableData(isExpanded: false, eventData: [EventTrackData]())
+//    var pendingEventList = ExpandableData(isExpanded: false, eventData: [EventTrackData]())
     
     var dropDownPickerView : UIPickerView!
     var dropDownPickerView2 : UIPickerView!
@@ -164,6 +197,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //    var isStartNavigationButtonTapped : Bool!
     var listID : Int?
     
+    var sectionForCollapse : Int!
+    
     var selectedLat : String?
     var selectedLong : String?
     
@@ -171,7 +206,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     var timer : Timer!
     
-    
+    var indexPath : IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,15 +227,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.acceptByMeView  = AcceptByMeView.instanceFromNib() as? AcceptByMeView
         self.sentByMeView  = SentByMeView.instanceFromNib() as? SentByMeView
         
-        
+        BasicFunctions.setRoundCornerOfImageView(imageView: self.detailView.profileImageView)
         
         
         
         self.placeSelectedORCancelled = false
+        self.isMessageControllerPresented = false
+        self.isCropImage = false
+        kIsDisplayOnlyImage = false
         
         
         self.setUpScrollView()
-        self.getProfileFromServer()
+        
+//        if kBaseURL.isEmpty
+//        {
+//            self.findBaseURL()
+//        }
+//        else
+//        {
+            self.getProfileFromServer()
+//        }
 //        self.fetchUserEventsFromServer()
         
 //        self.fetchRequestsFromServer()
@@ -210,6 +256,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
+        
         
 //        let tapRecognizer = UITapGestureRecognizer()
 //        tapRecognizer.addTarget(self, action: #selector(self.didTapView))
@@ -245,10 +293,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-    
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
@@ -256,18 +302,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.mainScrollView.setContentOffset(point, animated: false)
             self.placeSelectedORCancelled = false
             
-            self.selectedLocationAddress = BasicFunctions.getPreferences(kSelectedAddress) as? String
-            if self.selectedLocationAddress != nil
+            //            self.selectedLocationAddress = kSelectedAddress
+            if kSelectedAddress != nil
             {
-                self.createEventView.locationTextField.text = self.selectedLocationAddress
+                self.createEventView.locationTextField.text = kSelectedAddress
                 
+                kSelectedAddress = nil
                 
-            
             }
-//            else
-//            {
-//                self.createEventView.locationTextField.text = self.currentLocationAddress
-//            }
+            //            else
+            //            {
+            //                self.createEventView.locationTextField.text = self.currentLocationAddress
+            //            }
             
         }
         else if self.isUpdated == true && self.placeSelectedORCancelled == true
@@ -276,30 +322,32 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.mainScrollView.setContentOffset(point, animated: false)
             self.placeSelectedORCancelled = false
             
-            self.selectedLocationAddress = BasicFunctions.getPreferences(kSelectedAddress) as? String
-            if self.selectedLocationAddress != nil
+            //            self.selectedLocationAddress = kSelectedAddress
+            if kSelectedAddress != nil
             {
-                self.editEventView.locationTextField.text = self.selectedLocationAddress
+                self.editEventView.locationTextField.text = kSelectedAddress
                 
+                kSelectedAddress = nil
                 
                 
             }
-//            else
-//            {
-//                self.reverseGeocodeCoordinate(self.currentLocationCoordinate)
-//            }
+            //            else
+            //            {
+            //                self.reverseGeocodeCoordinate(self.currentLocationCoordinate)
+            //            }
             
             
         }
-//        else if self.isStartNavigationButtonTapped == true
-//        {
-//            self.isStartNavigationButtonTapped = false
-//
-//            let point = CGPoint(x: self.mainScrollView.frame.size.width * 2, y: 0)
-//            self.mainScrollView.setContentOffset(point, animated: false)
-//
-//        }
-        else
+        else if kNotificationData != nil
+        {
+            self.receivedNotificationOutsideFromHomeVC(notificationData: kNotificationData!)
+            kNotificationData = nil
+        }
+        else if kIsDisplayOnlyImage
+        {
+            kIsDisplayOnlyImage = false
+        }
+        else if !self.isMessageControllerPresented && !self.isCropImage
         {
             if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
                 
@@ -313,12 +361,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let point = CGPoint(x: 0, y: 0)
             self.mainScrollView.setContentOffset( point, animated: true)
             
-            if kUserList.count < 1
-            {
+            
+            
             self.getContactListFromServer()
-            }
             
         }
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        
         
         
         
@@ -326,6 +381,38 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
     }
+//    func findBaseURL()
+//    {
+
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//
+//        ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+//
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//            let urlDictionary = result as? [String : Any]
+//            kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+//
+//            self.getProfileFromServer()
+//
+//            if kUserList.count < 1
+//            {
+//                self.getContactListFromServer()
+//            }
+//
+//
+//
+//        }
+//
+//    }
+//    func checkNotificationData()
+//    {
+//        if self.notificationData != nil
+//        {
+//            self.receivedNotification(notification: notificationData!)
+////            self.invitesStatusButtonTapped(self.invitesStatusButton)
+//            self.notificationData = nil
+//        }
+//    }
 //    func fetchAllContactsFromDevice()  {
 //
 //            var contacts: [CNContact] = {
@@ -401,7 +488,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @objc func receivedNotification(notification : Notification)
     {
-//        self.backButtonTapped()
+        
+        BasicFunctions.hideLeftMenu(vc: self)
+        
+//        if self.presentedViewController != nil
+//        {
+//            self.dismiss(animated: true) {
+//
+//                kIsNotificationReceived = false
+//            }
+//        }
         
         if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
 
@@ -433,12 +529,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
 
             }
-            point = CGPoint(x: 0, y: 0)
+            point = CGPoint(x: 5, y: 0)
             self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
             self.fetchRequestsFromServer()
             
         }
-        else if status == "confirmed"   //  status == "accepted"
+        else if status == "YES"   //  status == "accepted"
         {
 
             if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
@@ -457,6 +553,111 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         }
+        else if status == "NO"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
+            
+            
+        }
+        
+        self.backButtonTapped()
+        
+        
+        
+    }
+    func receivedNotificationOutsideFromHomeVC(notificationData : [String : Any])
+    {
+        
+        BasicFunctions.hideLeftMenu(vc: self)
+        
+        if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+            
+            UIView.animate(withDuration: 0.25) {
+                
+                self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+                
+            }
+            
+        }
+        
+        
+        var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+        self.mainScrollView.setContentOffset( point, animated: true)
+        
+        
+        
+        let status = notificationData["status"] as! String
+        if status == "request" ||  status == "cancelled" || status == "closed"
+        {
+            
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesReceivedView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesReceivedView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: 5, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchRequestsFromServer()
+            
+        }
+        else if status == "YES"   //  status == "accepted"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchReceivedRequestsFromServer()
+            
+            
+        }
+        else if status == "NO"
+        {
+            
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+                
+                UIView.animate(withDuration: 0.25) {
+                    
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+                    
+                }
+                
+                
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
+            
+            
+        }
+        
         
         
         
@@ -520,6 +721,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
+        self.view.endEditing(true)
         BasicFunctions.openLeftMenu(vc: self)
     }
     
@@ -535,13 +737,19 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        
 //                })
         
-        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
-        self.present(createListVC!, animated: true, completion: nil)
+//        let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC")
+//        self.present(createListVC!, animated: true, completion: nil)
+        
+        self.view.endEditing(true)
+        BasicFunctions.pushVCinNCwithName("CreateListVC", popTop: false)
     }
     
     
     @IBAction func myListsButtonTapped(_ sender: UIButton)
     {
+        
+        self.view.endEditing(true)
+        
         if (self.lineView.frame.origin.x != self.myListsView.frame.origin.x) {
             
             UIView.animate(withDuration: 0.25) {
@@ -554,6 +762,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let point = CGPoint(x: 0, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
         self.isUpdated = false
+        
+        
+        self.getContactListFromServer()
+        
     }
     
     @IBAction func createInviteButtonTapped(_ sender: UIButton)
@@ -572,12 +784,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
         self.mainScrollView.setContentOffset( point, animated: false)
         
-//        self.createEventView.titleTextView.text = "Invite Title"
-//        self.createEventView.titleTextView.textColor = UIColor.lightGray
-//        self.createEventView.setNumberOfPeopleTextfield.text = ""
-//        self.createEventView.setListTextField.text = ""
-//        self.createEventView.dateTextField.text = ""
-//        self.createEventView.timeTextField.text = ""
+        self.createEventView.titleTextView.text = "Message"
+        self.createEventView.titleTextView.textColor = UIColor.lightGray
+        self.createEventView.setListTextField.text = ""
+        self.createEventView.setNumberOfPeopleTextfield.text = ""
+        self.createEventView.timeTextField.text = ""
+        self.createEventView.dateTextField.text = ""
+        self.createEventView.locationTextField.text = ""
+        
+        self.createEventView.locationTextField.isUserInteractionEnabled = false
+        self.createEventView.dateTextField.isUserInteractionEnabled = false
+        self.createEventView.timeTextField.isUserInteractionEnabled = false
+        
+        self.createEventView.locationSwitch.isOn = false
+        self.createEventView.dateSwitch.isOn = false
+        self.createEventView.timeSwitch.isOn = false
+        
+        self.selectedList = nil
+        self.listID = nil
+        
+        self.showPicker(textField: self.createEventView.setListTextField)
         
         
         
@@ -586,10 +812,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        self.createEventView.setListTextField.text = ""
 //        self.selectedList = nil
         
-        UserDefaults.standard.removeObject(forKey: kSelectedLat)
-        UserDefaults.standard.removeObject(forKey: kSelectedLong)
-        UserDefaults.standard.removeObject(forKey: kSelectedAddress)
-        UserDefaults.standard.synchronize()
+//        UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//        UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//        UserDefaults.standard.removeObject(forKey: kSelectedAddress)
+//        UserDefaults.standard.synchronize()
         
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
@@ -621,6 +847,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBAction func invitesStatusButtonTapped(_ sender: UIButton)
     {
+        
+        self.view.endEditing(true)
+        
         if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x)
         {
             
@@ -925,7 +1154,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 self.updateSelectedList = nil
-                self.listID = nil
+//                self.listID = nil
                 
                 self.editEventView.setListTextField.text = ""
                 self.editEventView.setNumberOfPeopleTextfield.text = ""
@@ -1016,7 +1245,201 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //    }
     
+    @objc func handleExpandClose(sender : UIButton)
+    {
+        
+        let section = sender.tag
+        
+        var indexPaths = [IndexPath]()
+
+        for row in self.eventList[section].eventData.indices
+        {
+            let indexPath = IndexPath(row: row, section: section)
+            indexPaths.append(indexPath)
+        }
+        
+        let isExpanded = self.eventList[section].isExpanded
+        self.eventList[section].isExpanded = !isExpanded
+        
+//        var imageView : UIImageView!
+//
+//        for subview in (sender.superview?.subviews)!
+//        {
+//            if let imgView = subview as? UIImageView
+//            {
+//                imageView = imgView
+//            }
+//        }
+        
+        for index in 0...self.eventList.count - 1
+        {
+            if index != section && self.eventList[index].isExpanded
+            {
+                self.eventList[index].isExpanded = false
+            }
+        }
+        
+        self.sentByMeView.acceptedUserTableView.reloadData()
+        
+        
+        if !isExpanded
+        {
+            if indexPaths.count > 0
+            {
+                self.sentByMeView.acceptedUserTableView.scrollToRow(at: indexPaths.first!, at: UITableViewScrollPosition.top
+                , animated: true)
+            }
+        }
+        
+        
+        
+//        if isExpanded
+//        {
+////            imageView.image = UIImage.init(named: "PlusIcon")
+//            self.sentByMeView.acceptedUserTableView.deleteRows(at: indexPaths, with: UITableViewRowAnimation.fade)
+//        }
+//        else
+//        {
+//            imageView.image = UIImage.init(named: "MinusIcon")
+//            self.sentByMeView.acceptedUserTableView.insertRows(at: indexPaths, with: UITableViewRowAnimation.fade)
+//            if indexPaths.count > 0
+//            {
+////            self.sentByMeView.acceptedUserTableView.scrollToRow(at: indexPaths.first!, at: UITableViewScrollPosition.top
+////                , animated: true)
+//
+//                for index in 0...self.eventList.count - 1
+//                {
+//                    if index != section && self.eventList[index].isExpanded
+//                    {
+//                        self.eventList[index].isExpanded = false
+//
+////                        var indexPathse = [IndexPath]()
+////                        for row in self.eventList[index].eventData.indices
+////                        {
+////                            let indexPath = IndexPath(row: row, section: index)
+////                            indexPathse.append(indexPath)
+////                        }
+////
+////                        self.eventList[index].isExpanded = false
+////
+////                        let view = self.sentByMeView.acceptedUserTableView.headerView(forSection: index)
+////
+////                        for subview in (view?.subviews)!
+////                        {
+////                            if let imgView = subview as? UIImageView
+////                            {
+////                                imageView = imgView
+////                            }
+////                        }
+////
+////                        imageView.image = UIImage.init(named: "PlusIcon")
+//
+////                        if indexPathse.count > 0
+////                        {
+////                        self.sentByMeView.acceptedUserTableView.deleteRows(at: indexPathse, with: UITableViewRowAnimation.fade)
+////                        }
+//                    }
+//                }
+//                self.sentByMeView.acceptedUserTableView.reloadData()
+//
+//            }
+        
+//        }
+    }
     
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        if tableView.tag == 5
+        {
+            return self.eventList.count
+        }
+        
+        return 1
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
+    {
+        if tableView.tag == 5
+        {
+        let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 30.0))
+            headerView.backgroundColor = UIColor.init(red: 255/255, green: 0, blue: 35/255, alpha: 1.0)
+            
+        let imageView = UIImageView.init(frame: CGRect.init(x: 0, y: 0, width: 20.0, height: headerView.frame.size.height))
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
+            
+        if self.eventList[section].isExpanded
+        {
+            imageView.image = UIImage.init(named: "MinusIcon")
+        }
+        else
+        {
+            imageView.image = UIImage.init(named: "PlusIcon")
+        }
+            
+        let button = UIButton(type: .custom)
+        button.frame = CGRect.init(x: 0, y: 0, width: headerView.frame.size.width, height: headerView.frame.size.height)
+        button.tag = section
+        button.addTarget(self, action: #selector(self.handleExpandClose(sender:)), for: UIControlEvents.touchUpInside)
+//        button.setImage(UIImage.init(named: "PlusIcon"), for: UIControlState.normal)
+//        button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 150);
+        
+        let label = UILabel.init(frame: CGRect.init(x: 25.0, y: headerView.frame.origin.y, width: headerView.frame.size.width - 30 , height: headerView.frame.size.height))
+        label.textColor = UIColor.white
+        label.font = label.font.withSize(15.0)
+        label.numberOfLines = 0
+            
+            
+        if section == 0
+        {
+            label.text = "List of people who replied with yes."
+        }
+        else if section == 1
+        {
+            label.text = "List of people who replied with no."
+        }
+        else
+        {
+            label.text = "List of people with no response."
+        }
+        
+        headerView.addSubview(imageView)
+        headerView.addSubview(label)
+        headerView.addSubview(button)
+
+        return headerView
+            
+        }
+        
+        return nil
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView?
+    {
+        if tableView.tag == 5
+        {
+            let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 10.0))
+        
+            return footerView
+        }
+        
+        return nil
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        if tableView.tag == 5
+        {
+            return 10.0
+        }
+        return 0
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if tableView.tag == 5
+        {
+            return 30.0
+        }
+        
+        return 0
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -1038,7 +1461,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else if tableView.tag == 5
         {
-            return self.acceptedEventList.count
+            if !self.eventList[section].isExpanded
+            {
+                return 0
+            }
+            
+            return self.eventList[section].eventData.count
+            
         }
         return self.invitedList.count
     }
@@ -1058,11 +1487,38 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             contactCell?.accessoryType = .detailButton
             contactCell?.deleteButton.isHidden = true
+            contactCell?.editButton.isHidden = false
+            contactCell?.profileButton.isHidden = false
+            
+            contactCell?.editButton.tag = indexPath.row
+            contactCell?.profileButton.tag = indexPath.row
+            
+            contactCell?.editButton.addTarget(self, action: #selector(self.editButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            contactCell?.profileButton.addTarget(self, action: #selector(self.editButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            
+//            contactCell?.awakeFromNib()
+            
             
         
+            
         let userListObject = kUserList[indexPath.row]
         
-            contactCell!.nameLabel.text = userListObject.name
+        contactCell!.nameLabel.text = userListObject.name
+            
+        if userListObject.imageURL != ""
+        {
+            contactCell?.profileImageView.imageURL = URL.init(string: userListObject.imageURL)
+        }
+        else
+        {
+            contactCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+        }
+            
+        
+            
+            
+            
+            
             
             return contactCell!
             
@@ -1100,17 +1556,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            formatter2.timeStyle = .medium
 //            formatter2.dateFormat = "hh:mm a"
             
-            var invitedBy : String!
+            
+            var phoneBookName : String!
             
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
             
             if fullName == " "
             {
-                invitedBy = eventData.phone
+                phoneBookName = String(format: "\n[Sent from %@]", eventData.phone)
             }
             else
             {
-                invitedBy = fullName + " " + "(" + eventData.phone + ")"
+                phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.phone)
             }
             
 
@@ -1118,10 +1575,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //            requestEventCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             
             
-            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+            requestEventCell?.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(eventData.senderName).boldWithItalic(phoneBookName)
 //            requestEventCell?.listName.attributedText = NSMutableAttributedString().bold("List name : ").normal(eventData.listName)
             requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
 //            requestEventCell?.totalInvited.attributedText = NSMutableAttributedString().bold("Total Invited : ").normal(String(eventData.totalInvited))
+            
+            
+            
+            if eventData.imageURL != ""
+            {
+                requestEventCell?.profileImageView.imageURL = URL.init(string: eventData.imageURL)
+            }
+            else
+            {
+                requestEventCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+            }
+            
             
             if eventData.eventTime.isEmpty
             {
@@ -1141,7 +1610,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else
             {
-                requestEventCell?.locationHeightConstraint.constant = 62
+                requestEventCell?.locationHeightConstraint.constant = 90.0
                 requestEventCell?.startNavigationViewHeightConstraint.constant = 30.5
                 requestEventCell?.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
@@ -1150,11 +1619,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             requestEventCell?.startNavigationButton.tag = indexPath.row
             requestEventCell?.acceptButton.tag = indexPath.row
             requestEventCell?.rejectButton.tag = indexPath.row
+            requestEventCell?.profileImageButton.tag = indexPath.row
             
             requestEventCell?.expandButton.addTarget(self, action: #selector(self.showDetailView(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             requestEventCell?.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
+            requestEventCell?.profileImageButton.addTarget(self, action: #selector(self.displayOnlyImageForMessageReceived(sender:)), for: UIControlEvents.touchUpInside)
             
 //            if eventData.eventType == "canceled"
 //            {
@@ -1329,6 +1800,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let eventData = self.receivedRequestEventList[indexPath.row]
             
+            if eventData.imageURL != ""
+            {
+                receivedEventsCell?.profileImageView.imageURL = URL.init(string: eventData.imageURL)
+            }
+            else
+            {
+                receivedEventsCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+            }
+            
 //            let dateformatter = DateFormatter()
 //            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 //
@@ -1349,21 +1829,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //            formatter2.dateFormat = "hh:mm a"
             
-            var invitedBy : String!
+            var phoneBookName : String!
 
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitedBy.phone)
 
             if fullName == " "
             {
-                invitedBy = eventData.invitedBy.phone
+                phoneBookName = String(format: "\n[Sent from %@]", eventData.invitedBy.phone)
             }
             else
             {
-                invitedBy = fullName + " " + "(" + eventData.invitedBy.phone + ")"
+                phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.invitedBy.phone)
             }
             
             receivedEventsCell?.acceptedORSentByMe.text = eventData.eventType
-            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
+            receivedEventsCell?.title.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
 //            receivedEventsCell?.paymentMethod.attributedText = NSMutableAttributedString().bold("Who will pay : ").normal(eventData.whoWillPay)
             receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             
@@ -1386,11 +1866,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if eventData.eventAddress.isEmpty
             {
                 receivedEventsCell?.locationHeightConstraint.constant = 0
+//                receivedEventsCell?.locationHeightConstraint.priority = UILayoutPriority(rawValue: 750.0)
                 receivedEventsCell?.startNavigationButton.isHidden = true
             }
             else
             {
-                receivedEventsCell?.locationHeightConstraint.constant = 62.5
+                receivedEventsCell?.locationHeightConstraint.constant = 90.0
+//                receivedEventsCell?.locationHeightConstraint.priority = UILayoutPriority(rawValue: 1000.0)
                 receivedEventsCell?.startNavigationButton.isHidden = false
                 receivedEventsCell?.address.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
@@ -1414,7 +1896,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             else
             {
-                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+                receivedEventsCell?.listName.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(String(format: "%@ %@", eventData.invitedBy.firstName,eventData.invitedBy.lastName)).boldWithItalic(phoneBookName)
                 receivedEventsCell?.totalInvitedHeightConstraint.constant = 0
                 
                 
@@ -1447,9 +1929,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             receivedEventsCell?.expandButton.tag = indexPath.row
             receivedEventsCell?.startNavigationButton.tag = indexPath.row
+            receivedEventsCell?.profileImageButton.tag = indexPath.row
             
             receivedEventsCell?.expandButton.addTarget(self, action: #selector(self.showReceivedEventDetailView(sender:)), for: UIControlEvents.touchUpInside)
             receivedEventsCell?.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromReceivedRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
+            receivedEventsCell?.profileImageButton.addTarget(self, action: #selector(self.displayOnlyImageForMyMessages(sender:)), for: UIControlEvents.touchUpInside)
             
             
             
@@ -1464,17 +1948,20 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 contactCell = Bundle.main.loadNibNamed("ContactCell", owner: nil, options: nil)?[0] as? ContactCell
             }
-            
+
             contactCell?.deleteButton.isHidden = true
+
+
+            let eventData = self.eventList[indexPath.section].eventData[indexPath.row]
+
             
-            
-            let eventData = self.acceptedEventList[indexPath.row]
-            
-            
+
+
+
             var invitedTo : String!
-            
+
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitee.phone)
-            
+
             if fullName == " "
             {
                 invitedTo = eventData.invitee.phone
@@ -1483,12 +1970,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 invitedTo = fullName + " " + "(" + eventData.invitee.phone + ")"
             }
-            
+
             contactCell?.nameLabel.text = invitedTo
             
+            if eventData.invitee.imageURL != ""
+            {
+                contactCell?.profileImageView.imageURL = URL.init(string: eventData.invitee.imageURL)
+            }
+            else
+            {
+                contactCell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+            }
             
+            contactCell?.profileButton.isHidden = false
+            contactCell?.profileButton.tag = indexPath.row
+            
+            contactCell?.profileButton.addTarget(self, action: #selector(self.displayOnlyImageForCollapseViews(sender:)), for: UIControlEvents.touchUpInside)
+
+
             return contactCell!
-            
+
 
         }
         
@@ -1583,14 +2084,229 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         BasicFunctions.pushVCinNCwithObject(vc: listDetailVC, popTop: false)
     }
     
+    // UiimagePickerControllerDelegate Methods
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    {
+        var originalImage : UIImage?
+        if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
+        {
+            originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+            self.isCropImage = true
+            
+            
+        }
+        
+        dismiss(animated: true) {
+            
+            var imageCropVC : RSKImageCropViewController!
+            imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
+            imageCropVC.delegate = self
+            imageCropVC.avoidEmptySpaceAroundImage = true
+            self.navigationController?.pushViewController(imageCropVC, animated: true)
+        }
+    }
+    
+    // RSKImageCropViewControllerDelegate Methods
+    func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
+        
+        self.isCropImage = false
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
+        
+//        let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
+//        cell.profileImageView.image = croppedImage
+        
+        BasicFunctions.showActivityIndicator(vu: controller.view)
+        
+        let userListObject = kUserList[self.indexPath.row]
+        
+        var imageData : Data?
+        
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: croppedImage, targetSize: CGSize.init(width: 320.0, height: 320.0))
+            
+            imageData = UIImagePNGRepresentation(scaleImage)
+        
+        var postParams = [String : Any]()
+        postParams["list_id"] = userListObject.id
+        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: controller.view)
+            
+            let json = result as! [String : Any]
+//            let msg = json["messages"] as? String
+            
+            let message = json["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if json["error"] == nil
+            {
+                self.isCropImage = false
+                self.navigationController?.popViewController(animated: true)
+//                BasicFunctions.showAlert(vc: self, msg: msg)
+            }
+            
+        }
+    }
+    
+    // RSKImageCropViewControllerDataSource Methods
+    func imageCropViewControllerCustomMaskRect(_ controller: RSKImageCropViewController) -> CGRect {
+        
+        return CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 200)
+    }
+    
+    func imageCropViewControllerCustomMaskPath(_ controller: RSKImageCropViewController) -> UIBezierPath {
+        
+        return UIBezierPath(rect: controller.maskRect)
+    }
+    
+    @objc func displayOnlyImageForMessageReceived(sender : UIButton)
+    {
+        let eventData = self.requestEventList[sender.tag]
+        
+        
+        if eventData.imageURL != ""
+        {
+        let cell : RequestEventCell = self.requestEventView.requestEventTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: 0)) as! RequestEventCell
+            
+        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+        let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+        editProfileImageVC.profileImage = cell.profileImageView.image
+        kIsDisplayOnlyImage = true
+        BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
+    
+    @objc func displayOnlyImageForMyMessages(sender : UIButton)
+    {
+        let eventData = self.receivedRequestEventList[sender.tag]
+        
+        
+        if eventData.imageURL != ""
+        {
+            let cell : ReceivedEventsCell = self.receivedEventsView.receivedEventsTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: 0)) as! ReceivedEventsCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            kIsDisplayOnlyImage = true
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
+    
+    @objc func displayOnlyImageForCollapseViews(sender : UIButton)
+    {
+        
+        var eventData : EventTrackData!
+        var section : Int!
+        var x = 0
+        
+        for index in self.eventList
+        {
+            if index.isExpanded
+            {
+                section = x
+                eventData = index.eventData[sender.tag]
+                break
+            }
+            
+            x = x + 1
+        }
+        
+        
+        if eventData.invitee.imageURL != ""
+        {
+            let cell : ContactCell = self.sentByMeView.acceptedUserTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: section)) as! ContactCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            kIsDisplayOnlyImage = true
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
+    
+    // Edit button Action Method
+    @objc func editButtonTapped(sender:UIButton)
+    {
+        self.indexPath = IndexPath.init(row: sender.tag, section: 0)
+        
+        let userListObject = kUserList[self.indexPath.row]
+        
+        if userListObject.imageURL != ""
+        {
+//            BasicFunctions.openActionSheetWithDeleteOption(vc: self, isEditing: false)
+            
+            let cell : ContactCell = self.contactsView.contactsTableView.cellForRow(at: self.indexPath) as! ContactCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            editProfileImageVC.userListObject = userListObject
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+        else
+        {
+            BasicFunctions.openActionSheet(vc: self, isEditing: false)
+        }
+        
+    }
+    
+//    func didDeleteImage()
+//    {
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//
+//        let userListObject = kUserList[self.indexPath.row]
+//
+//        var postParams = [String : Any]()
+//        postParams["list_id"] = userListObject.id
+//
+//        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+//
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//
+//            let json = result as? [String:Any]
+//
+//            let status = json?["status"] as? String
+//            let message = json?["message"] as? String
+//
+//            if message != nil && message == "Unauthorized"
+//            {
+//                BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+//                BasicFunctions.showSigInVC()
+//                return
+//
+//            }
+//
+//            if status == "success"
+//            {
+//                self.getContactListFromServer()
+//                return
+//            }
+//
+//            BasicFunctions.showAlert(vc: self, msg: message)
+//
+//
+//        }
+//    }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         
         textField.resignFirstResponder()
@@ -1694,10 +2410,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if eventData.eventAddress == ""
             {
                 self.sentByMeView.locationViewHeightConstraint.constant = 0
+//                self.sentByMeView.locationViewHeightConstraint.priority = UILayoutPriority(rawValue: 750.0)
+                
             }
             else
             {
                 self.sentByMeView.locationViewHeightConstraint.constant = 60.0
+//                self.sentByMeView.locationViewHeightConstraint.priority = UILayoutPriority(rawValue: 1000.0)
                 self.sentByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
             }
             
@@ -1708,8 +2427,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.sentByMeView.sendReportButton.tag = eventData.eventID
             self.sentByMeView.sendReportButton.addTarget(self, action: #selector(self.sendButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
             
-            self.acceptedEventList.removeAll()
-            self.acceptedEventList = eventData.acceptedEventList
+            self.eventList[0].isExpanded = false
+            self.eventList[0].eventData.removeAll()
+            self.eventList[0].eventData = eventData.acceptedEventList
+
+            self.eventList[1].isExpanded = false
+            self.eventList[1].eventData.removeAll()
+            self.eventList[1].eventData = eventData.rejectedEventList
+
+            self.eventList[2].isExpanded = false
+            self.eventList[2].eventData.removeAll()
+            self.eventList[2].eventData = eventData.pendingEventList
+            
             
             self.sentByMeView.acceptedUserTableView.reloadData()
             
@@ -1723,7 +2452,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
             
-            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message name: ").normal(eventData.title)
+            self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
             self.acceptByMeView.eventReceivedDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
             
@@ -1745,24 +2474,24 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             else
             {
                 self.acceptByMeView.location.attributedText = NSMutableAttributedString().bold("Location: ").normal(eventData.eventAddress)
-                self.acceptByMeView.locationViewHeightConstraint.constant = 60.0
+                self.acceptByMeView.locationViewHeightConstraint.constant = 80.0
                 self.acceptByMeView.startNavigationButtonHeightConstraint.constant = 30.5
             }
             
-            var invitedBy : String!
+            var phoneBookName : String!
 
             let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.invitedBy.phone)
 
             if fullName == " "
             {
-                invitedBy = eventData.invitedBy.phone
+                phoneBookName = String(format: "\n[Sent from %@]", eventData.invitedBy.phone)
             }
             else
             {
-                invitedBy = fullName + " " + "(" + eventData.invitedBy.phone + ")"
+                phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.invitedBy.phone)
             }
 
-            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+            self.acceptByMeView.invitedBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(String(format: "%@ %@", eventData.invitedBy.firstName,eventData.invitedBy.lastName)).boldWithItalic(phoneBookName)
 
 
             self.acceptByMeView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -1867,6 +2596,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         let eventData = self.requestEventList[sender.tag]
         
+//        BasicFunctions.setRoundCornerOfImageView(imageView: self.detailView.profileImageView)
+        
+        if eventData.imageURL != ""
+        {
+            self.detailView.profileImageView.imageURL = URL.init(string: eventData.imageURL)
+        }
+        else
+        {
+            self.detailView.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
+        }
+        
 //        let dateformatter = DateFormatter()
 //        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 //
@@ -1886,23 +2626,24 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        let time = formatter2.date(from: eventData.eventTime)
 //
 //        formatter2.dateFormat = "hh:mm a"
-        var invitedBy : String!
+        
+        var phoneBookName : String!
         
         let fullName = BasicFunctions.getNameFromContactList(phoneNumber: eventData.phone)
         
         if fullName == " "
         {
-            invitedBy = eventData.phone
+            phoneBookName = String(format: "\n[Sent from %@]", eventData.phone)
         }
         else
         {
-            invitedBy = fullName + " " + "(" + eventData.phone + ")"
+            phoneBookName = String(format: "\n[Sender is saved in your phone as %@ (%@)]", fullName,eventData.phone)
         }
         
         self.detailView.titleTextView.text = eventData.title
         
         
-        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(invitedBy)
+        self.detailView.createdBy.attributedText = NSMutableAttributedString().bold("Invited by: ").normal(eventData.senderName).boldWithItalic(phoneBookName)
 //        self.detailView.date.attributedText = NSMutableAttributedString().bold("Date and time of the event : ").normal(eventData.eventTime)
         self.detailView.createdDate.attributedText = NSMutableAttributedString().bold("Message received on: ").normal(String(format: "\n%@", eventData.eventCreatedTime))
 //        self.detailView.location.attributedText = NSMutableAttributedString().bold("Location : ").normal(eventData.eventAddress)
@@ -1925,6 +2666,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.detailView.acceptButton.tag = sender.tag
         self.detailView.rejectButton.tag = sender.tag
         self.detailView.startNavigationButton.tag = sender.tag
+        self.detailView.profileImageButton.tag = sender.tag
         
         if eventData.confirmed == 0
         {
@@ -1998,8 +2740,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.detailView.acceptButton.addTarget(self, action: #selector(self.acceptButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.rejectButton.addTarget(self, action: #selector(self.rejectButtonTapped(sender:)), for: UIControlEvents.touchUpInside)
-        
-        self.detailView.startNavigationButton.tag = sender.tag
+        self.detailView.profileImageButton.addTarget(self, action: #selector(self.displayOnlyImageForMessageReceived(sender:)), for: UIControlEvents.touchUpInside)
         self.detailView.startNavigationButton.addTarget(self, action: #selector(self.startNavigationButtonTappedFromRequestEvents(sender:)), for: UIControlEvents.touchUpInside)
         
         
@@ -2105,6 +2846,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.setListTextField.tag = 2
         
         self.selectedList = nil
+        self.updateSelectedList = nil
         
         
         self.editEventView.titleTextView.delegate = self
@@ -2132,7 +2874,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.editEventView.updateButton.tag = eventData.eventID
         self.editEventView.cancelButton.tag = eventData.eventID
         self.editEventView.deleteButton.tag = eventData.eventID
-        self.listID = eventData.listID
+//        self.listID = eventData.listID
         
         for list in kUserList
         {
@@ -2253,9 +2995,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.selectedLat = eventData.lat
         self.selectedLong = eventData.long
         
-        UserDefaults.standard.removeObject(forKey: kSelectedLat)
-        UserDefaults.standard.removeObject(forKey: kSelectedLong)
-        UserDefaults.standard.synchronize()
+        kSelectedLocation = nil
+        
+//        UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//        UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//        UserDefaults.standard.synchronize()
         
         
         
@@ -2766,6 +3510,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             userProfileData.lastName = userData?["lastName"] as? String ?? ""
             userProfileData.gender = userData?["gender_id"] as? Int ?? 0
             userProfileData.email = userData?["email"] as? String ?? ""
+            userProfileData.imageURL = userData?["profileImage"] as? String ?? ""
             userProfileData.createdAt = userData?["created_at"] as? String ?? ""
             userProfileData.updatedAt = userData?["updated_at"] as? String ?? ""
             
@@ -2780,16 +3525,17 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
             
-            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, gender: userProfileData.gender, email: userProfileData.email, dob: userProfileData.dob, dor: userProfileData.dor, createdAt: userProfileData.createdAt, updatedAt: userProfileData.updatedAt)
+            let userProfile = UserProfile.init(id: userProfileData.authID, accessToken: userProfileData.authToken, firstName: userProfileData.firstName, lastName: userProfileData.lastName, gender: userProfileData.gender, email: userProfileData.email, imageURL : userProfileData.imageURL, dob: userProfileData.dob, dor: userProfileData.dor, createdAt: userProfileData.createdAt, updatedAt: userProfileData.updatedAt)
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
             BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
             kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
             
-//            if kLoggedInUserProfile.dob == ""
-//            {
-//                self.contactsView.dobView.isHidden = false
-//            }
+            if kLoggedInUserProfile.dob == ""
+            {
+                self.contactsView.dobView.isHidden = false
+                self.contactsView.dobLabel.text = kBirthdayMessage
+            }
             
             
         }
@@ -2833,7 +3579,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         if json["error"] == nil && status == nil
         {
             
-            
+//        self.checkNotificationData()
         
         kUserList.removeAll()
         
@@ -2847,8 +3593,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         for list in contactListArray {
 
             let userListObject = UserList()
-            userListObject.name = list["list_name"] as! String
-            userListObject.id = list["id"] as! Int
+            userListObject.name = list["list_name"] as? String ?? ""
+            userListObject.id = list["id"] as? Int ?? 0
+            userListObject.imageURL = list["group_image"] as? String ?? ""
             
             var contactsArray : [[String : Any]]!
             if list["contacts"] as? [[String : Any]]  != nil
@@ -2864,6 +3611,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 {
                     contactData.phoneNumber = contact["phone"] as! String
                 }
+                
+                contactData.imageURL = contact["profileImage"] as? String ?? ""
                 
 //                if contact["name"] as? String != nil
 //                {
@@ -2944,11 +3693,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         //dismiss date picker dialog
         self.view.endEditing(true)
@@ -3002,11 +3751,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
         
-        self.createEventView.locationTextField.isUserInteractionEnabled = true
-        if self.editEventView != nil
-        {
-            self.editEventView.locationTextField.isUserInteractionEnabled = true
-        }
+//        self.createEventView.locationTextField.isUserInteractionEnabled = true
+//        if self.editEventView != nil
+//        {
+//            self.editEventView.locationTextField.isUserInteractionEnabled = true
+//        }
         
         //dismiss date picker dialog
         self.view.endEditing(true)
@@ -3122,15 +3871,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         
-        let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
-        let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
+        let selectedLat = kSelectedLocation?.latitude
+        let selectedLong = kSelectedLocation?.longitude
         
         var lat: Any!
         var long: Any!
         
         if self.createEventView.locationSwitch.isOn
         {
-            if self.selectedLat == nil && self.selectedLong == nil
+            if selectedLat == nil && selectedLong == nil
             {
                 
             if self.currentLocationCoordinate != nil
@@ -3163,6 +3912,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             let json = result as? [String : Any]
             let message = json?["message"] as? String
+            let nonAppUsersPhoneNumbers = json?["non_users"] as? String
             
             
             if message != nil && message == "Unauthorized"
@@ -3196,45 +3946,59 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.selectedList = nil
                 self.listID = nil
                 
+                self.showPicker(textField: self.createEventView.setListTextField)
+                
 //                self.currentLocationCoordinate = nil
                 
-                UserDefaults.standard.removeObject(forKey: kSelectedLat)
-                UserDefaults.standard.removeObject(forKey: kSelectedLong)
-                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
-                UserDefaults.standard.synchronize()
+//                UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//                UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
+//                UserDefaults.standard.synchronize()
+                
+                kSelectedLocation = nil
                 
             
                 
-                self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
                 
-                if message != nil
+                if nonAppUsersPhoneNumbers != ""
                 {
-                    BasicFunctions.showAlert(vc: self, msg: message)
+                  
+                let phoneNumberString = nonAppUsersPhoneNumbers
+                let recipientsArray = phoneNumberString!.components(separatedBy: ",")
+                
+                let alert = UIAlertController.init(title: "Event Created", message: "Some contacts from your list are not using invited APP. Do you want to invite them on invited app ?", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+
+
+                if (MFMessageComposeViewController.canSendText())
+                {
+                    let controller = MFMessageComposeViewController()
+                    controller.body = String(format: "%@ %@ wants to send you a message. Please download invited app for free to receive the message http://onelink.to/bfyctf", kLoggedInUserProfile.firstName!,kLoggedInUserProfile.lastName!)
+                    let phoneNumberString = nonAppUsersPhoneNumbers
+                    let recipientsArray = phoneNumberString!.components(separatedBy: ",")
+                    controller.recipients = recipientsArray
+                    controller.messageComposeDelegate = self
+                    self.present(controller, animated: true, completion: {
+                        
+                        self.isMessageControllerPresented = true
+                    })
                 }
-                
-                
-//                let alert = UIAlertController.init(title: "Invited", message: "Event Created successfully.Are you sure you want to send invitation to those members in the selected list whose don't install the app?", preferredStyle: UIAlertControllerStyle.alert)
-//                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
-//                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-//
-//
-//                if (MFMessageComposeViewController.canSendText())
-//                {
-//                    let controller = MFMessageComposeViewController()
-//                    controller.body = "Testing SMS Feature with shayan solutions."
-//                    let phoneNumberString = "03338717137,03366006260"
-//                    let recipientsArray = phoneNumberString.components(separatedBy: ",")
-//                    controller.recipients = recipientsArray
-//                    controller.messageComposeDelegate = self
-//                    self.present(controller, animated: true, completion: nil)
-//                }
-//                else
-//                {
-//                    print("Error")
-//                }
-//                }))
-//
-//                self.present(alert, animated: true, completion: nil)
+                else
+                {
+                    print("Error")
+                }
+                }))
+
+                self.present(alert, animated: true, completion: nil)
+                }
+                else
+                {
+                    if message != nil
+                    {
+                        BasicFunctions.showAlert(vc: self, msg: message)
+                    }
+                }
             }
             else
             {
@@ -3248,9 +4012,41 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
     }
-//    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-//        self.dismiss(animated: true, completion: nil)
-//    }
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        self.dismiss(animated: true) {
+            
+            self.isMessageControllerPresented = false
+            
+            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+
+                UIView.animate(withDuration: 0.25) {
+
+                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+
+                }
+
+            }
+
+            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+            self.mainScrollView.setContentOffset( point, animated: true)
+
+
+            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+
+                UIView.animate(withDuration: 0.25) {
+
+                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+
+                }
+
+
+            }
+            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+            self.fetchUserEventsFromServer()
+        }
+    }
+    
 //    func addPhoneNumber(phNo : String) {
 //        if #available(iOS 9.0, *) {
 //            let store = CNContactStore()
@@ -3279,7 +4075,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put the title of the message.")
             return
         }
-        else if self.updateSelectedList == nil && self.listID == nil
+        else if self.updateSelectedList == nil
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select List.")
             return
@@ -3371,14 +4167,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             postParams["list_id"] = self.updateSelectedList?.id
         }
-        else
-        {
-            postParams["list_id"] = self.listID
-        }
+//        else
+//        {
+//            postParams["list_id"] = self.listID
+//        }
         
     
-        let selectedLat = BasicFunctions.getPreferences(kSelectedLat)
-        let selectedLong = BasicFunctions.getPreferences(kSelectedLong)
+        let selectedLat = kSelectedLocation?.latitude
+        let selectedLong = kSelectedLocation?.longitude
         
         var lat: Any!
         var long: Any!
@@ -3387,12 +4183,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             if selectedLat == nil && selectedLong == nil
             {
-                
-                if self.currentLocationCoordinate != nil
-                {
-                    lat = self.currentLocationCoordinate?.latitude
-                    long = self.currentLocationCoordinate?.longitude
-                }
+                lat = self.selectedLat
+                long = self.selectedLong
+//                if self.currentLocationCoordinate != nil
+//                {
+//                    lat = self.currentLocationCoordinate?.latitude
+//                    long = self.currentLocationCoordinate?.longitude
+//                }
             }
             else
             {
@@ -3438,13 +4235,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //                self.editEventView.locationSwitch.isOn = false
 //                self.editEventView.dateSwitch.isOn = false
 //                self.editEventView.timeSwitch.isOn = false
-                self.listID = nil
+//                self.listID = nil
                 self.updateSelectedList = nil
                 
-                UserDefaults.standard.removeObject(forKey: kSelectedLat)
-                UserDefaults.standard.removeObject(forKey: kSelectedLong)
-                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
-                UserDefaults.standard.synchronize()
+                kSelectedLocation = nil
+                
+//                UserDefaults.standard.removeObject(forKey: kSelectedLat)
+//                UserDefaults.standard.removeObject(forKey: kSelectedLong)
+//                UserDefaults.standard.removeObject(forKey: kSelectedAddress)
+//                UserDefaults.standard.synchronize()
                 
                 self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
                 
@@ -3625,6 +4424,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 eventData.totalInvited = event["total_invited"] as? Int ?? 0
                 eventData.createdBy = event["create_by"] as? String ?? ""
                 eventData.eventAddress = event["address"] as? String ?? ""
+                eventData.senderName = event["invited_by"] as? String ?? ""
+                eventData.imageURL = event["profileImage"] as? String ?? ""
                 eventData.confirmed = event["confirmed"] as? Int ?? 0
                 eventData.eventTime = BasicFunctions.checkFormat(dateTimeString: event["event_time"] as? String ?? "")
                 eventData.phone = event["phone"] as? String ?? ""
@@ -3781,18 +4582,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     let userData = UserData()
                     userData.id = owner["id"] as! Int
+                    userData.firstName = owner["firstName"] as? String ?? ""
+                    userData.lastName = owner["lastName"] as? String ?? ""
                     userData.email = owner["email"] as? String ?? ""
                     userData.phone = owner["phone"] as? String ?? ""
                     
+                    eventData.imageURL = owner["profileImage"] as? String ?? ""
+                    
                     eventData.invitedBy = userData
                     
-                    let acceptedRequestArray = event["accepted_requests"] as! [[String : Any]]
+                    let acceptedRequestArray = event["accepted_requests"] as? [[String : Any]]
                     
-                    
-                    
-                    for acceptedEvent in acceptedRequestArray
+                    if acceptedRequestArray != nil
                     {
-                        let eventAcceptedData = EventAcceptedData()
+                        for acceptedEvent in acceptedRequestArray!
+                    {
+                        let eventAcceptedData = EventTrackData()
                         eventAcceptedData.id = acceptedEvent["id"] as! Int
                         eventAcceptedData.eventID = acceptedEvent["event_id"] as! Int
                         
@@ -3804,11 +4609,68 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                         userData.id = invitee["id"] as! Int
                         userData.email = invitee["email"] as? String ?? ""
                         userData.phone = invitee["phone"] as? String ?? ""
+                        userData.imageURL = invitee["profileImage"] as? String ?? ""
                         
                         eventAcceptedData.invitee = userData
                         }
                         
                         eventData.acceptedEventList.append(eventAcceptedData)
+                    }
+                    }
+                    
+                    
+                    let rejectRequestArray = event["reject_requests"] as? [[String : Any]]
+                    
+                    if rejectRequestArray != nil
+                    {
+                        for rejectEvent in rejectRequestArray!
+                    {
+                        let eventRejectedData = EventTrackData()
+                        eventRejectedData.id = rejectEvent["id"] as? Int ?? 0
+                        eventRejectedData.eventID = rejectEvent["event_id"] as? Int ?? 0
+                        
+                        if rejectEvent["invitee"] as? [String : Any] != nil
+                        {
+                            let invitee = rejectEvent["invitee"] as! [String : Any]
+                            
+                            let userData = UserData()
+                            userData.id = invitee["id"] as? Int ?? 0
+                            userData.email = invitee["email"] as? String ?? ""
+                            userData.phone = invitee["phone"] as? String ?? ""
+                            userData.imageURL = invitee["profileImage"] as? String ?? ""
+                            
+                            eventRejectedData.invitee = userData
+                        }
+                        
+                        eventData.rejectedEventList.append(eventRejectedData)
+                    }
+                    }
+                    
+                    let pendingRequestArray = event["pending_requests"] as? [[String : Any]]
+                    
+                    if pendingRequestArray != nil
+                    {
+                        for pendingEvent in pendingRequestArray!
+                    {
+                        let eventPendingData = EventTrackData()
+                        eventPendingData.id = pendingEvent["id"] as? Int ?? 0
+                        eventPendingData.eventID = pendingEvent["event_id"] as? Int ?? 0
+                        
+                        if pendingEvent["invitee"] as? [String : Any] != nil
+                        {
+                            let invitee = pendingEvent["invitee"] as! [String : Any]
+                            
+                            let userData = UserData()
+                            userData.id = invitee["id"] as? Int ?? 0
+                            userData.email = invitee["email"] as? String ?? ""
+                            userData.phone = invitee["phone"] as? String ?? ""
+                            userData.imageURL = invitee["profileImage"] as? String ?? ""
+                            
+                            eventPendingData.invitee = userData
+                        }
+                        
+                        eventData.pendingEventList.append(eventPendingData)
+                    }
                     }
                     
                     
@@ -3912,10 +4774,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.dropDownPickerView.delegate = self
         self.dropDownPickerView.tag = textField.tag
         
-        if textField.tag == 2 && self.listID != nil
+        if textField.tag == 2 && self.updateSelectedList?.id != nil
         {
-            let row = kUserList.index(where: {$0.id == self.listID})
-            self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+            let row = kUserList.index(where: {$0.id == self.updateSelectedList?.id})
+            if row != nil
+            {
+                self.dropDownPickerView.selectRow(row! + 1, inComponent: 0, animated: false)
+            }
         }
         
         

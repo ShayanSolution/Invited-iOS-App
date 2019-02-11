@@ -20,8 +20,15 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 }
+extension String {
+    func isValidEmail() -> Bool {
+        // here, `try!` will always succeed because the pattern is valid
+        let regex = try! NSRegularExpression(pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", options: .caseInsensitive)
+        return regex.firstMatch(in: self, options: [], range: NSRange(location: 0, length: count)) != nil
+    }
+}
 
-class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
+class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RSKImageCropViewControllerDelegate {
     
     @IBOutlet var profileScrollView: UIScrollView!
     
@@ -37,6 +44,14 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     @IBOutlet var dorTextField: UITextField!
     
+    @IBOutlet var profileView: UIView!
+    
+    
+    @IBOutlet var profileImageView: AsyncImageView!
+    
+    
+    @IBOutlet var editButton: UIButton!
+    
     
     let dobPicker = UIDatePicker()
     let dorPicker = UIDatePicker()
@@ -48,25 +63,33 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     let genderList = ["Select Gender","Male","Female"]
     
     let dropDownPickerView = UIPickerView()
+    
+//    var profileImage : UIImage?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        
-        
-        
-        
-        
-        self.profileScrollView.contentSize.height = 485.0
-        
+        kImage = nil
         
         self.firstNameTextField.text = kLoggedInUserProfile.firstName
         self.lastNameTextField.text = kLoggedInUserProfile.lastName
         self.emailTextField.text = kLoggedInUserProfile.email
         self.dobTextField.text = kLoggedInUserProfile.dob
         self.dorTextField.text = kLoggedInUserProfile.dor
+        
+//        if kLoggedInUserProfile.imageURL != ""
+//        {
+//            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
+////            self.profileImage = self.profileImageView.image
+//            self.editButton.isHidden = false
+//        }
+//        else
+//        {
+//            self.profileImageView.image = UIImage.init(named: "AddPhoto")
+//            self.editButton.isHidden = true
+//        }
         
         
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -111,12 +134,70 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         
     }
+    override func viewDidAppear(_ animated: Bool)
+    {
+        
+        self.profileScrollView.contentSize.height = 700.0
+    }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        if kImage != nil
+        {
+//            self.profileImage = kImage
+            self.profileImageView.image = kImage
+            self.editButton.isHidden = false
+        }
+        else if kImage == nil && (kLoggedInUserProfile.imageURL?.isEmpty)!
+        {
+            self.profileImageView.image = UIImage.init(named: "AddPhoto")
+            self.editButton.isHidden = true
+        }
+        else if kImage == nil && kLoggedInUserProfile.imageURL != ""
+        {
+            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
+            //            self.profileImage = self.profileImageView.image
+            self.editButton.isHidden = false
+            kImage = self.profileImageView.image
+        }
+        
+    }
+    override func viewDidLayoutSubviews()
+    {
+        self.profileView.layer.cornerRadius = self.profileView.frame.size.width / 2
+//        self.profileView.layer.borderWidth = 5.0
+//        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
+    }
+//    @objc func receivedNotification(notification : Notification)
+//    {
+////        let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+////        let homeVC : HomeVC = storyBoard.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+////
+////        homeVC.isNotificationReceived = true
+//
+//        kISNotificationReceived = true
+//        self.navigationController?.popViewController(animated: true)
+//    }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
+        self.view.endEditing(true)
         BasicFunctions.openLeftMenu(vc: self)
     }
     
+    @IBAction func editButtonTapped(_ sender: Any)
+    {
+        if kImage != nil
+        {
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = self.profileImageView.image
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+        else
+        {
+            BasicFunctions.openActionSheet(vc: self, isEditing: false)
+        }
+    }
     
     
     @IBAction func updateButtonTapped(_ sender: UIButton)
@@ -160,13 +241,18 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             BasicFunctions.showAlert(vc: self, msg: "Please put date of birth.")
             return
         }
+        else if !(self.emailTextField.text?.isValidEmail())!
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Please put valid email.")
+            return
+        }
         
         BasicFunctions.showActivityIndicator(vu: self.view)
         
         self.dateFormatter.dateFormat = "dd/MM/yyyy"
         
         var postParams = [String : Any]()
-        postParams["user_id"] = BasicFunctions.getPreferencesForInt(kUserID)
+        postParams["user_id"] = kLoggedInUserProfile.userID
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["email"] = self.emailTextField.text
@@ -211,8 +297,18 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             postParams["dateofrelation"] = ""
         }
         
+        var imageData : Data?
         
-        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        if kImage != nil
+        {
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
+            
+            imageData = UIImagePNGRepresentation(scaleImage)
+        }
+        
+        
+        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL, withImageData : imageData,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -235,6 +331,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             BasicFunctions.showSigInVC()
             return
             
+        }
+        
+        if json?["email"] != nil
+        {
+            let errorString : String = (json!["email"] as! Array)[0]
+            BasicFunctions.showAlert(vc: self, msg: errorString)
+            return
         }
         
         BasicFunctions.showAlert(vc: self, msg: message)
@@ -431,6 +534,63 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             self.genderTextField.text = self.genderList[row]
         }
     }
+    
+    
+    // UiimagePickerControllerDelegate Methods
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    {
+        var originalImage : UIImage?
+        
+        if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil
+        {
+            originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+            
+//            if Float((pickedImage?.size.height)!) < 64.0
+//            {
+//                pickedImage = BasicFunctions.resizeImage(image: pickedImage!, targetSize: CGSize.init(width: 64.0, height: 64.0))
+//            }
+            
+//            self.profileImageView.image = self.profileImage
+//            self.editButton.isHidden = false
+            
+            
+        }
+        
+        dismiss(animated: true) {
+            
+            var imageCropVC : RSKImageCropViewController!
+            imageCropVC = RSKImageCropViewController(image: originalImage!, cropMode: RSKImageCropMode.circle)
+            imageCropVC.delegate = self
+            imageCropVC.avoidEmptySpaceAroundImage = true
+            self.navigationController?.pushViewController(imageCropVC, animated: true)
+        }
+    }
+    
+    // RSKImageCropViewControllerDelegate Methods
+    func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
+        
+        kImage = croppedImage
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    // RSKImageCropViewControllerDataSource Methods
+    func imageCropViewControllerCustomMaskRect(_ controller: RSKImageCropViewController) -> CGRect {
+        
+        return CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 200)
+    }
+    
+    func imageCropViewControllerCustomMaskPath(_ controller: RSKImageCropViewController) -> UIBezierPath {
+        
+        return UIBezierPath(rect: controller.maskRect)
+    }
+    
+    
+    
     
     
     

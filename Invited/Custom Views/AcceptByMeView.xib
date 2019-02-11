@@ -98,7 +98,7 @@
                                         <constraint firstItem="Kcb-nq-3eQ" firstAttribute="top" secondItem="uKC-9U-YYj" secondAttribute="bottom" constant="5" id="xXB-Pi-D5D"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Aj-ql-VCi">
+                                <view contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="8Aj-ql-VCi">
                                     <rect key="frame" x="0.0" y="80" width="315" height="80"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="12X-WE-Tgf">
@@ -126,7 +126,7 @@
                                     <constraints>
                                         <constraint firstItem="hqL-8v-n5n" firstAttribute="leading" secondItem="8Aj-ql-VCi" secondAttribute="leading" id="6YF-T9-LYA"/>
                                         <constraint firstItem="uUd-UO-jlR" firstAttribute="top" secondItem="8Aj-ql-VCi" secondAttribute="top" id="AIo-dZ-pPu"/>
-                                        <constraint firstAttribute="height" constant="80" id="CnM-zm-qEo"/>
+                                        <constraint firstAttribute="height" priority="750" constant="80" id="CnM-zm-qEo"/>
                                         <constraint firstItem="12X-WE-Tgf" firstAttribute="centerY" secondItem="8Aj-ql-VCi" secondAttribute="centerY" id="DLO-2O-EJ8"/>
                                         <constraint firstItem="hqL-8v-n5n" firstAttribute="top" secondItem="uUd-UO-jlR" secondAttribute="bottom" constant="5" id="FUh-Ze-GPG"/>
                                         <constraint firstAttribute="trailing" secondItem="uUd-UO-jlR" secondAttribute="trailing" id="NO1-sp-APy"/>
@@ -250,7 +250,6 @@
                                 <constraint firstItem="omF-1A-RqF" firstAttribute="leading" secondItem="zMd-cY-M3j" secondAttribute="leading" id="5xg-GX-EdO"/>
                                 <constraint firstItem="P2h-bR-Aix" firstAttribute="leading" secondItem="zMd-cY-M3j" secondAttribute="leading" id="8Ah-8G-0e0"/>
                                 <constraint firstAttribute="trailing" secondItem="8Aj-ql-VCi" secondAttribute="trailing" id="Amu-71-wOY"/>
-                                <constraint firstAttribute="height" constant="340" id="CUJ-qZ-dPf"/>
                                 <constraint firstItem="8Aj-ql-VCi" firstAttribute="top" secondItem="P2h-bR-Aix" secondAttribute="bottom" id="JVk-jP-Ukr"/>
                                 <constraint firstAttribute="trailing" secondItem="yBN-0w-b9c" secondAttribute="trailing" id="Mnc-ow-a3S"/>
                                 <constraint firstItem="feA-kS-S1G" firstAttribute="top" secondItem="yBN-0w-b9c" secondAttribute="bottom" id="NhK-HG-fbQ"/>
@@ -275,6 +274,7 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstAttribute="bottom" secondItem="sDP-NJ-Fat" secondAttribute="bottom" constant="30.5" id="4Qo-Zp-hXs"/>
                         <constraint firstAttribute="trailing" secondItem="sDP-NJ-Fat" secondAttribute="trailing" constant="30" id="8Bq-Qw-yGH"/>
                         <constraint firstItem="sDP-NJ-Fat" firstAttribute="leading" secondItem="t1b-ba-7Uq" secondAttribute="leading" constant="30" id="B5M-w1-WbA"/>
                         <constraint firstItem="C2k-FR-M0C" firstAttribute="top" secondItem="baD-r8-a0y" secondAttribute="bottom" id="DbC-MM-Gdd"/>
@@ -299,7 +299,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="backButton" destination="baD-r8-a0y" id="fNA-NR-Vz6"/>
-                <outlet property="dateViewHeightConstraint" destination="feE-cc-EY6" id="9Lg-EG-Phv"/>
+                <outlet property="dateViewHeightConstraint" destination="Ro7-Cq-qoJ" id="PAX-3r-WZz"/>
                 <outlet property="eventDate" destination="XxZ-n9-6CC" id="1Gc-qc-aDW"/>
                 <outlet property="eventReceivedDate" destination="TvM-pi-ZBd" id="LLc-6t-v0i"/>
                 <outlet property="invitedBy" destination="uUd-UO-jlR" id="lZb-eq-R0S"/>

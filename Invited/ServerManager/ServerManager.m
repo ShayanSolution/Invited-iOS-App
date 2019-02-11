@@ -633,7 +633,7 @@
                                       
                                   }];
 }
-+ (void) updateList:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
++ (void) updateList:(NSDictionary *) inputData withBaseURL : (NSString*) url  accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
     [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
     [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
@@ -797,17 +797,23 @@
     
     
 }
-+ (void) updateUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
++ (void) updateUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url withImageData : (NSData *)imageData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
     [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
     [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [[ServerManager sharedWebService: url] POST:@"update-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        resultBlock((NSDictionary*)responseObject );
+    [[ServerManager sharedWebService: url] POST:@"update-user" parameters:inputData constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if (imageData != nil)
+        {
+            [formData appendPartWithFileData: imageData name: @"profileImage" fileName:@"file.png" mimeType:@"image/png"];
+        }
+    }
+                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                    resultBlock((NSDictionary*)responseObject);
     }
      
      
-                                   failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                       if (operation.responseObject)
+                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                    if (operation.responseObject)
                                        {
                                            resultBlock((NSDictionary*)operation.responseObject);
                                        }
@@ -822,6 +828,96 @@
                                        
                                        
                                    }];
+    
+    
+}
++ (void) updateListImage:(NSDictionary *) inputData withBaseURL : (NSString*) url withImageData : (NSData *)imageData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService: url] POST:@"update-list-image" parameters:inputData constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if (imageData != nil)
+        {
+            [formData appendPartWithFileData: imageData name: @"group_image" fileName:@"file.png" mimeType:@"image/png"];
+        }
+    }
+                                        success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                            resultBlock((NSDictionary*)responseObject);
+                                        }
+     
+     
+                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                            if (operation.responseObject)
+                                            {
+                                                resultBlock((NSDictionary*)operation.responseObject);
+                                            }
+                                            else
+                                            {
+                                                resultBlock(@{
+                                                              @"error": @"1",
+                                                              @"message": @"Something went wrong"});
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                        }];
+    
+    
+}
++ (void) deleteProfileImage:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService: url] POST:@"delete-user-profile-image" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                            if (operation.responseObject)
+                                            {
+                                                resultBlock((NSDictionary*)operation.responseObject);
+                                            }
+                                            else
+                                            {
+                                                resultBlock(@{
+                                                              @"error": @"1",
+                                                              @"message": @"Something went wrong"});
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                        }];
+    
+    
+}
++ (void) deleteListImage:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebService: url] POST:@"delete-list-image" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                            if (operation.responseObject)
+                                            {
+                                                resultBlock((NSDictionary*)operation.responseObject);
+                                            }
+                                            else
+                                            {
+                                                resultBlock(@{
+                                                              @"error": @"1",
+                                                              @"message": @"Something went wrong"});
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                        }];
     
     
 }

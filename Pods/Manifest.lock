@@ -58,6 +58,7 @@ PODS:
   - MBProgressHUD (1.1.0)
   - NKVPhonePicker (2.0.1)
   - PGSideMenu (1.2.0)
+  - RSKImageCropper (2.2.1)
   - SwiftyJSON (4.0.0)
   - TwitterCore (3.2.0)
   - TwitterKit (3.4.2):
@@ -74,6 +75,7 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.1.0)
   - NKVPhonePicker
   - PGSideMenu
+  - RSKImageCropper
   - SwiftyJSON
   - TwitterKit
 
@@ -92,10 +94,11 @@ SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   NKVPhonePicker: 736e64165a7d873380608178d7ccd988b88268ed
   PGSideMenu: 7e034935823aeb6940adb5c2774894bc18e57850
+  RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 82d4f2267e1366675d7b4f9ddafa8f5c0e71c86b
+PODFILE CHECKSUM: fc9ed2f8805ede91109f2b4c6af966295175b74a
 
 COCOAPODS: 1.4.0

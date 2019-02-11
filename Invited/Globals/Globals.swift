@@ -14,9 +14,13 @@ import CoreLocation
 var kContactList = [ContactData]()
 var kUserList = [UserList]()
 var kCurrentLocation : CLLocationCoordinate2D?
-let kSelectedAddress = "selectedAddress"
-let kSelectedLat = "selectedLat"
-let kSelectedLong = "selectedLong"
+
+var kImage : UIImage?
+var kIsDisplayOnlyImage : Bool!
+var kSelectedLocation : CLLocationCoordinate2D?
+var kSelectedAddress : String?
+var kNotificationData : [String : Any]?
+
 let kIfUserLoggedIn = "isUserLoggedIn"
 let kUserID = "userID"
 let kAccessToken = "accessToken"
@@ -24,6 +28,7 @@ let kFirstName = "firstName"
 let kLastName = "lastName"
 let kGender = "gender"
 let kEmail = "email"
+let kImageURL = "imageURL"
 let kDOB = "dob"
 let kDOR = "dor"
 let kCreatedAt = "createdAt"
@@ -33,6 +38,8 @@ let kDeleteInfo = "All users who have not rejected this message will get the not
 let kDeviceToken = "DeviceToken"
 let kUserProfile = "UserProfile"
 var kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+
+var kBirthdayMessage = "It is highly recommended that you provide “Date of Birth” for getting exclusive special discounts, or even completely free “Birthday Presents” from top brands ;and free “Dining Offers” from some of the best restaurants in your city on your special day. Go to “PROFILE” in the menu and update now."
 
 #if DEVELOPMENT
 var kBaseURL = "http://dev.invited.shayansolutions.com/"

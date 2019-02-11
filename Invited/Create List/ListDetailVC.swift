@@ -119,6 +119,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     }
     
     
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return self.searchData.count
@@ -150,6 +151,15 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         else
         {
             cell?.nameLabel.text = name + " " + "(" + contactData.phoneNumber + ")"
+        }
+        
+        if contactData.imageURL != ""
+        {
+            cell?.profileImageView.imageURL = URL.init(string: contactData.imageURL)
+        }
+        else
+        {
+            cell?.profileImageView.image = UIImage.init(named: "DefaultProfileImage")
         }
         
         return cell!
@@ -233,10 +243,11 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
             let createListVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateListVC") as! CreateListVC
             createListVC.listData = self.listData
             createListVC.isUpdated = true
+        
+            BasicFunctions.pushVCinNCwithObject(vc: createListVC, popTop: false)
             
-            
-            self.present(createListVC, animated: true, completion: nil)
-            
+//            self.present(createListVC, animated: true, completion: nil)
+        
 
         
     }

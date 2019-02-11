@@ -17,6 +17,14 @@ class ContactCell: UITableViewCell {
     
     @IBOutlet var deleteButton: UIButton!
     
+    @IBOutlet var editButton: UIButton!
+    
+    @IBOutlet var profileImageView: AsyncImageView!
+    
+    @IBOutlet var profileView: UIView!
+    
+    @IBOutlet var profileButton: UIButton!
+    
     
     
     @IBOutlet var selectedIcon: UIView!
@@ -25,6 +33,10 @@ class ContactCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        self.profileView.layer.cornerRadius = self.profileView.frame.size.width / 2
+//        self.profileView.layer.borderWidth = 2.0
+//        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

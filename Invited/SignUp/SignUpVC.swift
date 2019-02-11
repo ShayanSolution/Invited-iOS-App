@@ -25,6 +25,7 @@ class UserProfileData: NSObject
     var dob = String()
     var dor = String()
     var email = String()
+    var imageURL = String()
     var password = String()
     var createdAt = String()
     var updatedAt = String()
@@ -93,6 +94,9 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 
         // Do any additional setup after loading the view.
         
+        
+//        self.findBaseURL()
+        
         let currentDate = Date()
         
         
@@ -148,6 +152,18 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+//    func findBaseURL()
+//    {
+//        if kBaseURL.isEmpty
+//        {
+//            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+//                let urlDictionary = result as? [String : Any]
+//                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+//            }
+//        }
+//    }
+    
+    
     
     @IBAction func signUpButtonTapped(_ sender: UIButton)
     {
@@ -160,6 +176,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         self.signInScrollView.isHidden = true
         self.mainScrollView.isHidden = false
         
+        self.view.endEditing(true)
+        
     }
     
     @IBAction func signInButtonTapped(_ sender: UIButton)
@@ -171,6 +189,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         
         self.signInScrollView.isHidden = false
         self.mainScrollView.isHidden = true
+        
+        self.view.endEditing(true)
     }
     
     @IBAction func forgetPassword(_ sender: UIButton)
@@ -339,11 +359,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put last name.")
             return
         }
-        else if (self.genderTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please put gender.")
-            return
-        }
         else if (self.phoneTextField.code?.isEmpty)!
         {
             BasicFunctions.showAlert(vc: self, msg: "Please select country.")
@@ -354,11 +369,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             BasicFunctions.showAlert(vc: self, msg: "Please put phone number.")
             return
 
-        }
-        else if (self.dobTextField.text?.isEmpty)!
-        {
-            BasicFunctions.showAlert(vc: self, msg: "Please put bithday date.")
-            return
         }
         else if (self.passwordTextField.text?.isEmpty)!
         {
@@ -389,10 +399,21 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["phone"] = self.phoneTextField.text
-        postParams["dob"] = dateformatter.string(from: self.datePicker.date)
         postParams["email"] = self.emailTextField.text
         postParams["password"] = self.passwordTextField.text
         postParams["password_confirmation"] = self.confirmPasswordTextField.text
+        
+        var dobDate : String!
+        if (self.dobTextField.text?.isEmpty)!
+        {
+            dobDate = ""
+        }
+        else
+        {
+            dobDate = dateformatter.string(from: self.datePicker.date)
+        }
+        
+        postParams["dob"] = dobDate
         
         var gender : Int!
         
@@ -400,9 +421,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         {
             gender = 1
         }
-        else
+        else if self.genderTextField.text == "Female"
         {
             gender = 2
+        }
+        else
+        {
+            gender = 0
         }
         
         postParams["gender"] = gender
@@ -423,7 +448,6 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     func login(isLoginManually : Bool)
     {
-        BasicFunctions.showActivityIndicator(vu: self.view)
         
         var postParams = [String: Any]()
         
@@ -463,6 +487,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["grant_type"] = "password"
         postParams["scope"] = "*"
         postParams["role"] = "user"
+        
+        BasicFunctions.showActivityIndicator(vu: self.view)
         
         ServerManager.sign(in: postParams, withBaseURL : kBaseURL) { (result) in
             
@@ -505,7 +531,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
 //            BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
-            
+//            kUserList.removeAll()
+//            BasicFunctions.setUserLoggedIn()
+//            BasicFunctions.setHomeVC()
+//            BasicFunctions.fetchAllContactsFromDevice()
             self.updateDeviceToken()
             
             
@@ -588,11 +617,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
             
             if status != nil
             {
-                kUserList.removeAll()
-                BasicFunctions.setUserLoggedIn()
-                BasicFunctions.setHomeVC()
-                BasicFunctions.fetchAllContactsFromDevice()
+        
             }
+            
+            kUserList.removeAll()
+            BasicFunctions.setUserLoggedIn()
+            BasicFunctions.setHomeVC()
+            BasicFunctions.fetchAllContactsFromDevice()
             
             
         }
@@ -699,9 +730,20 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                 self.userProfileData.firstName = self.firstNameTextField.text!
                 self.userProfileData.lastName = self.lastNameTextField.text!
                 self.userProfileData.phone = self.phoneTextField.text!
-                self.userProfileData.dob = self.dateformatter.string(from: self.datePicker.date)
                 self.userProfileData.email = self.emailTextField.text!
                 self.userProfileData.password = self.passwordTextField.text!
+                
+                var dobDate : String!
+                if (self.dobTextField.text?.isEmpty)!
+                {
+                    dobDate = ""
+                }
+                else
+                {
+                    dobDate = dateformatter.string(from: self.datePicker.date)
+                }
+                
+                self.userProfileData.dob = dobDate
                 
                 var gender : Int!
                 
@@ -709,9 +751,13 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
                 {
                     gender = 1
                 }
-                else
+                else if self.genderTextField.text == "Female"
                 {
                     gender = 2
+                }
+                else
+                {
+                    gender = 0
                 }
                 
                 self.userProfileData.gender = gender

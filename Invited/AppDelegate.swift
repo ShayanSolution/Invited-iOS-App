@@ -13,6 +13,7 @@ import UserNotifications
 import Contacts
 import FacebookCore
 import TwitterKit
+import PGSideMenu
 
 
 @UIApplicationMain
@@ -20,28 +21,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 
     var window: UIWindow?
 
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        
+        
+        return true
+        
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
 
-        GMSPlacesClient.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
-        GMSServices.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
+        GMSPlacesClient.provideAPIKey("")
+        GMSServices.provideAPIKey("")
 
         
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
 
 
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
-
-
-
+        
+        
+        if kBaseURL.isEmpty
+        {
+            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
+                let urlDictionary = result as? [String : Any]
+                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+                kBirthdayMessage = urlDictionary?["BirthdayAlert"] as? String ?? kBirthdayMessage
+                
+                
+                
+            }
+        }
+        
         
         if BasicFunctions.getIfUserLoggedIn()
         {
             BasicFunctions.setHomeVC()
         }
-        
         
         
         self.registerForPushNotifications(application: application)
@@ -140,7 +158,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         
         print("Notification data: \(response.notification.request.content.userInfo)")
-        NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [AnyHashable : Any] )
+        
+        
+        if ((self.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController)?.topViewController is HomeVC
+        {
+//            kIsNotificationReceived = true
+            NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [String : Any] )
+        }
+        else
+        {
+            kNotificationData = response.notification.request.content.userInfo["custom_data"] as? [String : Any]
+            BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
+        }
+        
+        
+        
+        
+        
+        
+        
     }
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
 //        return SDKApplicationDelegate.shared.application(app, open: url, options: options)
@@ -175,13 +211,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        if kBaseURL.isEmpty
-        {
-            ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
-                let urlDictionary = result as? [String : Any]
-                kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
-            }
-        }
+
         
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()
