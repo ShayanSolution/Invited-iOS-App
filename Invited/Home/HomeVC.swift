@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import Contacts
+import ContactsUI
 import TwitterKit
 import FBSDKLoginKit
 import MessageUI
@@ -126,7 +127,7 @@ extension NSMutableAttributedString {
 
 
 @available(iOS 9.0, *)
-class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate{
+class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MFMessageComposeViewControllerDelegate,RSKImageCropViewControllerDelegate,CNContactViewControllerDelegate{
     
     
 
@@ -173,6 +174,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var placeSelectedORCancelled : Bool!
     var isMessageControllerPresented : Bool!
     var isCropImage : Bool!
+    var isContactVCPresented : Bool!
     
 //    var selectedButton : UIButton!
     
@@ -235,6 +237,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.isMessageControllerPresented = false
         self.isCropImage = false
         kIsDisplayOnlyImage = false
+        self.isContactVCPresented = false
         
         
         self.setUpScrollView()
@@ -295,6 +298,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     override func viewDidAppear(_ animated: Bool)
     {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
@@ -346,6 +350,10 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         else if kIsDisplayOnlyImage
         {
             kIsDisplayOnlyImage = false
+        }
+        else if self.isContactVCPresented
+        {
+            self.isContactVCPresented = false
         }
         else if !self.isMessageControllerPresented && !self.isCropImage
         {
@@ -1571,6 +1579,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
             
 
+            requestEventCell?.eventName.delegate = self
             requestEventCell?.eventName.text = eventData.title
 //            requestEventCell?.eventCreatedDate.attributedText = NSMutableAttributedString().bold("Date and time of invite sent : ").normal(dateformatter.string(from: createdDate!))
             
@@ -1718,7 +1727,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
 //            formatter2.dateFormat = "hh:mm a"
             
-//            yourEventsCell?.title.delegate = self
+            yourEventsCell?.title.delegate = self
 
             yourEventsCell?.title.text = eventData.title
             yourEventsCell?.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
@@ -1796,6 +1805,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             {
                 receivedEventsCell = Bundle.main.loadNibNamed("ReceivedEventsCell", owner: nil, options: nil)?[0] as? ReceivedEventsCell
             }
+            
+            receivedEventsCell?.title.delegate = self
             
             
             let eventData = self.receivedRequestEventList[indexPath.row]
@@ -2313,6 +2324,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         return true
     }
+    
+    // TextView Delegate Methods
     func textViewDidBeginEditing(_ textView: UITextView) {
         
         if textView.text == "Message"
@@ -2330,7 +2343,18 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
         }
     }
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        
+        if (URL.scheme?.contains("tel"))!
+        {
+            self.addPhoneNumber(phNo: URL.absoluteString.components(separatedBy: ":")[1])
+            return false
+        }
+        
+        return true
+    }
     
+    // TextField Delegate Methods
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         
@@ -2361,6 +2385,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
+    
+    
     @objc func showReceivedEventDetailView(sender:UIButton)
     {
         let eventData = self.receivedRequestEventList[sender.tag]
@@ -2380,6 +2406,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
             self.sentByMeView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
+            
+            self.sentByMeView.eventName.delegate = self
             
             
             self.sentByMeView.acceptedUserTableView.register(UINib(nibName: "ContactCell", bundle: nil), forCellReuseIdentifier: "ContactCell")
@@ -2451,6 +2479,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
             BasicFunctions.setRoundCornerOfButton(button: self.acceptByMeView.startNavigationButton, radius: 5.0)
             
+            self.acceptByMeView.titleTextView.delegate = self
             
             self.acceptByMeView.titleTextView.attributedText = NSMutableAttributedString().bold("Message: ").normal(eventData.title)
 //            self.acceptByMeView.totalInvited.attributedText = NSMutableAttributedString().bold("Total invited : ").normal(String(eventData.totalInvited))
@@ -2593,6 +2622,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
     
         self.detailView.frame = CGRect(x: 0 , y: 44, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.height - 44))
+        
+        self.detailView.titleTextView.delegate = self
         
         let eventData = self.requestEventList[sender.tag]
         
@@ -2780,6 +2811,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //
 //        formatter2.dateFormat = "hh:mm a"
         
+        self.eventDetailView.titleTextView.delegate = self
         
         self.eventDetailView.titleTextView.text = eventData.title
         self.eventDetailView.listName.attributedText = NSMutableAttributedString().bold("List name: ").normal(String(format: "%@ (%d)", eventData.listName,eventData.totalInvited))
@@ -4047,27 +4079,30 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
     }
     
-//    func addPhoneNumber(phNo : String) {
-//        if #available(iOS 9.0, *) {
-//            let store = CNContactStore()
-//            let contact = CNMutableContact()
-//            let homePhone = CNLabeledValue(label: CNLabelHome, value: CNPhoneNumber(stringValue :phNo ))
-//            contact.phoneNumbers = [homePhone]
-//            let controller = CNContactViewController(forUnknownContact : contact)
-//            controller.contactStore = store
-//            controller.delegate = self
-//            self.navigationController?.setNavigationBarHidden(false, animated: true)
-//            self.navigationController!.pushViewController(controller, animated: true)
-//        }
-//    }
-//    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?) {
-//        print("dismiss contact")
-//
-//        self.navigationController?.popViewController(animated: true)
-//    }
-//    func contactViewController(_ viewController: CNContactViewController, shouldPerformDefaultActionFor property: CNContactProperty) -> Bool {
-//        return true
-//    }
+    func addPhoneNumber(phNo : String) {
+        
+            let store = CNContactStore()
+            let contact = CNMutableContact()
+            let homePhone = CNLabeledValue(label: CNLabelHome, value: CNPhoneNumber(stringValue :phNo ))
+            contact.phoneNumbers = [homePhone]
+            let controller = CNContactViewController(forUnknownContact : contact)
+            controller.contactStore = store
+            controller.delegate = self
+            controller.allowsActions = false
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.isContactVCPresented = true
+            self.navigationController!.pushViewController(controller, animated: true)
+    }
+    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?) {
+        print("dismiss contact")
+
+        self.navigationController?.popViewController(animated: true)
+    }
+    func contactViewController(_ viewController: CNContactViewController, shouldPerformDefaultActionFor property: CNContactProperty) -> Bool {
+        return true
+    }
+    
+    
     @objc func updateButtonTapped(sender : UIButton)
     {
         if (self.editEventView.titleTextView.text?.isEmpty)! || self.editEventView.titleTextView.text == "Message"
@@ -4744,12 +4779,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
-//    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-//
-//        print("Link Selected!")
-//
-//        return true
-//    }
     
     
     

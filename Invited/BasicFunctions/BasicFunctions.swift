@@ -102,6 +102,7 @@ class BasicFunctions: NSObject {
         }
         vc.present(imagePicker, animated: true, completion: nil)
         
+        
     }
     class func openCamera(vc:UIViewController!, isEditing:Bool!) -> Void
     {
@@ -116,6 +117,7 @@ class BasicFunctions: NSObject {
             
         }
         vc.present(imagePicker, animated: true, completion: nil)
+
         
     }
     class func openActionSheet(vc:UIViewController!, isEditing:Bool!)
@@ -282,19 +284,19 @@ class BasicFunctions: NSObject {
     
     class func getTitleAccordingToDateAndTimeFormat (dateTimeString : String!) -> String
     {
-        var titleString = "Date and time of event: "
-        if dateTimeString.range(of: "-") != nil && dateTimeString.range(of: ":") != nil
-        {
-            
-        }
-        else if dateTimeString.range(of: "-") != nil
-        {
-            titleString = "Date of event: "
-        }
-        else if dateTimeString.range(of: ":") != nil
-        {
-            titleString = "Time of event: "
-        }
+        let titleString = "Valid till: "
+//        if dateTimeString.range(of: "-") != nil && dateTimeString.range(of: ":") != nil
+//        {
+//
+//        }
+//        else if dateTimeString.range(of: "-") != nil
+//        {
+//            titleString = "Date of event: "
+//        }
+//        else if dateTimeString.range(of: ":") != nil
+//        {
+//            titleString = "Time of event: "
+//        }
         return titleString
     }
     class func checkFormat(dateTimeString : String!) -> String
