@@ -112,7 +112,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         if updatedDate != nil
         {
-            year = BasicFunctions.compareDates(fromDate: updatedDate, toDate: currentDate)
+            year = BasicFunctions.compareDates(fromDate: updatedDate, toDate: self.currentDate)
         }
 
         if year < 1

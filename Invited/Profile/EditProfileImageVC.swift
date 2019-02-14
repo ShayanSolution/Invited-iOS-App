@@ -156,6 +156,11 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
     
     func deleteGroupImageFromServer()
     {
+//        let alert = UIAlertController.init(title: "Invited", message: "Are you sure you want to remove list photo?", preferredStyle: UIAlertControllerStyle.alert)
+//        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
+//        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+        
+        
         BasicFunctions.showActivityIndicator(vu: self.view)
         
         
@@ -189,10 +194,16 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             
             
         }
+//        }))
+//        self.present(alert, animated: true, completion: nil)
     }
     
     func deleteProfileImageFromServer()
     {
+//        let alert = UIAlertController.init(title: "Invited", message: "Are you sure you want to remove profile photo?", preferredStyle: UIAlertControllerStyle.alert)
+//        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
+//        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+        
         BasicFunctions.showActivityIndicator(vu: self.view)
         
         var postParams = [String : Any]()
@@ -225,6 +236,8 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             }
             
         }
+//        }))
+//        self.present(alert, animated: true, completion: nil)
     }
     
     func getProfileFromServer()
