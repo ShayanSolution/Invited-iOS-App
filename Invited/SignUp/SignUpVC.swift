@@ -474,7 +474,7 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
         postParams["role"] = "user"
         
         BasicFunctions.showActivityIndicator(vu: self.view)
-        
+        print(kBaseURL)
         ServerManager.sign(in: postParams, withBaseURL : kBaseURL) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)

@@ -21,6 +21,7 @@ var kNotificationData : [String : Any]?
 //let kSelectedLat = "selectedLat"
 //let kSelectedLong = "selectedLong"
 let kIfUserLoggedIn = "isUserLoggedIn"
+let kBaseURLInPrefrences = "baseURLInPrefrences"
 let kUserID = "userID"
 let kAccessToken = "accessToken"
 let kFirstName = "firstName"

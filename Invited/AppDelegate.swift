@@ -42,17 +42,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
         
+        let baseURL = BasicFunctions.getPreferences(kBaseURLInPrefrences) as? String
         
-        if kBaseURL.isEmpty
+        
+        if kBaseURL.isEmpty && baseURL == nil
         {
             ServerManager.getURL(nil, withBaseURL: kConfigURL) { (result) in
                 let urlDictionary = result as? [String : Any]
+
                 kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
+                kBaseURL = "http://" + kBaseURL;
                 kBirthdayMessage = urlDictionary?["BirthdayAlert"] as? String ?? kBirthdayMessage
+                
+                BasicFunctions.setPreferences(kBaseURL, key: kBaseURLInPrefrences)
                 
                 
                 
             }
+        }
+        else if kBaseURL.isEmpty && baseURL != nil
+        {
+            kBaseURL = baseURL!
         }
         
         
@@ -60,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         {
             BasicFunctions.setHomeVC()
         }
+        
         
         
         self.registerForPushNotifications(application: application)
@@ -218,6 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()
         {
+            
             CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
                 if (granted){
                     

@@ -11,7 +11,7 @@
 
 
 
-//#define kBaseURL @"http://invited.shayansolutions.com/"
+//#define kBaseURL @"http://invited2.shayansolutions.com/"
 //#define kBaseURL @"http://dev.invited.shayansolutions.com/"
 
 //#if DEBUG
@@ -41,28 +41,62 @@
 //    return sharedInstance;
 //}
 
-+ (AFHTTPRequestOperationManager *) sharedWebService: (NSString *)baseURL
+//+ (AFHTTPRequestOperationManager *) sharedWebService: (NSString *)baseURL
+//{
+//    //static dispatch_once_t once;
+//    AFHTTPRequestOperationManager * sharedInstance;
+//    //dispatch_once(&once, ^{
+////    if (sharedInstance == nil)
+////        {
+//
+//            sharedInstance = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
+//            [sharedInstance setResponseSerializer:[AFJSONResponseSerializer serializer]];
+//            [sharedInstance setRequestSerializer:[AFHTTPRequestSerializer serializer]];
+//            [sharedInstance.requestSerializer setTimeoutInterval:300];
+//            [sharedInstance.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html", nil]];
+//
+////        }
+//
+//
+//
+//
+//    //});
+//    return sharedInstance;
+//}
+
++ (AFHTTPRequestOperationManager *) sharedWebServiceWithBaseURL: (NSString *)baseURL token : (NSString*) token
 {
-    static dispatch_once_t once;
-    static AFHTTPRequestOperationManager * sharedInstance;
-    dispatch_once(&once, ^{
-        if (sharedInstance == nil) {
-            
-            sharedInstance = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
-            [sharedInstance setResponseSerializer:[AFJSONResponseSerializer serializer]];
-            [sharedInstance setRequestSerializer:[AFHTTPRequestSerializer serializer]];
-            [sharedInstance.requestSerializer setTimeoutInterval:300];
-            [sharedInstance.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html", nil]];
-            
-        }
+//    static dispatch_once_t once;
+    AFHTTPRequestOperationManager * shared;
+//    dispatch_once(&once, ^{
+//    if (shared == nil)
+//    {
+    
+        shared = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
+        [shared setResponseSerializer:[AFJSONResponseSerializer serializer]];
+        [shared setRequestSerializer:[AFHTTPRequestSerializer serializer]];
+        [shared.requestSerializer setTimeoutInterval:300];
+        [shared.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html", nil]];
+    
+    if (![token  isEqual: @""])
+    {
+        [shared.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
         
-    });
-    return sharedInstance;
+    }
+//        [sharedInstance.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
+//    }
+    
+    
+    
+    
+//    });
+    return shared;
 }
 
 + (void) getURL:(NSDictionary *) signInData withBaseURL : (NSString*) url withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url] GET:@"config.json" parameters:signInData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] GET:@"config.json" parameters:signInData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -88,7 +122,7 @@
 }
 + (void) signIn:(NSDictionary *) signInData withBaseURL : (NSString*) url withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url] POST:@"login" parameters:signInData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"login" parameters:signInData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -116,7 +150,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"register/validation" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"register/validation" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -144,7 +178,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"register-user" parameters:signUpData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"register-user" parameters:signUpData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -172,7 +206,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"social-signup-user" parameters:signUpData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"social-signup-user" parameters:signUpData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -200,7 +234,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"sms" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"sms" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -228,7 +262,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"phone/verification?" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"phone/verification?" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -256,7 +290,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"forget-password/send-code" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"forget-password/send-code" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -284,7 +318,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"forget-password/verify-code" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"forget-password/verify-code" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -312,7 +346,7 @@
 {
     
     
-    [[ServerManager sharedWebService: url] POST:@"forget-password/update-password" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:@""] POST:@"forget-password/update-password" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -339,10 +373,10 @@
 
 + (void) createList:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token  withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] POST:@"create-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"create-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -368,10 +402,10 @@
 }
 + (void) getContactList:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"get-contact-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"get-contact-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -393,10 +427,10 @@
 }
 + (void) createEvent:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] POST:@"create-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"create-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -419,10 +453,10 @@
 }
 + (void) getUserEvents:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"get-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"get-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -447,10 +481,10 @@
 }
 + (void) getRequests:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"get-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"get-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -473,10 +507,10 @@
 }
 + (void) updateEvent:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] POST:@"update-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"update-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -500,10 +534,10 @@
 }
 + (void) acceptEventRequest:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"accept-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"accept-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -527,10 +561,10 @@
 }
 + (void) rejectEventRequest:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"reject-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"reject-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -554,10 +588,10 @@
 }
 + (void) updateDeviceToken:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] POST:@"update-device-token" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"update-device-token" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -582,10 +616,10 @@
 
 + (void) getReceivedRequests:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"received-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"received-request" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -608,10 +642,10 @@
 }
 + (void) signOut:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"logout" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"logout" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -635,10 +669,10 @@
 }
 + (void) updateList:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] POST:@"update-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"update-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -662,10 +696,10 @@
 }
 + (void) deleteList:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"delete-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"delete-list" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -689,10 +723,10 @@
 }
 + (void) deleteEvent:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"delete-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"delete-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -716,10 +750,10 @@
 }
 + (void) cancelEvent:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    [[ServerManager sharedWebService: url] GET:@"cancel-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] GET:@"cancel-event" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -743,9 +777,9 @@
 }
 + (void) sendReport:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [[ServerManager sharedWebService: url] POST:@"send-report" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"send-report" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -771,9 +805,9 @@
 }
 + (void) getUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [[ServerManager sharedWebService: url] POST:@"get-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"get-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
@@ -799,9 +833,9 @@
 }
 + (void) updateUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
-    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
-    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [[ServerManager sharedWebService: url] POST:@"update-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+//    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[ServerManager sharedWebServiceWithBaseURL:url token:token] POST:@"update-user" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
         resultBlock((NSDictionary*)responseObject );
     }
      
