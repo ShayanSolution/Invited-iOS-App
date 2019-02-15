@@ -41,6 +41,8 @@ var kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunction
 
 var kBirthdayMessage = "It is highly recommended that you provide “Date of Birth” for getting exclusive special discounts, or even completely free “Birthday Presents” from top brands ;and free “Dining Offers” from some of the best restaurants in your city on your special day. Go to “PROFILE” in the menu and update now."
 
+let kDefaultImageURL = "http://dev.invited.shayansolutions.com/storage/images/%22+phoneNum+%22.jpg%22;"
+
 #if DEVELOPMENT
 var kBaseURL = "http://dev.invited.shayansolutions.com/"
 #else

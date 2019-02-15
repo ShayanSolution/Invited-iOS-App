@@ -505,10 +505,12 @@ class BasicFunctions: NSObject {
             
             for contact in results
             {
+                
                 let contactData = ContactData()
                 contactData.name = contact.givenName + " " + contact.familyName
                 //            contactData.phoneNumber = ((contact.phoneNumbers.first?.value)?.stringValue)!
-                if contact.isKeyAvailable(CNContactPhoneNumbersKey){
+                if contact.isKeyAvailable(CNContactPhoneNumbersKey)
+                {
                     let phoneNOs=contact.phoneNumbers
                     for item in phoneNOs
                     {
@@ -516,6 +518,14 @@ class BasicFunctions: NSObject {
                         contactData.phoneNumber = item.value.stringValue
                     }
                 }
+                
+//                if let imageData = contact.thumbnailImageData {
+////                    print("image \(String(describing: UIImage(data: imageData)))")
+//                    contactData.imageData = imageData
+//
+//                } else {
+//                    print("No image available")
+//                }
                 
 //                if kContactList.contains(where: { $0.phoneNumber.stringByRemovingWhitespaces.suffix(9) == contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) }) && kContactList.contains(where: { $0.name == contactData.name })
 //                {
@@ -545,7 +555,7 @@ class BasicFunctions: NSObject {
     class func openDatabase() -> OpaquePointer? {
         var db: OpaquePointer? = nil
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                      .appendingPathComponent("num.sqlite")
+                      .appendingPathComponent("PhoneContacts.sqlite")
         if sqlite3_open(fileURL.path, &db) == SQLITE_OK {
             print("Successfully opened connection to database at \(fileURL.path)")
             return db
@@ -583,7 +593,7 @@ class BasicFunctions: NSObject {
         
         self.delete(db: db)
     }
-    class func insert(id : Int32 ,name : NSString , phone : NSString , db : OpaquePointer?) {
+    class func insert(id : Int32 , name : NSString , phone : NSString , db : OpaquePointer?) {
         
     
         let insertStatementString = "INSERT INTO Contact (Id,Name, Phone) VALUES (?, ?, ?);"
@@ -603,6 +613,18 @@ class BasicFunctions: NSObject {
             sqlite3_bind_int(insertStatement, 1, id)
             sqlite3_bind_text(insertStatement, 2, name.utf8String, -1, nil)
             sqlite3_bind_text(insertStatement, 3, phone.utf8String, -1, nil)
+            
+//            var strBase64 : NSString!
+//
+//            if imageData != nil
+//            {
+//                strBase64 = imageData!.base64EncodedString(options: .lineLength64Characters) as NSString
+//                sqlite3_bind_text(insertStatement, 4, strBase64.utf8String, -1, nil)
+//            }
+//            else
+//            {
+//                sqlite3_bind_text(insertStatement, 4, strBase64.utf8String, -1, nil)
+//            }
             
             // 4
             if sqlite3_step(insertStatement) == SQLITE_DONE {
@@ -657,12 +679,20 @@ class BasicFunctions: NSObject {
                 let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
                 let phone = String(cString: queryResultCol2!)
                 
+//                let queryResultCol3 = sqlite3_column_text(queryStatement, 3)
+//                let imageDataString = String(cString: queryResultCol3!)
+                
                 
                 print("\(name) | \(phone)")
                 
                 let contactData = ContactData()
                 contactData.name = name
                 contactData.phoneNumber = phone.stringByRemovingWhitespaces
+                
+//                if imageDataString != ""
+//                {
+//                    contactData.imageData = Data(base64Encoded: imageDataString, options: .ignoreUnknownCharacters)!
+//                }
                 
                 kContactList.append(contactData)
                 
@@ -773,6 +803,26 @@ class BasicFunctions: NSObject {
         return " "
         
     }
+    
+//    class func getImageDataFromContactList(phoneNumber : String) -> Data
+//    {
+//        if kContactList.count > 0
+//        {
+//            for contactData in kContactList
+//            {
+//                contactData.phoneNumber = contactData.phoneNumber.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
+//                let phone = phoneNumber.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
+//                if contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) == phone.stringByRemovingWhitespaces.suffix(9)
+//                {
+//                    return contactData.imageData
+//                }
+//            }
+//        }
+//
+//
+//        return Data()
+//
+//    }
     
     
 }

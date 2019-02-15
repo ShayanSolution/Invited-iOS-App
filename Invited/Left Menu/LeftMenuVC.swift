@@ -7,8 +7,7 @@
 //
 
 import UIKit
-import FBSDKLoginKit
-import TwitterKit
+
 
 class LeftMenuVC: UIViewController {
     

@@ -10,8 +10,6 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import Contacts
-import TwitterKit
-import FBSDKLoginKit
 import MessageUI
 
 
@@ -3966,7 +3964,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 let phoneNumberString = nonAppUsersPhoneNumbers
                 let recipientsArray = phoneNumberString!.components(separatedBy: ",")
                 
-                let alert = UIAlertController.init(title: "Event Created", message: "Some contacts from your list are not using invited APP. Do you want to invite them on invited app ?", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController.init(title: "Event Created", message: String(format: "Some contacts (%d) from your list are not using invited APP. Do you want to invite them on invited app?", recipientsArray.count), preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
 
