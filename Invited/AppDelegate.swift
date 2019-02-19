@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                 let urlDictionary = result as? [String : Any]
 
                 kBaseURL = urlDictionary?["URL"] as? String ?? "http://dev.invited.shayansolutions.com/"
-                kBaseURL = "http://" + kBaseURL;
+                kBaseURL = String(format: "http://%@/", kBaseURL)
                 kBirthdayMessage = urlDictionary?["BirthdayAlert"] as? String ?? kBirthdayMessage
                 
                 BasicFunctions.setPreferences(kBaseURL, key: kBaseURLInPrefrences)

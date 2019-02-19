@@ -63,24 +63,24 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
-        self.firstNameTextField.text = kLoggedInUserProfile.firstName
-        self.lastNameTextField.text = kLoggedInUserProfile.lastName
-        self.emailTextField.text = kLoggedInUserProfile.email
-        self.dobTextField.text = kLoggedInUserProfile.dob
-        self.dorTextField.text = kLoggedInUserProfile.dor
+        self.firstNameTextField.text = kLoggedInUserProfile?.firstName
+        self.lastNameTextField.text = kLoggedInUserProfile?.lastName
+        self.emailTextField.text = kLoggedInUserProfile?.email
+        self.dobTextField.text = kLoggedInUserProfile?.dob
+        self.dorTextField.text = kLoggedInUserProfile?.dor
         
         
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
         var updatedDate : Date!
 
-        if kLoggedInUserProfile.updatedAt != ""
+        if kLoggedInUserProfile?.updatedAt != ""
         {
-            updatedDate = self.dateFormatter.date(from: kLoggedInUserProfile.updatedAt!)
+            updatedDate = self.dateFormatter.date(from: (kLoggedInUserProfile?.updatedAt)!)
         }
-        else if kLoggedInUserProfile.createdAt != ""
+        else if kLoggedInUserProfile?.createdAt != ""
         {
-            updatedDate = self.dateFormatter.date(from: kLoggedInUserProfile.createdAt!)
+            updatedDate = self.dateFormatter.date(from: (kLoggedInUserProfile?.createdAt)!)
         }
 
 
@@ -95,12 +95,12 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         if year < 1
         {
-            if kLoggedInUserProfile.dob != ""
+            if kLoggedInUserProfile?.dob != ""
             {
                 self.dobTextField.isUserInteractionEnabled = false
             }
 
-            if kLoggedInUserProfile.dor != ""
+            if kLoggedInUserProfile?.dor != ""
             {
                 self.dorTextField.isUserInteractionEnabled = false
             }
@@ -408,12 +408,12 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.dropDownPickerView.delegate = self
         
         
-        if kLoggedInUserProfile.gender == 0
+        if kLoggedInUserProfile?.gender == 0
         {
             self.genderTextField.text = ""
             self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
         }
-        else if kLoggedInUserProfile.gender == 1
+        else if kLoggedInUserProfile?.gender == 1
         {
             self.genderTextField.text = "Male"
             self.dropDownPickerView.selectRow(1, inComponent: 0, animated: false)

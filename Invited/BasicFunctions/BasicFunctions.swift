@@ -76,6 +76,9 @@ class BasicFunctions: NSObject {
         BasicFunctions.removePreferences(kBaseURLInPrefrences)
         BasicFunctions.removePreferences(kUserID)
         BasicFunctions.removePreferences(kAccessToken)
+        BasicFunctions.removePreferences(kUserProfile)
+        
+        kLoggedInUserProfile = nil
         
         
         let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
