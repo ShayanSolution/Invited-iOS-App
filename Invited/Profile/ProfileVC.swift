@@ -297,18 +297,9 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             postParams["dateofrelation"] = ""
         }
         
-        var imageData : Data?
-        
-        if kImage != nil
-        {
-            var scaleImage : UIImage!
-            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
-            
-            imageData = UIImagePNGRepresentation(scaleImage)
-        }
         
         
-        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL, withImageData : imageData,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -575,7 +566,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
         kImage = croppedImage
-        self.navigationController?.popViewController(animated: true)
+        self.uploadProfileImageOnServer(vc: controller)
     }
     
     // RSKImageCropViewControllerDataSource Methods
@@ -587,6 +578,63 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     func imageCropViewControllerCustomMaskPath(_ controller: RSKImageCropViewController) -> UIBezierPath {
         
         return UIBezierPath(rect: controller.maskRect)
+    }
+    
+    // Upload Profile Image on Server
+    func uploadProfileImageOnServer(vc : RSKImageCropViewController)
+    {
+        BasicFunctions.showActivityIndicator(vu: vc.view)
+        
+        var postParams = [String : Any]()
+        postParams["user_id"] = kLoggedInUserProfile.userID
+        
+        var imageData : Data?
+        
+        if kImage != nil
+        {
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: kImage!, targetSize: CGSize.init(width: 320.0, height: 320.0))
+            
+            imageData = UIImagePNGRepresentation(scaleImage)
+        }
+        
+        ServerManager.updateUserProfileImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: vc.view)
+            self.handleServerResponseOfUpdateProfileImage(json: result as? [String : Any])
+            
+            
+        }
+        
+        
+    }
+    func handleServerResponseOfUpdateProfileImage(json : [String : Any]?)
+    {
+        
+        let status = json?["status"] as? String
+        let message = json?["message"] as? String
+        let msg = json?["messages"] as? String
+        
+        if message != nil && message == "Unauthorized"
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+            BasicFunctions.showSigInVC()
+            return
+            
+        }
+        
+        if status == "success"
+        {
+            self.navigationController?.popViewController(animated: true)
+            BasicFunctions.showAlert(vc: self, msg: msg)
+            return
+        }
+        
+        if message != nil
+        {
+            BasicFunctions.showAlert(vc: self, msg: message)
+        }
+        
     }
     
     

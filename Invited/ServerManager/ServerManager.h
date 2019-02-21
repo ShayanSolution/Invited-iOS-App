@@ -40,9 +40,10 @@ typedef void(^TMARServiceResultBlock)(NSDictionary *result);
 + (void) cancelEvent:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) sendReport:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) getUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
-+ (void) updateUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url withImageData : (NSData *)imageData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
++ (void) updateUserProfile:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) updateListImage:(NSDictionary *) inputData withBaseURL : (NSString*) url withImageData : (NSData *)imageData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) deleteProfileImage:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
 + (void) deleteListImage:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
++ (void) updateUserProfileImage:(NSDictionary *) inputData withBaseURL : (NSString*) url withImageData : (NSData *)imageData accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock;
 
 @end

@@ -804,6 +804,8 @@ class BasicFunctions: NSObject {
         
     }
     
+    
+    
 //    class func getImageDataFromContactList(phoneNumber : String) -> Data
 //    {
 //        if kContactList.count > 0

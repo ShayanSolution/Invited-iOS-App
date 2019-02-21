@@ -40,6 +40,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        kIsDisplayOnlyImage = false
         self.searchData = self.listData.contactList
         self.contactListTableView.reloadData()
         
@@ -134,12 +135,15 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         }
         
         cell?.accessoryView?.isHidden = true
+        cell?.profileButton.isHidden = false
         
         let contactData = self.searchData[indexPath.row]
         
         cell?.deleteButton.tag = indexPath.row
+        cell?.profileButton.tag = indexPath.row
         
         cell?.deleteButton.addTarget(self, action: #selector(self.deleteContact(sender:)), for: UIControlEvents.touchUpInside)
+        cell?.profileButton.addTarget(self, action: #selector(self.displayOnlyImageForContact(sender:)), for: UIControlEvents.touchUpInside)
         
         let name = BasicFunctions.getNameFromContactList(phoneNumber: contactData.phoneNumber)
         
@@ -155,8 +159,10 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
 //        let imageData = BasicFunctions.getImageDataFromContactList(phoneNumber: contactData.phoneNumber)
         
+        let imageURL = String(format: "http://dev.invited.shayansolutions.com/storage/images/%@.jpg", contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) as CVarArg)
         
-        cell?.profileImageView.imageURL = URL.init(string: String(format: "http://dev.invited.shayansolutions.com/storage/images/%@.jpg", contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) as CVarArg))
+        contactData.imageURL = imageURL
+        cell?.profileImageView.imageURL = URL.init(string: imageURL)
         
         
         return cell!
@@ -203,6 +209,23 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 //        return[editAction,deleteAction]
 //
 //    }
+    
+    @objc func displayOnlyImageForContact(sender : UIButton)
+    {
+        let contactData = self.searchData[sender.tag]
+        
+        
+        if contactData.imageURL != ""
+        {
+            let cell : ContactCell = self.contactListTableView.cellForRow(at: IndexPath.init(row: sender.tag, section: 0)) as! ContactCell
+            
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
+            let editProfileImageVC : EditProfileImageVC = storyBoard.instantiateViewController(withIdentifier: "EditProfileImageVC") as! EditProfileImageVC
+            editProfileImageVC.profileImage = cell.profileImageView.image
+            kIsDisplayOnlyImage = true
+            BasicFunctions.pushVCinNCwithObject(vc: editProfileImageVC, popTop: false)
+        }
+    }
     
     @objc func deleteContact(sender : UIButton)
     {

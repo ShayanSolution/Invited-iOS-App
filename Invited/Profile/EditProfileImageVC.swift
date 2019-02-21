@@ -80,11 +80,14 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
         self.profileImageView.image = croppedImage
-        self.navigationController?.popViewController(animated: true)
         
         if self.userListObject != nil
         {
-            self.uploadGroupImageOnServer()
+            self.uploadGroupImageOnServer(vc: controller)
+        }
+        else
+        {
+            self.uploadProfileImageOnServer(vc: controller)
         }
         
     }
@@ -100,10 +103,10 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         return UIBezierPath(rect: controller.maskRect)
     }
     
-    func uploadGroupImageOnServer()
+    func uploadGroupImageOnServer(vc : UIViewController)
     {
         
-        BasicFunctions.showActivityIndicator(vu: self.view)
+        BasicFunctions.showActivityIndicator(vu: vc.view)
         
         var imageData : Data?
         
@@ -116,7 +119,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         postParams["list_id"] = self.userListObject!.id
         ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile.accessToken) { (result) in
             
-            BasicFunctions.stopActivityIndicator(vu: self.view)
+            BasicFunctions.stopActivityIndicator(vu: vc.view)
             
             let json = result as? [String : Any]
             //            let msg = json["messages"] as? String
@@ -133,11 +136,72 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             
             if json?["error"] == nil
             {
-                self.navigationController?.popViewController(animated: true)
+                AsyncImageLoader.defaultCache()?.removeAllObjects()
+//                self.navigationController?.popViewController(animated: true)
+                self.navigationController?.popToRootViewController(animated: true)
                 //                BasicFunctions.showAlert(vc: self, msg: msg)
             }
             
         }
+    }
+    
+    // Upload Profile Image on Server
+    func uploadProfileImageOnServer(vc : RSKImageCropViewController)
+    {
+        BasicFunctions.showActivityIndicator(vu: vc.view)
+        
+        var postParams = [String : Any]()
+        postParams["user_id"] = kLoggedInUserProfile.userID
+        
+        var imageData : Data?
+        
+        
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
+            
+            imageData = UIImagePNGRepresentation(scaleImage)
+        
+        
+        ServerManager.updateUserProfileImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: vc.view)
+            self.handleServerResponseOfUpdateProfileImage(json: result as? [String : Any])
+            
+            
+        }
+        
+        
+    }
+    func handleServerResponseOfUpdateProfileImage(json : [String : Any]?)
+    {
+        
+        let status = json?["status"] as? String
+        let message = json?["message"] as? String
+//        let msg = json?["messages"] as? String
+        
+        if message != nil && message == "Unauthorized"
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+            BasicFunctions.showSigInVC()
+            return
+            
+        }
+        
+        if status == "success"
+        {
+            AsyncImageLoader.defaultCache()?.removeAllObjects()
+//            self.navigationController?.popViewController(animated: true)
+            kImage = self.profileImageView.image
+            self.navigationController?.popToRootViewController(animated: true)
+//            BasicFunctions.showAlert(vc: self, msg: msg)
+            return
+        }
+        
+        if message != nil
+        {
+            BasicFunctions.showAlert(vc: self, msg: message)
+        }
+        
     }
     
     
@@ -181,6 +245,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             
             if status == "success"
             {
+                AsyncImageLoader.defaultCache()?.removeAllObjects()
                 self.navigationController?.popViewController(animated: true)
                 return
             }
@@ -217,6 +282,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             
             if status == "success"
             {
+                AsyncImageLoader.defaultCache()?.removeAllObjects()
                 self.getProfileFromServer()
             }
             else

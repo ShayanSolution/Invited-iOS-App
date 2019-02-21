@@ -4015,33 +4015,33 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             self.isMessageControllerPresented = false
             
-            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
-
-                UIView.animate(withDuration: 0.25) {
-
-                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
-
-                }
-
-            }
-
-            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
-            self.mainScrollView.setContentOffset( point, animated: true)
-
-
-            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
-
-                UIView.animate(withDuration: 0.25) {
-
-                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
-
-                }
-
-
-            }
-            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
-            self.fetchUserEventsFromServer()
+//            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+//
+//                UIView.animate(withDuration: 0.25) {
+//
+//                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+//
+//                }
+//
+//            }
+//
+//            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+//            self.mainScrollView.setContentOffset( point, animated: true)
+//
+//
+//            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+//
+//                UIView.animate(withDuration: 0.25) {
+//
+//                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+//
+//                }
+//
+//
+//            }
+//            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+//            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+//            self.fetchUserEventsFromServer()
         }
     }
     
