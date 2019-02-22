@@ -117,7 +117,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         
         var postParams = [String : Any]()
         postParams["list_id"] = self.userListObject!.id
-        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+        ServerManager.updateListImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile?.accessToken) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: vc.view)
             
@@ -151,7 +151,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         BasicFunctions.showActivityIndicator(vu: vc.view)
         
         var postParams = [String : Any]()
-        postParams["user_id"] = kLoggedInUserProfile.userID
+        postParams["user_id"] = kLoggedInUserProfile?.userID
         
         var imageData : Data?
         
@@ -162,7 +162,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             imageData = UIImagePNGRepresentation(scaleImage)
         
         
-        ServerManager.updateUserProfileImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+        ServerManager.updateUserProfileImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile?.accessToken) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: vc.view)
             self.handleServerResponseOfUpdateProfileImage(json: result as? [String : Any])
@@ -226,7 +226,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         var postParams = [String : Any]()
         postParams["list_id"] = self.userListObject!.id
         
-        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+        ServerManager.deleteListImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile?.accessToken) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -261,9 +261,9 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
         BasicFunctions.showActivityIndicator(vu: self.view)
         
         var postParams = [String : Any]()
-        postParams["user_id"] = kLoggedInUserProfile.userID
+        postParams["user_id"] = kLoggedInUserProfile?.userID
         
-        ServerManager.deleteProfileImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile.accessToken) { (result) in
+        ServerManager.deleteProfileImage(postParams, withBaseURL: kBaseURL, accessToken: kLoggedInUserProfile?.accessToken) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
             
@@ -358,7 +358,7 @@ class EditProfileImageVC: UIViewController,UIImagePickerControllerDelegate,UINav
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
             BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
-            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as? Data ?? Data()) as? UserProfile
             
             self.profileImageView.image = nil
             kImage = nil

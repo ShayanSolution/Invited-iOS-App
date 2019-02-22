@@ -37,11 +37,11 @@ let kCancelInfo = "All users who accepted this message will get the notification
 let kDeleteInfo = "All users who have not rejected this message will get the notification that the message has been deleted."
 let kDeviceToken = "DeviceToken"
 let kUserProfile = "UserProfile"
-var kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+var kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as? Data ?? Data()) as? UserProfile
 
 var kBirthdayMessage = "It is highly recommended that you provide “Date of Birth” for getting exclusive special discounts, or even completely free “Birthday Presents” from top brands ;and free “Dining Offers” from some of the best restaurants in your city on your special day. Go to “PROFILE” in the menu and update now."
 
-let kDefaultImageURL = "http://dev.invited.shayansolutions.com/storage/images/%22+phoneNum+%22.jpg%22;"
+let kBaseURLInPrefrences = "baseURLInPrefrences"
 
 #if DEVELOPMENT
 var kBaseURL = "http://dev.invited.shayansolutions.com/"

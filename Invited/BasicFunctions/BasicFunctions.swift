@@ -187,6 +187,12 @@ class BasicFunctions: NSObject {
     class func showSigInVC()
     {
         BasicFunctions.setBoolPreferences(false, forkey: kIfUserLoggedIn)
+        BasicFunctions.removePreferences(kBaseURLInPrefrences)
+        BasicFunctions.removePreferences(kUserID)
+        BasicFunctions.removePreferences(kAccessToken)
+        BasicFunctions.removePreferences(kUserProfile)
+        
+        kLoggedInUserProfile = nil
         
         let storyBoard = UIStoryboard.init(name: "Main", bundle: Bundle.main)
         let vc = storyBoard.instantiateViewController(withIdentifier: "LogInNC")
@@ -214,6 +220,11 @@ class BasicFunctions: NSObject {
     class func getPreferences(_ key:String!) -> Any! {
         let defaults : UserDefaults = UserDefaults.standard
         return defaults.object(forKey: key) as Any!
+    }
+    class func removePreferences(_ key:String!)
+    {
+        let defaults : UserDefaults = UserDefaults.standard
+        defaults.removeObject(forKey: key)
     }
     class func getPreferencesForInt(_ key:String!) -> Int! {
         let defaults : UserDefaults = UserDefaults.standard

@@ -3536,7 +3536,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
             
-            if kLoggedInUserProfile.dob == ""
+            if kLoggedInUserProfile?.dob == ""
             {
                 self.contactsView.dobView.isHidden = false
                 self.contactsView.dobLabel.text = kBirthdayMessage
@@ -3980,13 +3980,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 {
                     var fullName : String!
                     
-                    if (kLoggedInUserProfile.firstName?.isEmpty)! && (kLoggedInUserProfile.lastName?.isEmpty)!
+                    if (kLoggedInUserProfile?.firstName?.isEmpty)! && (kLoggedInUserProfile?.lastName?.isEmpty)!
                     {
                         fullName = "Invited App"
                     }
                     else
                     {
-                        fullName = String(format: "%@ %@", kLoggedInUserProfile.firstName!,kLoggedInUserProfile.lastName!)
+                        fullName = String(format: "%@ %@", (kLoggedInUserProfile?.firstName!)!,(kLoggedInUserProfile?.lastName!)!)
                     }
                     
                     let controller = MFMessageComposeViewController()
