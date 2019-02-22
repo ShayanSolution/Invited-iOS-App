@@ -161,6 +161,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         let imageURL = String(format: "http://dev.invited.shayansolutions.com/storage/images/%@.jpg", contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) as CVarArg)
         
+        AsyncImageLoader.defaultCache()?.removeAllObjects()
         contactData.imageURL = imageURL
         cell?.profileImageView.imageURL = URL.init(string: imageURL)
         
