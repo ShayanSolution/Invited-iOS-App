@@ -73,11 +73,11 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         kImage = nil
         
-        self.firstNameTextField.text = kLoggedInUserProfile.firstName
-        self.lastNameTextField.text = kLoggedInUserProfile.lastName
-        self.emailTextField.text = kLoggedInUserProfile.email
-        self.dobTextField.text = kLoggedInUserProfile.dob
-        self.dorTextField.text = kLoggedInUserProfile.dor
+        self.firstNameTextField.text = kLoggedInUserProfile?.firstName
+        self.lastNameTextField.text = kLoggedInUserProfile?.lastName
+        self.emailTextField.text = kLoggedInUserProfile?.email
+        self.dobTextField.text = kLoggedInUserProfile?.dob
+        self.dorTextField.text = kLoggedInUserProfile?.dor
         
 //        if kLoggedInUserProfile.imageURL != ""
 //        {
@@ -96,13 +96,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         var updatedDate : Date!
 
-        if kLoggedInUserProfile.updatedAt != ""
+        if kLoggedInUserProfile?.updatedAt != ""
         {
-            updatedDate = self.dateFormatter.date(from: kLoggedInUserProfile.updatedAt!)
+            updatedDate = self.dateFormatter.date(from: (kLoggedInUserProfile?.updatedAt!)!)
         }
-        else if kLoggedInUserProfile.createdAt != ""
+        else if kLoggedInUserProfile?.createdAt != ""
         {
-            updatedDate = self.dateFormatter.date(from: kLoggedInUserProfile.createdAt!)
+            updatedDate = self.dateFormatter.date(from: (kLoggedInUserProfile?.createdAt!)!)
         }
 
 
@@ -117,12 +117,12 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 
         if year < 1
         {
-            if kLoggedInUserProfile.dob != ""
+            if kLoggedInUserProfile?.dob != ""
             {
                 self.dobTextField.isUserInteractionEnabled = false
             }
 
-            if kLoggedInUserProfile.dor != ""
+            if kLoggedInUserProfile?.dor != ""
             {
                 self.dorTextField.isUserInteractionEnabled = false
             }
@@ -147,14 +147,14 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             self.profileImageView.image = kImage
             self.editButton.isHidden = false
         }
-        else if kImage == nil && (kLoggedInUserProfile.imageURL?.isEmpty)!
+        else if kImage == nil && (kLoggedInUserProfile?.imageURL?.isEmpty)!
         {
             self.profileImageView.image = UIImage.init(named: "AddPhoto")
             self.editButton.isHidden = true
         }
-        else if kImage == nil && kLoggedInUserProfile.imageURL != ""
+        else if kImage == nil && kLoggedInUserProfile?.imageURL != ""
         {
-            self.profileImageView.imageURL = URL.init(string: kLoggedInUserProfile.imageURL!)
+            self.profileImageView.imageURL = URL.init(string: (kLoggedInUserProfile?.imageURL!)!)
             //            self.profileImage = self.profileImageView.image
             self.editButton.isHidden = false
             kImage = self.profileImageView.image
@@ -252,7 +252,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.dateFormatter.dateFormat = "dd/MM/yyyy"
         
         var postParams = [String : Any]()
-        postParams["user_id"] = kLoggedInUserProfile.userID
+        postParams["user_id"] = kLoggedInUserProfile?.userID
         postParams["firstName"] = self.firstNameTextField.text
         postParams["lastName"] = self.lastNameTextField.text
         postParams["email"] = self.emailTextField.text
@@ -297,18 +297,9 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
             postParams["dateofrelation"] = ""
         }
         
-        var imageData : Data?
-        
-        if kImage != nil
-        {
-            var scaleImage : UIImage!
-            scaleImage = BasicFunctions.resizeImage(image: self.profileImageView.image!, targetSize: CGSize.init(width: 320.0, height: 320.0))
-            
-            imageData = UIImagePNGRepresentation(scaleImage)
-        }
         
         
-        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL, withImageData : imageData,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+        ServerManager.updateUserProfile(postParams, withBaseURL : kBaseURL, accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
@@ -482,12 +473,12 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.dropDownPickerView.delegate = self
         
         
-        if kLoggedInUserProfile.gender == 0
+        if kLoggedInUserProfile?.gender == 0
         {
             self.genderTextField.text = ""
             self.dropDownPickerView.selectRow(0, inComponent: 0, animated: false)
         }
-        else if kLoggedInUserProfile.gender == 1
+        else if kLoggedInUserProfile?.gender == 1
         {
             self.genderTextField.text = "Male"
             self.dropDownPickerView.selectRow(1, inComponent: 0, animated: false)
@@ -575,7 +566,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
         
         kImage = croppedImage
-        self.navigationController?.popViewController(animated: true)
+        self.uploadProfileImageOnServer(vc: controller)
     }
     
     // RSKImageCropViewControllerDataSource Methods
@@ -587,6 +578,63 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     func imageCropViewControllerCustomMaskPath(_ controller: RSKImageCropViewController) -> UIBezierPath {
         
         return UIBezierPath(rect: controller.maskRect)
+    }
+    
+    // Upload Profile Image on Server
+    func uploadProfileImageOnServer(vc : RSKImageCropViewController)
+    {
+        BasicFunctions.showActivityIndicator(vu: vc.view)
+        
+        var postParams = [String : Any]()
+        postParams["user_id"] = kLoggedInUserProfile?.userID
+        
+        var imageData : Data?
+        
+        if kImage != nil
+        {
+            var scaleImage : UIImage!
+            scaleImage = BasicFunctions.resizeImage(image: kImage!, targetSize: CGSize.init(width: 320.0, height: 320.0))
+            
+            imageData = UIImagePNGRepresentation(scaleImage)
+        }
+        
+        ServerManager.updateUserProfileImage(postParams, withBaseURL: kBaseURL, withImageData: imageData, accessToken: kLoggedInUserProfile?.accessToken) { (result) in
+            
+            BasicFunctions.stopActivityIndicator(vu: vc.view)
+            self.handleServerResponseOfUpdateProfileImage(json: result as? [String : Any])
+            
+            
+        }
+        
+        
+    }
+    func handleServerResponseOfUpdateProfileImage(json : [String : Any]?)
+    {
+        
+        let status = json?["status"] as? String
+        let message = json?["message"] as? String
+        let msg = json?["messages"] as? String
+        
+        if message != nil && message == "Unauthorized"
+        {
+            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+            BasicFunctions.showSigInVC()
+            return
+            
+        }
+        
+        if status == "success"
+        {
+            self.navigationController?.popViewController(animated: true)
+            BasicFunctions.showAlert(vc: self, msg: msg)
+            return
+        }
+        
+        if message != nil
+        {
+            BasicFunctions.showAlert(vc: self, msg: message)
+        }
+        
     }
     
     

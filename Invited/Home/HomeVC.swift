@@ -756,13 +756,15 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             }
             
+            let point = CGPoint(x: 0, y: 0)
+            self.mainScrollView.setContentOffset( point, animated: false)
+            self.isUpdated = false
+            
+            
+            self.getContactListFromServer()
+            
         }
-        let point = CGPoint(x: 0, y: 0)
-        self.mainScrollView.setContentOffset( point, animated: false)
-        self.isUpdated = false
         
-        
-        self.getContactListFromServer()
         
     }
     
@@ -776,32 +778,34 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             }
             
+            self.isUpdated = false
+            
+            let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
+            self.mainScrollView.setContentOffset( point, animated: false)
+            
+            self.createEventView.titleTextView.text = "Message"
+            self.createEventView.titleTextView.textColor = UIColor.lightGray
+            self.createEventView.setListTextField.text = ""
+            self.createEventView.setNumberOfPeopleTextfield.text = ""
+            self.createEventView.timeTextField.text = ""
+            self.createEventView.dateTextField.text = ""
+            self.createEventView.locationTextField.text = ""
+            
+            self.createEventView.locationTextField.isUserInteractionEnabled = false
+            self.createEventView.dateTextField.isUserInteractionEnabled = false
+            self.createEventView.timeTextField.isUserInteractionEnabled = false
+            
+            self.createEventView.locationSwitch.isOn = false
+            self.createEventView.dateSwitch.isOn = false
+            self.createEventView.timeSwitch.isOn = false
+            
+            self.selectedList = nil
+            self.listID = nil
+            
+            self.showPicker(textField: self.createEventView.setListTextField)
+            
         }
-        self.isUpdated = false
         
-        let point = CGPoint(x: self.mainScrollView.frame.size.width, y: 0)
-        self.mainScrollView.setContentOffset( point, animated: false)
-        
-        self.createEventView.titleTextView.text = "Message"
-        self.createEventView.titleTextView.textColor = UIColor.lightGray
-        self.createEventView.setListTextField.text = ""
-        self.createEventView.setNumberOfPeopleTextfield.text = ""
-        self.createEventView.timeTextField.text = ""
-        self.createEventView.dateTextField.text = ""
-        self.createEventView.locationTextField.text = ""
-        
-        self.createEventView.locationTextField.isUserInteractionEnabled = false
-        self.createEventView.dateTextField.isUserInteractionEnabled = false
-        self.createEventView.timeTextField.isUserInteractionEnabled = false
-        
-        self.createEventView.locationSwitch.isOn = false
-        self.createEventView.dateSwitch.isOn = false
-        self.createEventView.timeSwitch.isOn = false
-        
-        self.selectedList = nil
-        self.listID = nil
-        
-        self.showPicker(textField: self.createEventView.setListTextField)
         
         
         
@@ -857,24 +861,25 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             }
             
+            let point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+            self.mainScrollView.setContentOffset( point, animated: false)
+            
+            
+            if self.eventStatusView.lineView.frame.origin.x == 5
+            {
+                self.fetchRequestsFromServer()
+            }
+            else if self.eventStatusView.lineView.frame.origin.x == self.eventStatusView.invitesSentView.frame.origin.x
+            {
+                self.fetchUserEventsFromServer()
+            }
+            else
+            {
+                self.fetchReceivedRequestsFromServer()
+            }
+            
         }
         
-        let point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
-        self.mainScrollView.setContentOffset( point, animated: false)
-        
-        
-        if self.eventStatusView.lineView.frame.origin.x == 5
-        {
-            self.fetchRequestsFromServer()
-        }
-        else if self.eventStatusView.lineView.frame.origin.x == self.eventStatusView.invitesSentView.frame.origin.x
-        {
-            self.fetchUserEventsFromServer()
-        }
-        else
-        {
-            self.fetchReceivedRequestsFromServer()
-        }
         
     }
     
@@ -1180,10 +1185,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             }
             
-            
-        }
             self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
             self.fetchRequestsFromServer()
+            
+            
+        }
 
         }
         else if sender.tag == 2
@@ -1198,11 +1204,12 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                 }
                 
+                point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+                self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
+                self.fetchUserEventsFromServer()
+                
             }
             
-            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
-            self.fetchUserEventsFromServer()
             
         }
         else
@@ -1217,11 +1224,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                 }
                 
+                point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
+                self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
+                self.fetchReceivedRequestsFromServer()
+                
             }
-            
-            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: false)
-            self.fetchReceivedRequestsFromServer()
             
         }
         
@@ -3527,9 +3534,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
             BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
-            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as? Data ?? Data()) as? UserProfile
             
-            if kLoggedInUserProfile.dob == ""
+            if kLoggedInUserProfile?.dob == ""
             {
                 self.contactsView.dobView.isHidden = false
                 self.contactsView.dobLabel.text = kBirthdayMessage
@@ -3964,15 +3971,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 let phoneNumberString = nonAppUsersPhoneNumbers
                 let recipientsArray = phoneNumberString!.components(separatedBy: ",")
                 
-                let alert = UIAlertController.init(title: "Event Created", message: "Some contacts from your list are not using invited APP. Do you want to invite them on invited app ?", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController.init(title: "Event Created", message: String(format: "Some contacts (%d) from your list are not using invited APP. Do you want to invite them on invited app?", recipientsArray.count), preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
 
 
                 if (MFMessageComposeViewController.canSendText())
                 {
+                    var fullName : String!
+                    
+                    if (kLoggedInUserProfile?.firstName?.isEmpty)! && (kLoggedInUserProfile?.lastName?.isEmpty)!
+                    {
+                        fullName = "Invited App"
+                    }
+                    else
+                    {
+                        fullName = String(format: "%@ %@", (kLoggedInUserProfile?.firstName!)!,(kLoggedInUserProfile?.lastName!)!)
+                    }
+                    
                     let controller = MFMessageComposeViewController()
-                    controller.body = String(format: "%@ %@ wants to send you a message. Please download invited app for free to receive the message http://onelink.to/bfyctf", kLoggedInUserProfile.firstName!,kLoggedInUserProfile.lastName!)
+                    controller.body = String(format: "%@ wants to send you a message. Please download invited app for free to receive the message http://onelink.to/bfyctf", fullName)
                     let phoneNumberString = nonAppUsersPhoneNumbers
                     let recipientsArray = phoneNumberString!.components(separatedBy: ",")
                     controller.recipients = recipientsArray
@@ -4015,33 +4033,33 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             self.isMessageControllerPresented = false
             
-            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
-
-                UIView.animate(withDuration: 0.25) {
-
-                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
-
-                }
-
-            }
-
-            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
-            self.mainScrollView.setContentOffset( point, animated: true)
-
-
-            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
-
-                UIView.animate(withDuration: 0.25) {
-
-                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
-
-                }
-
-
-            }
-            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
-            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
-            self.fetchUserEventsFromServer()
+//            if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x) {
+//
+//                UIView.animate(withDuration: 0.25) {
+//
+//                    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+//
+//                }
+//
+//            }
+//
+//            var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+//            self.mainScrollView.setContentOffset( point, animated: true)
+//
+//
+//            if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+//
+//                UIView.animate(withDuration: 0.25) {
+//
+//                    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+//
+//                }
+//
+//
+//            }
+//            point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+//            self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+//            self.fetchUserEventsFromServer()
         }
     }
     

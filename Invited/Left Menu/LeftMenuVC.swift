@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class LeftMenuVC: UIViewController {
     
     @IBOutlet var versionLabel: UILabel!

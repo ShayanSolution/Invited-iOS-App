@@ -245,8 +245,6 @@ class VerifyCodeVC: UIViewController,UITextFieldDelegate {
     func register()
     {
         
-        
-        
         BasicFunctions.showActivityIndicator(vu: self.view)
         var postParams = [String: Any]()
         postParams["firstName"] = self.userCredentials.firstName

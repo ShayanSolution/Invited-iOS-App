@@ -221,8 +221,8 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     }
     
     
-//    @IBAction func signUpFB(_ sender: UIButton)
-//    {
+    @IBAction func signUpFB(_ sender: UIButton)
+    {
 //        BasicFunctions.showActivityIndicator(vu: self.view)
 //        let loginManager = LoginManager()
 //        loginManager.logOut()
@@ -251,10 +251,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //
 //            }
 //        }
-//    }
-//
-//    func getFBUserData(isFBLogin : Bool)
-//    {
+    }
+    
+    func getFBUserData(isFBLogin : Bool)
+    {
 //        if((FBSDKAccessToken.current()) != nil)
 //        {
 //
@@ -297,10 +297,10 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //                }
 //            })
 //        }
-//    }
-//
-//    @IBAction func loginTwitter(_ sender: UIButton)
-//    {
+    }
+    
+    @IBAction func loginTwitter(_ sender: UIButton)
+    {
 //        BasicFunctions.showActivityIndicator(vu: self.view)
 //        TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
 //            if (session != nil) {
@@ -308,25 +308,25 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
 //                //                print("token \(session?.authToken)")
 //                //                print("tokensecret \(session?.authTokenSecret)")
 //                //                print("userid \(session?.userID)")
-//
+//                
 //                BasicFunctions.stopActivityIndicator(vu: self.view)
-//
+//                
 //                self.userProfileData.firstName = "H"
 //                self.userProfileData.lastName = "K"
 //                self.userProfileData.gender = 1
 //                self.userProfileData.dob = "11/08/2018"
 //                self.userProfileData.email = ""
 //                self.userProfileData.password = "123456"
-//
+//                
 //                self.goToPhoneVC()
-//
-//
+//                
+//                
 //            } else {
 //                BasicFunctions.stopActivityIndicator(vu: self.view)
 //                BasicFunctions.showAlert(vc: self, msg: error?.localizedDescription)
 //            }
 //        })
-//    }
+    }
     
     
     func goToPhoneVC()
