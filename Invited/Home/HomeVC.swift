@@ -3534,7 +3534,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: userProfile)
             BasicFunctions.setPreferences(encodedData, key: kUserProfile)
             
-            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as! Data) as! UserProfile
+            kLoggedInUserProfile = NSKeyedUnarchiver.unarchiveObject(with: BasicFunctions.getPreferences(kUserProfile) as? Data ?? Data()) as? UserProfile
             
             if kLoggedInUserProfile?.dob == ""
             {
