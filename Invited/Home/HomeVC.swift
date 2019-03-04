@@ -10,8 +10,6 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import Contacts
-import TwitterKit
-import FBSDKLoginKit
 import MessageUI
 
 

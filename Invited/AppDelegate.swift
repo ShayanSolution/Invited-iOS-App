@@ -11,8 +11,6 @@ import GoogleMaps
 import GooglePlaces
 import UserNotifications
 import Contacts
-import FacebookCore
-import TwitterKit
 import PGSideMenu
 
 
