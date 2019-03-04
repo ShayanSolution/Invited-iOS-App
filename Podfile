@@ -15,10 +15,6 @@ pod 'GooglePlacePicker'
 pod 'GoogleMaps'
 pod 'SwiftyJSON'
 pod 'NKVPhonePicker'
-pod 'TwitterKit’
-pod 'FacebookCore'
-pod 'FacebookLogin'
-pod 'FacebookShare'
 pod 'PGSideMenu'
 pod 'RSKImageCropper'
 

@@ -8,10 +8,7 @@
 
 import UIKit
 import NKVPhonePicker
-import FacebookCore
-import FacebookLogin
-import FBSDKLoginKit
-import TwitterKit
+
 
 
 class UserProfileData: NSObject
@@ -226,109 +223,109 @@ class SignUpVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPick
     
     @IBAction func signUpFB(_ sender: UIButton)
     {
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        let loginManager = LoginManager()
-        loginManager.logOut()
-
-        loginManager.logIn(readPermissions: [.publicProfile,.email,.userBirthday], viewController: self) { (loginResult) in
-
-            
-            BasicFunctions.stopActivityIndicator(vu: self.view)
-            
-            switch loginResult {
-            case .failed(let error):
-                print(error)
-            case .cancelled:
-                print("User cancelled login.")
-            case .success(let grantedPermissions, let declinedPermissions, let accessToken):
-                print("Logged in!")
-                
-                if sender.tag == 1
-                {
-                    self.getFBUserData(isFBLogin: false)
-                }
-                else
-                {
-                    self.getFBUserData(isFBLogin: true)
-                }
-                
-            }
-        }
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//        let loginManager = LoginManager()
+//        loginManager.logOut()
+//
+//        loginManager.logIn(readPermissions: [.publicProfile,.email,.userBirthday], viewController: self) { (loginResult) in
+//
+//
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//
+//            switch loginResult {
+//            case .failed(let error):
+//                print(error)
+//            case .cancelled:
+//                print("User cancelled login.")
+//            case .success(let grantedPermissions, let declinedPermissions, let accessToken):
+//                print("Logged in!")
+//
+//                if sender.tag == 1
+//                {
+//                    self.getFBUserData(isFBLogin: false)
+//                }
+//                else
+//                {
+//                    self.getFBUserData(isFBLogin: true)
+//                }
+//
+//            }
+//        }
     }
     
     func getFBUserData(isFBLogin : Bool)
     {
-        if((FBSDKAccessToken.current()) != nil)
-        {
-
-            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,email,birthday"]).start(completionHandler: { (connection, result, error) -> Void in
-
-                if (error == nil){
-                    
-                    let userInfo = result as? [String:Any]
-                    self.userProfileData.firstName = userInfo?["first_name"] as? String ?? ""
-                    self.userProfileData.lastName = userInfo?["last_name"] as? String ?? ""
-                    self.userProfileData.gender = 1
-                    let dobString = userInfo?["birthday"] as? String ?? ""
-                    self.userProfileData.email = userInfo?["email"] as? String ?? ""
-                    self.userProfileData.password = userInfo?["id"] as? String ?? "123456"
-                    
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "dd/MM/yyyy"
-                    
-                    let date = formatter.date(from: dobString)
-                    
-                    formatter.dateFormat = "yyyy-MM-dd"
-                    
-                    if date != nil
-                    {
-                        self.userProfileData.dob = formatter.string(from: date!)
-                    }
-                    
-                    
-                    if isFBLogin
-                    {
-                        self.userProfileData.isFBSignUp = false
-                        self.login(isLoginManually: false)
-                    }
-                    else
-                    {
-                        self.userProfileData.isFBSignUp = true
-                        self.goToPhoneVC()
-                    }
-                    
-                }
-            })
-        }
+//        if((FBSDKAccessToken.current()) != nil)
+//        {
+//
+//            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name,email,birthday"]).start(completionHandler: { (connection, result, error) -> Void in
+//
+//                if (error == nil){
+//
+//                    let userInfo = result as? [String:Any]
+//                    self.userProfileData.firstName = userInfo?["first_name"] as? String ?? ""
+//                    self.userProfileData.lastName = userInfo?["last_name"] as? String ?? ""
+//                    self.userProfileData.gender = 1
+//                    let dobString = userInfo?["birthday"] as? String ?? ""
+//                    self.userProfileData.email = userInfo?["email"] as? String ?? ""
+//                    self.userProfileData.password = userInfo?["id"] as? String ?? "123456"
+//
+//                    let formatter = DateFormatter()
+//                    formatter.dateFormat = "dd/MM/yyyy"
+//
+//                    let date = formatter.date(from: dobString)
+//
+//                    formatter.dateFormat = "yyyy-MM-dd"
+//
+//                    if date != nil
+//                    {
+//                        self.userProfileData.dob = formatter.string(from: date!)
+//                    }
+//
+//
+//                    if isFBLogin
+//                    {
+//                        self.userProfileData.isFBSignUp = false
+//                        self.login(isLoginManually: false)
+//                    }
+//                    else
+//                    {
+//                        self.userProfileData.isFBSignUp = true
+//                        self.goToPhoneVC()
+//                    }
+//
+//                }
+//            })
+//        }
     }
     
     @IBAction func loginTwitter(_ sender: UIButton)
     {
-        BasicFunctions.showActivityIndicator(vu: self.view)
-        TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
-            if (session != nil) {
-                //                print("username \(session?.userName)")
-                //                print("token \(session?.authToken)")
-                //                print("tokensecret \(session?.authTokenSecret)")
-                //                print("userid \(session?.userID)")
-                
-                BasicFunctions.stopActivityIndicator(vu: self.view)
-                
-                self.userProfileData.firstName = "H"
-                self.userProfileData.lastName = "K"
-                self.userProfileData.gender = 1
-                self.userProfileData.dob = "11/08/2018"
-                self.userProfileData.email = ""
-                self.userProfileData.password = "123456"
-                
-                self.goToPhoneVC()
-                
-                
-            } else {
-                BasicFunctions.stopActivityIndicator(vu: self.view)
-                BasicFunctions.showAlert(vc: self, msg: error?.localizedDescription)
-            }
-        })
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//        TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
+//            if (session != nil) {
+//                //                print("username \(session?.userName)")
+//                //                print("token \(session?.authToken)")
+//                //                print("tokensecret \(session?.authTokenSecret)")
+//                //                print("userid \(session?.userID)")
+//                
+//                BasicFunctions.stopActivityIndicator(vu: self.view)
+//                
+//                self.userProfileData.firstName = "H"
+//                self.userProfileData.lastName = "K"
+//                self.userProfileData.gender = 1
+//                self.userProfileData.dob = "11/08/2018"
+//                self.userProfileData.email = ""
+//                self.userProfileData.password = "123456"
+//                
+//                self.goToPhoneVC()
+//                
+//                
+//            } else {
+//                BasicFunctions.stopActivityIndicator(vu: self.view)
+//                BasicFunctions.showAlert(vc: self, msg: error?.localizedDescription)
+//            }
+//        })
     }
     
     
