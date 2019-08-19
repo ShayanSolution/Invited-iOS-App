@@ -31,8 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         // Override point for customization after application launch.
         
 
-        GMSPlacesClient.provideAPIKey("")
-        GMSServices.provideAPIKey("")
+        GMSPlacesClient.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
+        GMSServices.provideAPIKey("AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8")
 
         
 //        AIzaSyBzPGNnwW86_v95lVaHHmcqDwZgIQ2QKF8
@@ -59,6 +59,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         {
             kBaseURL = baseURL!
         }
+        
+//        if #available(iOS 10.0, *) {
+//            Timer.scheduledTimer(withTimeInterval: 40, repeats: true) { (Timer) in
+//                
+//                BasicFunctions.updateLocationOnServer(city: kCity ?? "")
+//            }
+//        } else {
+//            // Fallback on earlier versions
+//        }
         
         
         if BasicFunctions.getIfUserLoggedIn()
@@ -92,6 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         return true
     }
+    
     
     func registerForPushNotifications(application: UIApplication) {
         

@@ -338,6 +338,34 @@
     
     
 }
++ (void) updateLocation:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    [[ServerManager sharedWebService: url] POST:@"user-address" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                            if (operation.responseObject)
+                                            {
+                                                resultBlock((NSDictionary*)operation.responseObject);
+                                            }
+                                            else
+                                            {
+                                                resultBlock(@{
+                                                              @"error": @"1",
+                                                              @"message": @"Something went wrong"});
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                        }];
+    
+    
+}
 
 + (void) createList:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token  withResulBlock: (TMARServiceResultBlock) resultBlock
 {

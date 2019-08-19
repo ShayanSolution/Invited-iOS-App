@@ -254,6 +254,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 //        self.fetchReceivedRequestsFromServer()
         
         
+        
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedNotification(notification:)), name: Notification.Name("ReceiveNotificationData"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
@@ -277,8 +280,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     @objc func appDidBecomeActive()
     {
-        
-//        self.locationManager.startUpdatingLocation()
+        kCity = nil
+        self.locationManager.startUpdatingLocation()
         self.requestEventView.requestEventTableView.reloadData()
         self.receivedEventsView.receivedEventsTableView.reloadData()
         
@@ -580,6 +583,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         
         self.backButtonTapped()
+        self.view.endEditing(true)
         
         
         
@@ -712,6 +716,16 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             // 3
             self.currentLocationAddress = lines.joined(separator: "\n")
+            
+            if kCity == nil
+            {
+
+                BasicFunctions.updateLocationOnServer(city: address.locality ?? "")
+
+            }
+            
+            kCity = address.locality
+            
             if self.editEventView != nil && self.isUpdated && self.editEventView.locationTextField.text == "" && self.editEventView.locationSwitch.isOn
             {
                 self.editEventView.locationTextField.text = self.currentLocationAddress
@@ -811,6 +825,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.listID = nil
             
             self.showPicker(textField: self.createEventView.setListTextField)
+            
             
         }
         
@@ -950,9 +965,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.createEventView.createButton.addTarget(self, action: #selector(self.createButtonTapped), for: UIControlEvents.touchUpInside)
         
-        self.createEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-        self.createEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-        self.createEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.createEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.valueChanged)
+        self.createEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.valueChanged)
+        self.createEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.valueChanged)
         self.createEventView.updateButton.addTarget(self, action: #selector(self.updateButtonTapped), for: UIControlEvents.touchUpInside)
         
         self.mainScrollView.addSubview(self.createEventView)
@@ -1044,6 +1059,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if sender.isOn
             {
                 self.createEventView.dateTextField.isUserInteractionEnabled = true
+                
+                self.datePicker.date = Date()
             }
             else
             {
@@ -1057,6 +1074,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if sender.isOn
             {
                 self.createEventView.timeTextField.isUserInteractionEnabled = true
+                
+                self.timePicker.date = Date()
             }
             else
             {
@@ -1083,6 +1102,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if sender.isOn
             {
                 self.editEventView.dateTextField.isUserInteractionEnabled = true
+                
+                self.datePicker.date = Date()
             }
             else
             {
@@ -1096,6 +1117,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             if sender.isOn
             {
                 self.editEventView.timeTextField.isUserInteractionEnabled = true
+                
+                self.timePicker.date = Date()
             }
             else
             {
@@ -2277,6 +2300,23 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     
+//    func updateLocationOnServer(city:String)
+//    {
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//        var postParams = [String : Any]()
+//        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
+//        postParams["address"] = city
+//
+//        ServerManager.updateLocation(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+//
+//
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+////            self.handleServerResponseOfSendReport(json: result as! [String : Any])
+//
+//
+//        }
+//    }
+    
 //    func didDeleteImage()
 //    {
 //        BasicFunctions.showActivityIndicator(vu: self.view)
@@ -2885,6 +2925,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.selectedList = nil
         self.updateSelectedList = nil
         
+        self.datePicker.date = Date()
+        self.timePicker.date = Date()
+        
         
         self.editEventView.titleTextView.delegate = self
         self.editEventView.setNumberOfPeopleTextfield.delegate = self
@@ -2932,9 +2975,9 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         self.addDoneButtonOnTextViewKeyboard(textView: self.editEventView.titleTextView)
         
-        self.editEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-        self.editEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
-        self.editEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.touchUpInside)
+        self.editEventView.locationSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.valueChanged)
+        self.editEventView.dateSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.valueChanged)
+        self.editEventView.timeSwitch.addTarget(self, action: #selector(self.switchStateChanged(sender:)), for: UIControlEvents.valueChanged)
         
         self.editEventView.backButton.isHidden = false
         self.editEventView.backButton.addTarget(self, action: #selector(self.backButtonTapped), for: UIControlEvents.touchUpInside)
@@ -3415,7 +3458,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         {
             if status == "error"
             {
-                BasicFunctions.showAlert(vc: self, msg: "Event has been deleted.")
+                BasicFunctions.showAlert(vc: self, msg: message)
                 self.fetchRequestsFromServer()
                 return
             }
@@ -3433,8 +3476,6 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         }
         else
         {
-            let message = json["message"] as? String
-            
             if message != nil
             {
                 BasicFunctions.showAlert(vc: self, msg: message!)
@@ -3850,6 +3891,11 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             BasicFunctions.showAlert(vc: self, msg: "Please put valid number of people.")
             return
         }
+//        else if self.datePicker.date < Date() && self.createEventView.dateSwitch.isOn
+//        {
+//            BasicFunctions.showAlert(vc: self, msg: "Please put future date.")
+//            return
+//        }
     
         
         
@@ -3984,6 +4030,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.listID = nil
                 
                 self.showPicker(textField: self.createEventView.setListTextField)
+                
                 
 //                self.currentLocationCoordinate = nil
                 

@@ -817,6 +817,23 @@ class BasicFunctions: NSObject {
         
     }
     
+    class func updateLocationOnServer(city:String)
+    {
+        //        BasicFunctions.showActivityIndicator(vu: self.view)
+        var postParams = [String : Any]()
+        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
+        postParams["address"] = city
+        
+        ServerManager.updateLocation(postParams,withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            
+            //            BasicFunctions.stopActivityIndicator(vu: self.view)
+            //            self.handleServerResponseOfSendReport(json: result as! [String : Any])
+            
+            
+        }
+    }
+    
     
     
 //    class func getImageDataFromContactList(phoneNumber : String) -> Data

@@ -94,7 +94,7 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
-        var updatedDate : Date!
+        var updatedDate : Date?
 
         if kLoggedInUserProfile?.updatedAt != ""
         {
@@ -131,6 +131,8 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.showPicker(textField: self.genderTextField)
         self.showDatePicker(textField: self.dobTextField)
         self.showDatePicker(textField: self.dorTextField)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
         
     }
@@ -177,6 +179,13 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
 //        kISNotificationReceived = true
 //        self.navigationController?.popViewController(animated: true)
 //    }
+    
+    @objc func appDidBecomeActive()
+    {
+        kCity = nil
+        BasicFunctions.hideLeftMenu(vc: self)
+        BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
+    }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {

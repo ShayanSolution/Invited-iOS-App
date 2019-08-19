@@ -19,6 +19,7 @@ var kImage : UIImage?
 var kIsDisplayOnlyImage : Bool!
 var kSelectedLocation : CLLocationCoordinate2D?
 var kSelectedAddress : String?
+var kCity : String?
 var kNotificationData : [String : Any]?
 
 let kIfUserLoggedIn = "isUserLoggedIn"
