@@ -110,6 +110,8 @@
 		AFE5DFCB207CD53900652A1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFCA207CD53900652A1B /* Assets.xcassets */; };
 		AFE5DFCE207CD53900652A1B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5DFCC207CD53900652A1B /* LaunchScreen.storyboard */; };
 		AFEF939220E639790033801A /* VerifyCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEF939120E639790033801A /* VerifyCodeVC.swift */; };
+		CEBBDAA7230ADF42007812AF /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */; };
+		CEBBDAA8230ADF42007812AF /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -192,6 +194,7 @@
 		AFEF939120E639790033801A /* VerifyCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeVC.swift; sourceTree = "<group>"; };
 		B19BC0F64D4F18D2BDA5B5DB /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C917C6D76207FCF7F9C91214 /* Pods-Invited Dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Invited Dev.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Invited Dev/Pods-Invited Dev.debug.xcconfig"; sourceTree = "<group>"; };
+		CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		F7EA2FD84022E08315EEBDFC /* Pods_Invited_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Invited_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -404,6 +407,7 @@
 				AFD22FAE21C8D06A00BE6540 /* Left Menu */,
 				AF88848620B3ED30002F6D4F /* Home */,
 				AFCF897621D391B200082881 /* Profile */,
+				CEBBDAA5230ADEF2007812AF /* Notifications */,
 				AFBCABD920DA4E9C007ABE74 /* Map */,
 				AF88848920B42C9D002F6D4F /* Create List */,
 				AFE5DFC7207CD53900652A1B /* Main.storyboard */,
@@ -413,6 +417,14 @@
 				AF6E4FDA2199912F00918723 /* Invited Dev-Info.plist */,
 			);
 			path = Invited;
+			sourceTree = "<group>";
+		};
+		CEBBDAA5230ADEF2007812AF /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		FE37F070EFE89DE843D4DD83 /* Frameworks */ = {
@@ -725,6 +737,7 @@
 				AF02312721F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */,
 				AF6E4FA82199912D00918723 /* SentByMeView.swift in Sources */,
 				AF6E4FA92199912D00918723 /* CreateListVC.swift in Sources */,
+				CEBBDAA8230ADF42007812AF /* NotificationsVC.swift in Sources */,
 				AF6E4FAA2199912D00918723 /* WelcomeVC.swift in Sources */,
 				AF6E4FAB2199912D00918723 /* RouteVC.swift in Sources */,
 				AF6E4FAC2199912D00918723 /* ServerManager.m in Sources */,
@@ -765,6 +778,7 @@
 				AF02312621F0C63C006C4D51 /* EditProfileImageVC.swift in Sources */,
 				AFD9028120B2CE470039E686 /* WelcomeVC.swift in Sources */,
 				AF73019B20DBA35200483267 /* RouteVC.swift in Sources */,
+				CEBBDAA7230ADF42007812AF /* NotificationsVC.swift in Sources */,
 				AFC9DD2120B52C0B00042708 /* ServerManager.m in Sources */,
 				AFD9028420B2CFC40039E686 /* BasicFunctions.swift in Sources */,
 				AF88848F20B42F59002F6D4F /* ContactCell.swift in Sources */,

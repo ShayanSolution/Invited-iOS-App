@@ -13,6 +13,8 @@ class LeftMenuVC: UIViewController {
     
     @IBOutlet var versionLabel: UILabel!
     
+    @IBOutlet var notificationsCountLabel: UILabel!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +28,11 @@ class LeftMenuVC: UIViewController {
             self.versionLabel.text = String(format: "v%@", appVersion!)
         }
     }
+    override func viewDidLayoutSubviews()
+    {
+        notificationsCountLabel.layer.masksToBounds = true
+        notificationsCountLabel.layer.cornerRadius = notificationsCountLabel.frame.size.width/2
+    }
     
     
     
@@ -36,10 +43,14 @@ class LeftMenuVC: UIViewController {
     }
     @IBAction func profileButtonTapped(_ sender: UIButton)
     {
-        
         BasicFunctions.hideLeftMenu(vc: self)
         BasicFunctions.pushVCinNCwithName("ProfileVC", popTop: true)
-        
+    }
+    
+    @IBAction func notificationsButtonTapped(_ sender: UIButton)
+    {
+        BasicFunctions.hideLeftMenu(vc: self)
+        BasicFunctions.pushVCinNCwithName("NotificationsVC", popTop: true)
     }
     @IBAction func logoutButtonTapped(_ sender: UIButton)
     {
