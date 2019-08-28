@@ -30,6 +30,9 @@ protocol EditImageDelegate:class {
     func didDeleteImage()
 }
 
+typealias CompletionHandler = (_ notificationCount:Int) -> Void
+typealias AfterReadPushNotification = (_ success:Bool) -> Void
+
 
 class BasicFunctions: NSObject {
     
@@ -254,6 +257,9 @@ class BasicFunctions: NSObject {
     class func openLeftMenu(vc : UIViewController!)
     {
         if let sideMenuController = vc.navigationController!.parent as? PGSideMenu {
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let leftMenuVC = storyBoard.instantiateViewController(withIdentifier: "LeftMenuVC") as? LeftMenuVC
+            sideMenuController.addLeftMenuController(leftMenuVC!)
             sideMenuController.toggleLeftMenu()
         }
     }
@@ -384,6 +390,15 @@ class BasicFunctions: NSObject {
         (UIApplication.shared.delegate as! AppDelegate).window?.rootViewController = sideMenuController
         
     }
+//    class func addLeftMenuController(vc:UIViewController)
+//    {
+//        if let sideMenuController = vc.navigationController!.parent as? PGSideMenu
+//        {
+//            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//            let leftMenuVC = storyBoard.instantiateViewController(withIdentifier: "LeftMenuVC") as? LeftMenuVC
+//            sideMenuController.addLeftMenuController(leftMenuVC!)
+//        }
+//    }
     class func showSettingsAlert(vc:UIViewController!, msg:String!)
     {
         let alert = UIAlertController.init(title: "Error", message: msg, preferredStyle: .alert)
@@ -469,6 +484,101 @@ class BasicFunctions: NSObject {
         }
         
     }
+    
+    class func getNotificationsListFromServer(comletionHandler : @escaping CompletionHandler)
+    {
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+        
+        var postParams = [String:Any]()
+        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
+        
+        ServerManager.getNotificationsData(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+            
+            
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+            
+            let json = result as! [String : Any]
+            
+            let status = json["status"] as? String
+            let message = json["message"] as? String
+            
+            if message != nil && message == "Unauthorized"
+            {
+                //            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+                BasicFunctions.showSigInVC()
+                return
+                
+            }
+            
+            if  json["error"] == nil && status == nil
+            {
+                let notificationCount = json["unReadNotification_count"] as! Int
+                
+                if notificationCount > 0
+                {
+                    kNotificationCount = notificationCount
+                    
+                }
+                else
+                {
+                    kNotificationCount = 0
+                }
+                
+                var notificationsArray : [[String : Any]]!
+                
+                
+                notificationsArray = json["notifications"] as? [[String : Any]]
+                
+                kNotificationsList.removeAll()
+                
+                for notification in notificationsArray
+                {
+                    let notificationData = NotificationData()
+                    notificationData.id = notification["id"] as? Int ?? 0
+                    notificationData.notification_id = notification["notification_id"] as? Int ?? 0
+                    notificationData.event_id = notification["event_id"] as? Int ?? 0
+                    notificationData.sender_name = notification["sender_name"] as? String ?? ""
+                    notificationData.related_screen = notification["related_screen"] as? String ?? ""
+                    notificationData.read_status = notification["read_status"] as? Int ?? 0
+                    notificationData.sender_image = notification["sender_image"] as? String ?? ""
+                    notificationData.message = notification["message"] as? String ?? ""
+                    
+                    kNotificationsList.append(notificationData)
+                    
+                }
+                
+                comletionHandler(notificationCount)
+                
+            }
+            else if status == "error"
+            {
+                kNotificationsList.removeAll()
+                
+            }
+            //        else
+            //        {
+            //
+            //            BasicFunctions.showAlert(vc: self, msg: message)
+            //        }
+            
+        }
+        
+    }
+    class func sendNotificationDataToServer(notification_id:Int, completionHandler: @escaping AfterReadPushNotification)
+        {
+    
+            var postParams = [String:Any]()
+            postParams["notification_id"] = notification_id
+    
+            ServerManager.readNotification(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+    
+    
+                completionHandler(true)
+            }
+        }
+    
+    
+    
     
     
     class func fetchAllContactsFromDevice()  {

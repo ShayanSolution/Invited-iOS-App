@@ -139,6 +139,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     @IBOutlet var createInviteButton: UIButton!
     @IBOutlet var invitesStatusButton: UIButton!
     
+    @IBOutlet var notificationCountLabel: UILabel!
     @IBOutlet var myListsView: UIView!
     @IBOutlet var createInviteView: UIView!
     @IBOutlet var invitesStatusView: UIView!
@@ -213,6 +214,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
         // Do any additional setup after loading the view.
         
+        
         self.mainScrollView.frame.size.width = self.view.frame.size.width
         
 //        self.isStartNavigationButtonTapped = false
@@ -261,6 +263,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateNotificationCount), name: Notification.Name("UpdateNotificationCount"), object: nil)
+        
         
         
 //        let tapRecognizer = UITapGestureRecognizer()
@@ -286,8 +290,27 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         self.receivedEventsView.receivedEventsTableView.reloadData()
         
     }
-    override func viewDidLayoutSubviews() {
+    @objc func updateNotificationCount()
+    {
+        if kNotificationCount != nil
+        {
+        if kNotificationCount > 0
+        {
+            self.notificationCountLabel.isHidden = false
+            self.notificationCountLabel.text = String(kNotificationCount)
+        }
+        else
+        {
+            self.notificationCountLabel.isHidden = true
+        }
+        }
+    }
+    override func viewDidLayoutSubviews()
+    {
         super.viewDidLayoutSubviews()
+        
+        self.notificationCountLabel.layer.cornerRadius = self.notificationCountLabel.frame.size.width/2
+        self.notificationCountLabel.layer.masksToBounds = true
         
         self.detailView.titleTextView.setContentOffset(.zero, animated: false)
         self.eventDetailView.titleTextView.setContentOffset(.zero, animated: false)
@@ -300,6 +323,8 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     override func viewDidAppear(_ animated: Bool)
     {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        self.getNotificationListFromServer()
         
         if  self.isUpdated == false && self.placeSelectedORCancelled == true
         {
@@ -343,10 +368,14 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             
         }
+        else if kPushNotificationData != nil
+        {
+            self.receivedNotificationOutsideFromHomeVC(notificationData: kPushNotificationData!)
+            kPushNotificationData = nil
+        }
         else if kNotificationData != nil
         {
-            self.receivedNotificationOutsideFromHomeVC(notificationData: kNotificationData!)
-            kNotificationData = nil
+            self.redirectToRelativeView(notificationData: kNotificationData!)
         }
         else if kIsDisplayOnlyImage
         {
@@ -362,7 +391,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
                 UIView.animate(withDuration: 0.25) {
                     
-                    self.lineView.frame.origin.x = self.myListsView.frame.origin.x
+                self.lineView.frame.origin.x = self.myListsView.frame.origin.x
                     
                 }
                 
@@ -374,6 +403,22 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             
             self.getContactListFromServer()
             
+        }
+    }
+    
+    func getNotificationListFromServer()
+    {
+        BasicFunctions.getNotificationsListFromServer { (notificationCount) in
+            
+            if notificationCount > 0
+            {
+                self.notificationCountLabel.isHidden = false
+                self.notificationCountLabel.text = String(notificationCount)
+            }
+            else
+            {
+                self.notificationCountLabel.isHidden = true
+            }
         }
     }
     
@@ -499,6 +544,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     {
         
         BasicFunctions.hideLeftMenu(vc: self)
+        self.updateNotificationCount()
         
 //        if self.presentedViewController != nil
 //        {
@@ -672,6 +718,113 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
     }
+    func redirectToRelativeView(notificationData:NotificationData)
+    {
+
+    if (self.lineView.frame.origin.x != self.invitesStatusView.frame.origin.x)
+    {
+
+    UIView.animate(withDuration: 0.25) {
+
+    self.lineView.frame.origin.x = self.invitesStatusView.frame.origin.x
+
+    }
+
+    }
+
+
+    var point = CGPoint(x: 2 * self.mainScrollView.frame.size.width, y: 0)
+    self.mainScrollView.setContentOffset( point, animated: true)
+
+
+
+    if notificationData.related_screen == "Created" || notificationData.related_screen == "updated the event" || notificationData.related_screen == "Cancelled Event" || notificationData.related_screen == "Deleted Event" || notificationData.related_screen == "Closed Event"
+    {
+
+
+    if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesReceivedView.frame.origin.x) {
+
+    UIView.animate(withDuration: 0.25) {
+
+    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesReceivedView.frame.origin.x
+
+    }
+
+
+    }
+    point = CGPoint(x: 5, y: 0)
+    self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+        
+    if notificationData.related_screen == "Deleted Event"
+    {
+        kNotificationData = nil
+        self.fetchRequestsFromServer()
+    }
+    else
+    {
+        self.fetchRequestsFromServer()
+    }
+
+    }
+    else if notificationData.related_screen == "Accept Event"
+    {
+
+    if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.myEventsView.frame.origin.x) {
+
+    UIView.animate(withDuration: 0.25) {
+
+    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.myEventsView.frame.origin.x
+
+    }
+
+
+    }
+    point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width * 2, y: 0)
+    self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+    self.fetchReceivedRequestsFromServer()
+
+
+    }
+    else if notificationData.related_screen == "Reject Event"
+    {
+
+    if (self.eventStatusView.lineView.frame.origin.x != self.eventStatusView.invitesSentView.frame.origin.x) {
+
+    UIView.animate(withDuration: 0.25) {
+
+    self.eventStatusView.lineView.frame.origin.x = self.eventStatusView.invitesSentView.frame.origin.x
+
+    }
+
+
+    }
+    point = CGPoint(x: self.eventStatusView.mainScrollView.frame.size.width, y: 0)
+    self.eventStatusView.mainScrollView.setContentOffset( point, animated: true)
+    self.fetchUserEventsFromServer()
+
+
+    }
+
+
+
+
+    }
+//    func sendNotificationDataToServer(notification_id:Int)
+//    {
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//        
+//        var postParams = [String:Any]()
+//        postParams["notification_id"] = notification_id
+//        
+//        ServerManager.readNotification(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+//            
+//            
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//            
+//            self.getNotificationListFromServer()
+//            
+//        }
+//    }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
 
@@ -3471,7 +3624,7 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 self.backButtonTapped()
                 
             }
-            BasicFunctions.showAlert(vc: self, msg: status!)
+            BasicFunctions.showAlert(vc: self, msg: message!)
             self.fetchRequestsFromServer()
         }
         else
@@ -4377,13 +4530,13 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         ServerManager.getUserEvents(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
             
             BasicFunctions.stopActivityIndicator(vu: self.view)
-            self.handleServerResponse(result as! [String : Any])
+            self.handleServerResponseOfUserEvents(result as! [String : Any])
             
         }
         
     }
     
-    func handleServerResponse(_ json: [String: Any])
+    func handleServerResponseOfUserEvents(_ json: [String: Any])
     {
         let status = json["status"] as? String
         let message = json["message"] as? String
@@ -4450,7 +4603,26 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             self.userEventList.append(eventData)
                 
             }
+                
             self.yourEventsView.yourEventsTableView.reloadData()
+                
+                if kNotificationData != nil
+                {
+                    for i in 0...self.userEventList.count - 1
+                    {
+                        let event = self.userEventList[i]
+                        if event.eventID == kNotificationData?.event_id
+                        {
+                            self.yourEventsView.yourEventsTableView.scrollToRow(at: IndexPath.init(row: i, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                            kNotificationData = nil
+                            break
+                        }
+                    }
+                }
+//                else if self.userEventList.count > 0
+//                {
+//                    self.yourEventsView.yourEventsTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+//                }
             
             
         }
@@ -4552,7 +4724,21 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 
             }
             self.requestEventView.requestEventTableView.reloadData()
-            if self.requestEventList.count > 0
+                
+            if kNotificationData != nil
+            {
+                for i in 0...self.requestEventList.count - 1
+                {
+                    let event = self.requestEventList[i]
+                    if event.eventID == kNotificationData?.event_id
+                    {
+                        self.requestEventView.requestEventTableView.scrollToRow(at: IndexPath.init(row: i, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                        kNotificationData = nil
+                        break
+                    }
+                }
+            }
+            else if self.requestEventList.count > 0
             {
             self.requestEventView.requestEventTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
             }
@@ -4775,10 +4961,28 @@ class HomeVC : UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                     
                     self.receivedRequestEventList.append(eventData)
                     
-                }
+            }
+            
                 self.receivedEventsView.receivedEventsTableView.reloadData()
-                
-                
+            
+            if kNotificationData != nil
+            {
+                for i in 0...self.receivedRequestEventList.count - 1
+                {
+                    let event = self.receivedRequestEventList[i]
+                    if event.eventID == kNotificationData?.event_id
+                    {
+                        self.receivedEventsView.receivedEventsTableView.scrollToRow(at: IndexPath.init(row: i, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                        kNotificationData = nil
+                        break
+                        }
+                        }
+            }
+//            else if self.receivedRequestEventList.count > 0
+//            {
+//                self.receivedEventsView.receivedEventsTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+//            }
+            
             
         }
         else if status == "error"

@@ -13,6 +13,8 @@ import CoreLocation
 
 var kContactList = [ContactData]()
 var kUserList = [UserList]()
+var kNotificationsList = [NotificationData]()
+var kNotificationCount : Int!
 var kCurrentLocation : CLLocationCoordinate2D?
 
 var kImage : UIImage?
@@ -20,7 +22,8 @@ var kIsDisplayOnlyImage : Bool!
 var kSelectedLocation : CLLocationCoordinate2D?
 var kSelectedAddress : String?
 var kCity : String?
-var kNotificationData : [String : Any]?
+var kPushNotificationData : [String : Any]?
+var kNotificationData : NotificationData?
 
 let kIfUserLoggedIn = "isUserLoggedIn"
 let kUserID = "userID"

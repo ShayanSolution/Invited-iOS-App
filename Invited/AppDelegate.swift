@@ -160,9 +160,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         print("Notification data: \(notification.request.content.userInfo)")
 //        NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: notification.request.content.userInfo["custom_data"] as! [AnyHashable : Any] )
         
-       UIApplication.shared.applicationIconBadgeNumber = 0
+       
+        UIApplication.shared.applicationIconBadgeNumber = 0
         
+        kNotificationCount = kNotificationCount + 1
+    
+//        BasicFunctions.getNotificationsListFromServer { (notificationCount) in
+//
+//        }
         
+        NotificationCenter.default.post(name: Notification.Name("UpdateNotificationCount"), object: nil, userInfo: nil)
 
     }
     
@@ -174,17 +181,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         print("Notification data: \(response.notification.request.content.userInfo)")
         
+        kNotificationCount = kNotificationCount - 1
+        let notificationInfo = response.notification.request.content.userInfo["custom_data"] as? [String : Any]
+        let notification_id = notificationInfo?["notification_id"] as? Int
+
+        if notification_id != nil
+        {
+            BasicFunctions.sendNotificationDataToServer(notification_id: notification_id!) { (success) in
+            
+                if success
+                {
+                    if ((self.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController)?.topViewController is HomeVC
+                    {
+                        //            kIsNotificationReceived = true
+                        NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: notificationInfo)
+                    }
+                    else
+                    {
+                        kPushNotificationData = notificationInfo
+                        BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
+                    }
+                }
+            }
+        }
         
-        if ((self.window?.rootViewController as? PGSideMenu)?.contentController as? UINavigationController)?.topViewController is HomeVC
-        {
-//            kIsNotificationReceived = true
-            NotificationCenter.default.post(name: Notification.Name("ReceiveNotificationData"), object: nil, userInfo: response.notification.request.content.userInfo["custom_data"] as? [String : Any] )
-        }
-        else
-        {
-            kNotificationData = response.notification.request.content.userInfo["custom_data"] as? [String : Any]
-            BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
-        }
         
         
         
@@ -226,7 +246,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-
+        
         
         application.applicationIconBadgeNumber = 0
         if BasicFunctions.getIfUserLoggedIn()

@@ -8,6 +8,17 @@
 
 import UIKit
 
+class NotificationData: NSObject
+{
+    var id = Int()
+    var notification_id = Int()
+    var event_id = Int()
+    var sender_name = String()
+    var related_screen = String()
+    var read_status = Int()
+    var message = String()
+    var sender_image = String()
+}
 
 class LeftMenuVC: UIViewController {
     
@@ -27,7 +38,27 @@ class LeftMenuVC: UIViewController {
         {
             self.versionLabel.text = String(format: "v%@", appVersion!)
         }
+        
     }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(true)
+        
+        BasicFunctions.getNotificationsListFromServer { (notificationCount) in
+        
+            if notificationCount > 0
+            {
+                self.notificationsCountLabel.isHidden = false
+                self.notificationsCountLabel.text = String(notificationCount)
+            }
+            else
+            {
+                self.notificationsCountLabel.isHidden = true
+            }
+        }
+    }
+    
     override func viewDidLayoutSubviews()
     {
         notificationsCountLabel.layer.masksToBounds = true
@@ -52,6 +83,8 @@ class LeftMenuVC: UIViewController {
         BasicFunctions.hideLeftMenu(vc: self)
         BasicFunctions.pushVCinNCwithName("NotificationsVC", popTop: true)
     }
+    
+    
     @IBAction func logoutButtonTapped(_ sender: UIButton)
     {
         BasicFunctions.hideLeftMenu(vc: self)
@@ -123,6 +156,88 @@ class LeftMenuVC: UIViewController {
         }))
         self.present(alert, animated: true, completion: nil)
     }
+    
+//    func getNotificationsListFromServer()
+//    {
+//        BasicFunctions.showActivityIndicator(vu: self.view)
+//        
+//        var postParams = [String:Any]()
+//        postParams["user_id"] = BasicFunctions.getPreferences(kUserID)
+//        
+//        ServerManager.getNotificationsData(postParams, withBaseURL : kBaseURL,accessToken: BasicFunctions.getPreferences(kAccessToken) as? String) { (result) in
+//            
+//            
+//            BasicFunctions.stopActivityIndicator(vu: self.view)
+//            self.handleServerResponseOfNotificationsData(result as! [String : Any])
+//            
+//        }
+//        
+//    }
+//    
+//    func handleServerResponseOfNotificationsData(_ json: [String: Any])
+//    {
+//        let status = json["status"] as? String
+//        let message = json["message"] as? String
+//        
+//        if message != nil && message == "Unauthorized"
+//        {
+//            BasicFunctions.showAlert(vc: self, msg: "Session Expired. Please login again")
+//            BasicFunctions.showSigInVC()
+//            return
+//            
+//        }
+//        
+//        if  json["error"] == nil && status == nil
+//        {
+//            let notificationCount = json["unReadNotification_count"] as! Int
+//            
+//            if notificationCount > 0
+//            {
+//                kNotificationCount = notificationCount
+//                notificationsCountLabel.isHidden = false
+//                notificationsCountLabel.text = String(notificationCount)
+//            }
+//            else
+//            {
+//                notificationsCountLabel.isHidden = true
+//            }
+//            
+//            var notificationsArray : [[String : Any]]!
+//            
+//            
+//            notificationsArray = json["notifications"] as? [[String : Any]]
+//            
+//            kNotificationsList.removeAll()
+//            
+//            for notification in notificationsArray
+//            {
+//                let notificationData = NotificationData()
+//                notificationData.id = notification["id"] as? Int ?? 0
+//                notificationData.notification_id = notification["notification_id"] as? Int ?? 0
+//                notificationData.event_id = notification["event_id"] as? Int ?? 0
+//                notificationData.sender_name = notification["sender_name"] as? String ?? ""
+//                notificationData.related_screen = notification["related_screen"] as? String ?? ""
+//                notificationData.read_status = notification["read_status"] as? Int ?? 0
+//                notificationData.sender_image = notification["sender_image"] as? String ?? ""
+//                notificationData.message = notification["message"] as? String ?? ""
+//                
+//                kNotificationsList.append(notificationData)
+//                
+//            }
+//            
+//        }
+//        else if status == "error"
+//        {
+//            kNotificationsList.removeAll()
+//            
+//        }
+//        else
+//        {
+//        
+//            BasicFunctions.showAlert(vc: self, msg: message)
+//        }
+//        
+//    }
     
     
     

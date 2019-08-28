@@ -636,6 +636,58 @@
                                        
                                    }];
 }
++ (void) getNotificationsData:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    //    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [[ServerManager sharedWebService: url] GET:@"notifications" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                       failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                           if (operation.responseObject)
+                                           {
+                                               resultBlock((NSDictionary*)operation.responseObject);
+                                           }
+                                           else
+                                           {
+                                               resultBlock(@{
+                                                             @"error": @"1",
+                                                             @"message": @"Something went wrong"});
+                                           }
+                                           
+                                           
+                                           
+                                       }];
+}
++ (void) readNotification:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
+{
+    [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+    //    [[ServerManager sharedWebService: url].requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [[ServerManager sharedWebService: url] POST:@"read_notification" parameters:inputData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        resultBlock((NSDictionary*)responseObject );
+    }
+     
+     
+                                       failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                           if (operation.responseObject)
+                                           {
+                                               resultBlock((NSDictionary*)operation.responseObject);
+                                           }
+                                           else
+                                           {
+                                               resultBlock(@{
+                                                             @"error": @"1",
+                                                             @"message": @"Something went wrong"});
+                                           }
+                                           
+                                           
+                                           
+                                       }];
+}
 + (void) signOut:(NSDictionary *) inputData withBaseURL : (NSString*) url accessToken : (NSString*)token withResulBlock: (TMARServiceResultBlock) resultBlock
 {
     [[ServerManager sharedWebService: url].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];

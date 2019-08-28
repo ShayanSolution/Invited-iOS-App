@@ -52,6 +52,9 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     
     @IBOutlet var editButton: UIButton!
     
+    @IBOutlet var notificationCountLabel: UILabel!
+    
+    
     
     let dobPicker = UIDatePicker()
     let dorPicker = UIDatePicker()
@@ -134,12 +137,28 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateNotificationCount), name: Notification.Name("UpdateNotificationCount"), object: nil)
+        
         
     }
     override func viewDidAppear(_ animated: Bool)
     {
         
         self.profileScrollView.contentSize.height = 700.0
+        
+//        BasicFunctions.getNotificationsListFromServer { (notificationCount) in
+        
+            if kNotificationCount > 0
+            {
+                self.notificationCountLabel.isHidden = false
+                self.notificationCountLabel.text = String(kNotificationCount)
+            }
+            else
+            {
+                self.notificationCountLabel.isHidden = true
+            }
+            
+//        }
     }
     override func viewWillAppear(_ animated: Bool)
     {
@@ -165,7 +184,10 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     }
     override func viewDidLayoutSubviews()
     {
-        self.profileView.layer.cornerRadius = self.profileView.frame.size.width / 2
+        self.notificationCountLabel.layer.cornerRadius = self.notificationCountLabel.frame.size.width/2
+        self.notificationCountLabel.layer.masksToBounds = true
+        
+        BasicFunctions.setRoundCornerOfView(view: self.profileView, radius: self.profileView.frame.size.width/2)
 //        self.profileView.layer.borderWidth = 5.0
 //        self.profileView.layer.borderColor = UIColor.lightGray.cgColor
     }
@@ -184,13 +206,29 @@ class ProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPic
     {
         kCity = nil
         BasicFunctions.hideLeftMenu(vc: self)
-        BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
+//        BasicFunctions.pushVCinNCwithName("HomeVC", popTop: true)
+    }
+    @objc func updateNotificationCount()
+    {
+        if kNotificationCount != nil
+        {
+            if kNotificationCount > 0
+            {
+                self.notificationCountLabel.isHidden = false
+                self.notificationCountLabel.text = String(kNotificationCount)
+            }
+            else
+            {
+                self.notificationCountLabel.isHidden = true
+            }
+        }
     }
     
     @IBAction func menuButtonTapped(_ sender: UIButton)
     {
         self.view.endEditing(true)
         BasicFunctions.openLeftMenu(vc: self)
+        
     }
     
     @IBAction func editButtonTapped(_ sender: Any)

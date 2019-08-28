@@ -9,16 +9,14 @@
 import UIKit
 
 
-class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
+class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate
+{
     
     @IBOutlet var contactListTableView: UITableView!
     
     var listData : UserList!
     
     var searchData : [ContactData]!
-    
-    
-    
     
     @IBOutlet var searchTextField: UITextField!
     
@@ -28,6 +26,7 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
 
         // Do any additional setup after loading the view.
         
+        AsyncImageLoader.defaultCache()?.removeAllObjects()
         
         self.searchTextField.addTarget(self, action: #selector(self.searchRecordsAsPerText(_:)), for: .editingChanged)
         
@@ -37,7 +36,8 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool)
+    {
         super.viewWillAppear(true)
         
         kIsDisplayOnlyImage = false
@@ -161,9 +161,8 @@ class ListDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,U
         
         
         
-        let imageURL = String(format: "%@storage/images/%@.jpg", kBaseURL,contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9) as CVarArg)
+        let imageURL = String(format: "%@storage/images/%@.jpg", kBaseURL,String(contactData.phoneNumber.stringByRemovingWhitespaces.suffix(9)))
         print(imageURL)
-        AsyncImageLoader.defaultCache()?.removeAllObjects()
         contactData.imageURL = imageURL
         cell?.profileImageView.imageURL = URL.init(string: imageURL)
         

@@ -112,6 +112,10 @@
 		AFEF939220E639790033801A /* VerifyCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEF939120E639790033801A /* VerifyCodeVC.swift */; };
 		CEBBDAA7230ADF42007812AF /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */; };
 		CEBBDAA8230ADF42007812AF /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */; };
+		CEED2410230BC230001BC349 /* NotificationsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEED240E230BC230001BC349 /* NotificationsCell.swift */; };
+		CEED2411230BC230001BC349 /* NotificationsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEED240F230BC230001BC349 /* NotificationsCell.xib */; };
+		CEED2412230BD07A001BC349 /* NotificationsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEED240F230BC230001BC349 /* NotificationsCell.xib */; };
+		CEED2413230BD0BE001BC349 /* NotificationsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEED240E230BC230001BC349 /* NotificationsCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -195,6 +199,8 @@
 		B19BC0F64D4F18D2BDA5B5DB /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C917C6D76207FCF7F9C91214 /* Pods-Invited Dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Invited Dev.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Invited Dev/Pods-Invited Dev.debug.xcconfig"; sourceTree = "<group>"; };
 		CEBBDAA6230ADF42007812AF /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
+		CEED240E230BC230001BC349 /* NotificationsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsCell.swift; sourceTree = "<group>"; };
+		CEED240F230BC230001BC349 /* NotificationsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationsCell.xib; sourceTree = "<group>"; };
 		F7EA2FD84022E08315EEBDFC /* Pods_Invited_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Invited_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -269,6 +275,8 @@
 				AF4F636320C1B14C00083873 /* YourEventsCell.xib */,
 				AF4F636A20C1BC4100083873 /* ReceivedEventsCell.swift */,
 				AF4F636B20C1BC4100083873 /* ReceivedEventsCell.xib */,
+				CEED240E230BC230001BC349 /* NotificationsCell.swift */,
+				CEED240F230BC230001BC349 /* NotificationsCell.xib */,
 			);
 			path = "Custom Cells";
 			sourceTree = "<group>";
@@ -546,6 +554,7 @@
 				AF6E4FC82199912D00918723 /* Assets.xcassets in Resources */,
 				AF6E4FC92199912D00918723 /* ReceivedEventsView.xib in Resources */,
 				AF6E4FCA2199912D00918723 /* ReceivedEventsCell.xib in Resources */,
+				CEED2412230BD07A001BC349 /* NotificationsCell.xib in Resources */,
 				AF6E4FCB2199912D00918723 /* AcceptByMeView.xib in Resources */,
 				AF6E4FCC2199912D00918723 /* RequestEventCell.xib in Resources */,
 				AF6E4FCD2199912D00918723 /* Main.storyboard in Resources */,
@@ -570,6 +579,7 @@
 				AFE5DFCB207CD53900652A1B /* Assets.xcassets in Resources */,
 				AF4F636920C1B8D500083873 /* ReceivedEventsView.xib in Resources */,
 				AF4F636D20C1BC4100083873 /* ReceivedEventsCell.xib in Resources */,
+				CEED2411230BC230001BC349 /* NotificationsCell.xib in Resources */,
 				AFCF818920F33BAF0041FD9D /* AcceptByMeView.xib in Resources */,
 				AF4F635B20C186CC00083873 /* RequestEventCell.xib in Resources */,
 				AFE5DFC9207CD53900652A1B /* Main.storyboard in Resources */,
@@ -753,6 +763,7 @@
 				AF6E4FB52199912D00918723 /* VerifyCodeVC.swift in Sources */,
 				AF6E4FB62199912D00918723 /* ReceivedEventsView.swift in Sources */,
 				AF6E4FB72199912D00918723 /* ListDetailVC.swift in Sources */,
+				CEED2413230BD0BE001BC349 /* NotificationsCell.swift in Sources */,
 				AF6E4FB82199912D00918723 /* CreateEventView.swift in Sources */,
 				AF6E4FB92199912D00918723 /* AcceptByMeView.swift in Sources */,
 				AF6E4FBA2199912D00918723 /* ContactsView.swift in Sources */,
@@ -794,6 +805,7 @@
 				AFB9CCF020CE609100337C6A /* ListDetailVC.swift in Sources */,
 				AFC9DD3020B5809100042708 /* CreateEventView.swift in Sources */,
 				AFCF818720F33B7B0041FD9D /* AcceptByMeView.swift in Sources */,
+				CEED2410230BC230001BC349 /* NotificationsCell.swift in Sources */,
 				AFC9DD2C20B54F6500042708 /* ContactsView.swift in Sources */,
 				AF4F635D20C1AFAC00083873 /* YourEventsView.swift in Sources */,
 				AF5518D72107340300060CC0 /* UpdatePasswordVC.swift in Sources */,
